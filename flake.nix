@@ -24,7 +24,7 @@
   outputs = { self, nixpkgs, dedsec-grub-theme, home-manager, ... }@inputs: {
 
     nixosConfigurations = {
-      "laptop" = import ./hosts/suzuha-laptop inputs;
+      "suzuha" = import ./hosts/suzuha-laptop inputs;
 
     };
   };

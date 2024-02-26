@@ -25,6 +25,8 @@ in
   # Enable the KDE Plasma Desktop Environment.
   services.xserver.desktopManager.plasma5.enable = true;
   services.xserver.displayManager.sddm.enable = true;
+  security.pam.services.plasma5.enableKwallet = true;
+  programs.kdeconnect.enable = true;
 
   # input methode
   i18n.inputMethod = {
@@ -56,9 +58,9 @@ in
   ];
 
   # Users on system
-  users.users.poporo = {
+  users.users.michiha = {
     isNormalUser = true;
-    description = "poporo";
+    description = "michiha";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
       firefox
