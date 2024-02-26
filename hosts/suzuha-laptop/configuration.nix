@@ -2,14 +2,12 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ pkgs, inputs, ... }:
-let
-    my_fonts = pkgs.callPackage (../../my_fonts.nix) { };
-in
+{ pkgs, ... }:
 {
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ../../modules/system
   ];
 
   nixpkgs = {
@@ -19,43 +17,6 @@ in
       allowUnfree = true;
     };
   };
-
-  # desktop settings
-  services.xserver.enable = true;
-  # Enable the KDE Plasma Desktop Environment.
-  services.xserver.desktopManager.plasma5.enable = true;
-  services.xserver.displayManager.sddm.enable = true;
-  security.pam.services.plasma5.enableKwallet = true;
-  programs.kdeconnect.enable = true;
-
-  # input methode
-  i18n.inputMethod = {
-    enabled = "fcitx5";
-    fcitx5.waylandFrontend = true;
-    fcitx5.addons = with pkgs; [ fcitx5-rime fcitx5-chinese-addons fcitx5-table-extra ];
-  };
-
-  # location
-  i18n.defaultLocale = "en_US.UTF-8";
-  i18n.supportedLocales = [ "zh_CN.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" ];
-  i18n.extraLocaleSettings = {
-    LANG = "en_US.UTF-8";
-    LC_ALL = "en_US.UTF-8";
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
-    LC_NAME = "en_US.UTF-8";
-    LC_NUMERIC = "en_US.UTF-8";
-    LC_PAPER = "en_US.UTF-8";
-    LC_TELEPHONE = "en_US.UTF-8";
-    LC_TIME = "en_US.UTF-8";
-  };
-  # system fonts
-  fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "FiraCode" "CascadiaCode" ]; })
-    my_fonts
-  ];
 
   # Users on system
   users.users.michiha = {
@@ -68,35 +29,6 @@ in
     ];
   };
 
-  # system leve apps
-  environment.systemPackages = with pkgs; [
-    neofetch
-
-    vscode
-    nushellFull
-    zoxide
-    bat
-    starship
-    fzf
-    git
-    nil
-    nixpkgs-fmt
-
-    # archives
-    zip
-    xz
-    unzip
-    p7zip
-
-    # 这里从 helix 这个 inputs 数据源安装了 helix 程序
-    inputs.helix.packages."${pkgs.system}".helix
-  ];
-
-  # others
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
 
   system.stateVersion = "24.05"; # Did you read the comment?
 }
