@@ -4,7 +4,7 @@
 
 { pkgs, inputs, ... }:
 let
-    my_fonts = pkgs.callPackage (./my_fonts.nix) { };
+    my_fonts = pkgs.callPackage (../../my_fonts.nix) { };
 in
 {
   imports = [
