@@ -3,6 +3,9 @@
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
 { pkgs, inputs, ... }:
+let
+    my_fonts = pkgs.callPackage (./my_fonts.nix) { };
+in
 {
   imports = [
     # Include the results of the hardware scan.
@@ -46,6 +49,11 @@
     LC_TELEPHONE = "en_US.UTF-8";
     LC_TIME = "en_US.UTF-8";
   };
+  # system fonts
+  fonts.packages = with pkgs; [
+    (nerdfonts.override { fonts = [ "FiraCode" "CascadiaCode" ]; })
+    my_fonts
+  ];
 
   # Users on system
   users.users.poporo = {

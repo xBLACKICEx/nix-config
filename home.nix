@@ -31,6 +31,7 @@
 
     # utils
     ripgrep # recursively searches directories for a regex pattern
+    fd # replacement of find
     jq # A lightweight and flexible command-line JSON processor
     yq-go # yaml processer https://github.com/mikefarah/yq
     lsd
@@ -61,6 +62,7 @@
     # it provides the command `nom` works just like `nix`
     # with more details log output
     nix-output-monitor
+  
 
     # productivity
     hugo # static site generator
