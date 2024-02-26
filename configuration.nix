@@ -9,7 +9,7 @@
     ./hardware-configuration.nix
   ];
 
-    nixpkgs = {
+  nixpkgs = {
     # Configure your nixpkgs instance
     config = {
       # Disable if you don't want unfree packages
@@ -60,6 +60,8 @@
 
   # system leve apps
   environment.systemPackages = with pkgs; [
+    neofetch
+
     vscode
     nushellFull
     zoxide
@@ -69,6 +71,12 @@
     git
     nil
     nixpkgs-fmt
+
+    # archives
+    zip
+    xz
+    unzip
+    p7zip
 
     # 这里从 helix 这个 inputs 数据源安装了 helix 程序
     inputs.helix.packages."${pkgs.system}".helix
