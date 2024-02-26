@@ -83,6 +83,11 @@
     ethtool
     pciutils # lspci
     usbutils # lsusb
+
+    # 聊天工具
+    telegram-desktop
+    element-desktop
+    discord
   ];
 
   # git 相关配置
