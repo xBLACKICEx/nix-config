@@ -10,13 +10,16 @@
       url = "gitlab:VandalByte/dedsec-grub-theme";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # helix editor, use the master branch
+    helix.url = "github:helix-editor/helix/master";
   };
 
   # 这里的 `self` 是个特殊参数，它指向 `outputs` 函数返回的 attribute set 自身，即自引用
   outputs = { self, nixpkgs, dedsec-grub-theme, ... }@inputs: {
 
-    specialArgs = { inherit inputs; };
     nixosConfigurations.laptop = nixpkgs.lib.nixosSystem {
+      specialArgs = { inherit inputs; };
       system = "x86_64-linux";
       modules = [
         ./configuration.nix

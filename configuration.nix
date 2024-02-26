@@ -2,7 +2,7 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, ... }:
+{ pkgs, inputs, ... }:
 {
   imports = [
     # Include the results of the hardware scan.
@@ -61,7 +61,7 @@
   # system leve apps
   environment.systemPackages = with pkgs; [
     vscode
-    nushell
+    nushellFull
     zoxide
     bat
     starship
@@ -69,6 +69,9 @@
     git
     nil
     nixpkgs-fmt
+
+    # 这里从 helix 这个 inputs 数据源安装了 helix 程序
+    inputs.helix.packages."${pkgs.system}".helix
   ];
 
   # others
