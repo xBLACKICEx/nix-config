@@ -54,7 +54,7 @@
     gawk
     zstd
     gnupg
-    keeepassxc
+    keepassxc
 
     # nix related
     #

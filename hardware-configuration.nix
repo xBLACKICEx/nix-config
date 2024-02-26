@@ -152,8 +152,25 @@
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
-# Enabling Bluetooth support
+  # Enabling Bluetooth support
   hardware.bluetooth.enable = true;
+
+  # Enable sound with pipewire.
+  hardware.pulseaudio.enable = false;
+  sound.enable = true;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    # If you want to use JACK applications, uncomment this
+    jack.enable = true;
+
+    # use the example session manager (no others are packaged yet so this is enabled by default,
+    # no need to redefine it in your config for now)
+    #media-session.enable = true;
+  };
 
 #Network
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
