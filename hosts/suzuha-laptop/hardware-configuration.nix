@@ -16,7 +16,7 @@
   boot.kernelPackages = pkgs.linuxPackages_latest; # set linux kernel to latest version
   boot.supportedFilesystems = [ "ntfs" ];
 
-  # networking bug fix for rtw89_8852be
+# networking bug fix for rtw89_8852be
   # https://github.com/lwfinger/rtw89/issues/308
   boot.extraModprobeConfig = ''
     options rtw89_pci disable_aspm_l1=Y
@@ -136,10 +136,12 @@
   fileSystems = {
     "/mnt/media/家" = {
       device = "/dev/disk/by-uuid/4076D28A76D28058";
-      fsType = "ntfs3";
+      fsType = "ntfs-3g";
       options = [
         "rw"
         "uid=1000"
+        "gid=100"
+        "nofail"
       ];
     };
   };
