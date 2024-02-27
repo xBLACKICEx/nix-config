@@ -24,10 +24,10 @@ nixpkgs.lib.nixosSystem {
         username = "michiha";
       };
 
-      # home-manager.users.poporo = import ../../home {
-      #   inherit pkgs;
-      #   username = "poporo";
-      # };
+      home-manager.users.poporo = import ../../home {
+        inherit pkgs;
+        username = "poporo";
+      };
 
       # 使用 home-manager.extraSpecialArgs 自定义传递给 ./home.nix 的参数
       # 取消注释下面这一行，就可以在 home.nix 中使用 flake 的所有 inputs 参数了
