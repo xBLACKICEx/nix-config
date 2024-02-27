@@ -1,6 +1,6 @@
-{ lib, stdenv, requireFile }:
+{ lib, stdenv, }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "my_fonts";
   version = "0.0.2";
 

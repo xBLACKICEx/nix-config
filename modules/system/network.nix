@@ -18,7 +18,6 @@
   # networking.interfaces.wlo1.useDHCP = lib.mkDefault true;
 
   networking = {
-    hostName = "suzuha"; # Define your hostname.
     nameservers = [ "127.0.0.1" "::1" ];
 
     # If using dhcpcd:

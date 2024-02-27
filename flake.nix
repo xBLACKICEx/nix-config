@@ -21,11 +21,12 @@
   };
 
   # 这里的 `self` 是个特殊参数，它指向 `outputs` 函数返回的 attribute set 自身，即自引用
-  outputs = { self, nixpkgs, dedsec-grub-theme, home-manager, ... }@inputs: {
+  outputs = { self, nixpkgs, dedsec-grub-theme, home-manager, ... }@inputs:
+    {
 
-    nixosConfigurations = {
-      "suzuha" = import ./hosts/suzuha-laptop inputs;
+      nixosConfigurations = {
+        "suzuha" = import ./hosts/suzuha-laptop inputs;
 
+      };
     };
-  };
 }

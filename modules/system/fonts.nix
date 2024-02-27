@@ -1,6 +1,6 @@
 { pkgs, ... }:
 let
-  my_fonts = pkgs.callPackage (../../my_fonts.nix) { };
+  # my_fonts = pkgs.callPackage (../../my_fonts.nix) { };
 in
 {
   # system fonts
@@ -20,7 +20,7 @@ in
           "CascadiaCode"
         ];
       })
-      my_fonts # 自定义字体
+      # my_fonts # 自定义字体
     ];
   };
 }

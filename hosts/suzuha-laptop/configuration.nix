@@ -18,10 +18,23 @@
     };
   };
 
+  # Define hostname michiha@suzyha, poporo@suzyha ...
+  networking.hostName = "suzuha"; 
+
   # Users on system
   users.users.michiha = {
     isNormalUser = true;
     description = "michiha";
+    extraGroups = [ "networkmanager" "wheel" ];
+    packages = with pkgs; [
+      firefox
+      kate
+    ];
+  };
+
+  users.users.poporo = {
+    isNormalUser = true;
+    description = "poporo";
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
       firefox
