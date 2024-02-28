@@ -29,6 +29,7 @@
       fcitx5-chinese-addons
       fcitx5-table-extra
       # fcitx5-mozc    # japanese input method
+      fcitx5-gtk # gtk im module
 
     ];
   };

@@ -20,6 +20,10 @@
   #     xxx
   # '';
 
+  imports = [
+    # 导入一些常用的配置
+    ../modules/home/fcitx5
+  ];
 
   # 通过 home.packages 安装一些常用的软件
   # 这些软件将仅在当前用户下可用，不会影响系统级别的配置
@@ -62,7 +66,7 @@
     # it provides the command `nom` works just like `nix`
     # with more details log output
     nix-output-monitor
-  
+
 
     # productivity
     hugo # static site generator
