@@ -1,13 +1,7 @@
-{ nixpkgs, dedsec-grub-theme, home-manager, ... }@inputs:
-let
-  system = "x86_64-linux"; # System architecture
-  pkgs = import nixpkgs {
-    inherit system;
-    config.allowUnfree = true; # Allow proprietary software
-  };
-in
+{ nixpkgs, dedsec-grub-theme, home-manager, inputs, outputs, pkgs, ... }:
+
 nixpkgs.lib.nixosSystem {
-  specialArgs = { inherit inputs; };
+  specialArgs = { inherit inputs outputs; };
   system = "x86_64-linux";
   modules = [
     ./configuration.nix
@@ -17,21 +11,8 @@ nixpkgs.lib.nixosSystem {
       home-manager.useGlobalPkgs = true;
       home-manager.useUserPackages = true;
 
-      # 这里的 ryan 也得替换成你的用户名
-      # 这里的 import 函数在前面 Nix 语法中介绍过了，不再赘述
-      home-manager.users.michiha = import ../../home {
-        inherit pkgs;
-        username = "michiha";
-      };
-
-      home-manager.users.poporo = import ../../home {
-        inherit pkgs;
-        username = "poporo";
-      };
-
-      # 使用 home-manager.extraSpecialArgs 自定义传递给 ./home.nix 的参数
-      # 取消注释下面这一行，就可以在 home.nix 中使用 flake 的所有 inputs 参数了
-      # home-manager.extraSpecialArgs = inputs;
+      home-manager.users.michiha = ../../home/michiha.nix;
+      home-manager.extraSpecialArgs = { inherit pkgs inputs outputs; };
     }
   ];
 }

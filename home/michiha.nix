@@ -1,9 +1,9 @@
-{ pkgs, username, ... }:
+{ pkgs, outputs, ... }:
 
 {
   # 注意修改这里的用户名与用户目录
-  home.username = username;
-  home.homeDirectory = "/home/${username}";
+  # home.username = username;
+  # home.homeDirectory = "/home/michiha";  # 直接将当前文件夹的配置文件，链接到 Home 目录下的指定位置
 
   # 直接将当前文件夹的配置文件，链接到 Home 目录下的指定位置
   # home.file.".config/i3/wallpaper.jpg".source = ./wallpaper.jpg;
@@ -22,7 +22,7 @@
 
   imports = [
     # 导入一些常用的配置
-    ../modules/home/fcitx5
+    outputs.homeManagerModules.fcitx5
   ];
 
   # 通过 home.packages 安装一些常用的软件
