@@ -12,7 +12,10 @@
     fzf
     git
     nil
+
+    # nix tools
     nixpkgs-fmt
+    nix-output-monitor
 
     # archives
     zip
