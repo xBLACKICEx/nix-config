@@ -23,6 +23,7 @@
   imports = [
     # 导入一些常用的配置
     outputs.homeManagerModules.fcitx5
+    outputs.homeManagerModules.wm-hyprland
   ];
 
   # 通过 home.packages 安装一些常用的软件
@@ -86,6 +87,8 @@
     ethtool
     pciutils # lspci
     usbutils # lsusb
+    brightnessctl # control the brightness of the screen, for hyprland
+    # pueue #  A command scheduler for shells https://github.com/Nukesor/pueue
 
     # 聊天工具
     telegram-desktop
@@ -98,6 +101,42 @@
     enable = true;
     userName = "xblackicex";
     userEmail = "xblackicex@outlook.com";
+  };
+
+  services.pueue.enable = true;
+  services.pueue.settings = {
+    client = {
+      restart_in_place = false;
+      read_local_logs = true;
+      show_confirmation_questions = false;
+      show_expanded_aliases = false;
+      dark_mode = false;
+      max_status_lines = null;
+      status_time_format = "%H:%M:%S";
+      status_datetime_format = "%Y-%m-%d\n%H:%M:%S";
+    };
+    daemon = {
+      pause_group_on_failure = false;
+      pause_all_on_failure = false;
+      callback = null;
+      env_vars = { };
+      callback_log_lines = 10;
+      shell_command = null;
+    };
+    shared = {
+      pueue_directory = null;
+      runtime_directory = null;
+      alias_file = null;
+      use_unix_socket = true;
+      unix_socket_path = null;
+      host = "127.0.0.1";
+      port = "6924";
+      pid_path = null;
+      daemon_cert = null;
+      daemon_key = null;
+      shared_secret_path = null;
+    };
+    profiles = { };
   };
 
   # # 启用 starship，这是一个漂亮的 shell 提示符

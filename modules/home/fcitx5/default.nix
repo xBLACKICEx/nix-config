@@ -11,6 +11,9 @@
       # so we need to force replace it in every rebuild to avoid file conflict.
       force = true;
     };
-    "fcitx5/conf/classicui.conf".source = ./configs/conf/classicui.conf;
+    "fcitx5/conf/classicui.conf" = {
+      source = ./configs/conf/classicui.conf;
+      force = true;
+    };
   };
 }

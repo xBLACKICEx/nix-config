@@ -1,4 +1,4 @@
-{ nixpkgs, dedsec-grub-theme, home-manager, inputs, outputs, pkgs, ... }:
+{ nixpkgs, dedsec-grub-theme, home-manager, hyprland, inputs, outputs, nur-ryan4yin, anyrun, pkgs, ... }:
 
 nixpkgs.lib.nixosSystem {
   specialArgs = { inherit inputs outputs; };
@@ -12,7 +12,7 @@ nixpkgs.lib.nixosSystem {
       home-manager.useUserPackages = true;
 
       home-manager.users.michiha = ../../home/michiha.nix;
-      home-manager.extraSpecialArgs = { inherit pkgs inputs outputs; };
+      home-manager.extraSpecialArgs = { inherit pkgs inputs anyrun hyprland nur-ryan4yin outputs; };
     }
   ];
 }
