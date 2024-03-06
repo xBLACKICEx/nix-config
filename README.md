@@ -6,6 +6,10 @@
 
 This nix-config is my personal configuration used to manage and configure NixOS. However, please note that due to my own usage needs and skill level, this configuration may have some issues, so I do not recommend others to use it for now.
 
+## For Nix Newbies
+
+If you're new to Nix, you might find it helpful to explore my git commit history. The commit messages provide detailed insights (AI-generated, haha 😄), illustrating how this configuration started with just 4 files and evolved to its current state. This approach may offer a more accessible learning path compared to diving into larger, complex nix-configs.
+
 ## Creation Process
 
 In creating this nix-config, I borrowed ideas and techniques from the following configurations and resources:
