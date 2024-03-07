@@ -4,7 +4,7 @@
 
 ## About This Configuration
 
-This nix-config is my personal configuration used to manage and configure NixOS. However, please note that due to my own usage needs and skill level, this configuration may have some issues, so I do not recommend others to use it for now.
+This nix-config is my personal setup for managing and configuring NixOS. However, please note that due to my own needs and skill level, this configuration may have issues, so I advise against using it at this time.
 
 ## For Nix Newbies
 
@@ -12,13 +12,14 @@ If you're new to Nix, you might find it helpful to explore my git commit history
 
 ## Creation Process
 
-In creating this nix-config, I borrowed ideas and techniques from the following configurations and resources:
-#### my config is based on:
+In crafting this nix-config, I drew inspiration from various sources and configurations, including:
+
 - [ryan4yin/nix-config](https://github.com/ryan4yin/nix-config/tree/main)
 - [MatthiasBenaets/nixos-config](https://github.com/MatthiasBenaets/nixos-config)
-- [Misterio77/nix-starter-configs](https://github.com/Misterio77/nix-starter-configs) 
+- [Misterio77/nix-starter-configs](https://github.com/Misterio77/nix-starter-configs)
+  
+Additionally, I found valuable insights in the book:
 
-#### a book I read for nixos and flake ect...
 - [NixOS and Flakes: A Modular System Configuration Framework](https://nixos-and-flakes.thiscute.world)
 
-Thanks to the above resources and assistance, without which this configuration might not have been possible.
+Gratitude is extended to these resources and contributors, without whom this configuration might not have been feasible.
