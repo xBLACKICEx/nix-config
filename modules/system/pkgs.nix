@@ -1,6 +1,6 @@
 { pkgs, inputs, ... }:
 let
-  waveterm = pkgs.callPackage  ../../waveterm.nix  { };
+  # waveterm = pkgs.callPackage  ../../waveterm.nix  { };
 in
 {
   # system leve apps
@@ -27,8 +27,6 @@ in
     xz
     unzip
     p7zip
-
-    waveterm
 
   ];
 
