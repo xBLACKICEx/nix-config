@@ -4,19 +4,14 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports =
-    [
-      (modulesPath + "/installer/scan/not-detected.nix")
-    ];
-# kernel settings
-  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "usbhid" ];
+  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
+
+  boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
-  boot.kernelPackages = pkgs.linuxPackages_latest; # set linux kernel to latest version
-  boot.supportedFilesystems = [ "ntfs" ];
-
-# networking bug fix for rtw89_8852be
+  
+  # networking bug fix for rtw89_8852be
   # https://github.com/lwfinger/rtw89/issues/308
   boot.extraModprobeConfig = ''
     options rtw89_pci disable_aspm_l1=Y
@@ -34,7 +29,17 @@
       fi
     '';
 
-# Dual BootinJ using grub
+  boot.supportedFilesystems = [
+    "ext4"
+    "btrfs"
+    "xfs"
+    "ntfs"
+    "fat"
+    "vfat"
+    "exfat"
+  ];
+
+# Dual Boot using grub
   boot.loader = {
     efi = {
       canTouchEfiVariables = true;
@@ -57,101 +62,83 @@
   };
 
   boot.initrd = {
-    # unlocked luks devices via a keyfile or prompt a passphrase.
     luks.devices."crypted-nixos" = {
-      # NOTE: DO NOT use device name here(like /dev/sda, /dev/nvme0n1p2, etc), use UUID instead.
-      # https://github.com/ryan4yin/nix-config/issues/43
-      device = "/dev/disk/by-uuid/2700f54b-0f14-4979-8c3f-6c25b0764c22";
-      # the keyfile(or device partition) that should be used as the decryption key for the encrypted device.
-      # if not specified, you will be prompted for a passphrase instead.
-      #keyFile = "/root-part.key";
-
-      # whether to allow TRIM requests to the underlying device.
-      # it's less secure, but faster.
-      allowDiscards = true;
-      # Whether to bypass dm-crypt’s internal read and write workqueues. 
-      # Enabling this should improve performance on SSDs; 
+      device = "/dev/disk/by-uuid/f865468b-13bd-4363-a1ab-44b764fc0f05";
+      # Whether to bypass dm-crypt’s internal read and write workqueues.
+      # Enabling this should improve performance on SSDs;
       # https://wiki.archlinux.org/index.php/Dm-crypt/Specialties#Disable_workqueue_for_increased_solid_state_drive_(SSD)_performance
       bypassWorkqueues = true;
     };
   };
 
-# mount device
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/9938-0AF4";
-    fsType = "vfat";
-  };
+  
+  fileSystems."/" =
+    { device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
+      fsType = "btrfs";
+    };  
 
-  fileSystems."/" = {
-    device = "/dev/disk/by-uuid/33abbb8f-86dc-4ce8-a38a-ec0c55923fc8";
-    fsType = "btrfs";
-  };
+  fileSystems."/nix" =
+    { device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
+      fsType = "btrfs";
+      options = [ "subvol=@nix" "noatime" "compress-force=zstd:1" ];
+    };
 
-  fileSystems."/nix" = {
-    device = "/dev/disk/by-uuid/33abbb8f-86dc-4ce8-a38a-ec0c55923fc8";
-    fsType = "btrfs";
-    options = [ "subvol=@nix" "noatime" "compress-force=zstd:1" ];
-  };
+  fileSystems."/gnu" =
+    { device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
+      fsType = "btrfs";
+      options = [ "subvol=@guix" "noatime" "compress-force=zstd:1" ];
+    };
 
-  fileSystems."/gnu" = {
-    device = "/dev/disk/by-uuid/33abbb8f-86dc-4ce8-a38a-ec0c55923fc8";
-    fsType = "btrfs";
-    options = [ "subvol=@guix" "noatime" "compress-force=zstd:1" ];
-  };
+  fileSystems."/tmp" =
+    { device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
+      fsType = "btrfs";
+      options = [ "subvol=@tmp" "compress-force=zstd:1" ];
+    };
 
-  fileSystems."/tmp" = {
-    device = "/dev/disk/by-uuid/33abbb8f-86dc-4ce8-a38a-ec0c55923fc8";
-    fsType = "btrfs";
-    options = [ "subvol=@tmp" "compress-force=zstd:1" ];
-  };
-
-  fileSystems."/persistent" = {
-    device = "/dev/disk/by-uuid/33abbb8f-86dc-4ce8-a38a-ec0c55923fc8";
-    fsType = "btrfs";
-    options = [ "subvol=@persistent" "compress-force=zstd:1" ];
-  };
-
-  fileSystems."/snapshots" = {
-    device = "/dev/disk/by-uuid/33abbb8f-86dc-4ce8-a38a-ec0c55923fc8";
-    fsType = "btrfs";
-    options = [ "subvol=@snapshots" "compress-force=zstd:1" ];
-  };
-
-  fileSystems."/swap" = {
-    device = "/dev/disk/by-uuid/33abbb8f-86dc-4ce8-a38a-ec0c55923fc8";
-    fsType = "btrfs";
-    options = [ "subvol=@swap" "ro" ];
-  };
-
+  fileSystems."/swap" =
+    { device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
+      fsType = "btrfs";
+      options = [ "subvol=@swap" "ro"];
+    };
+  
   # remount swapfile in read-write mode
   fileSystems."/swap/swapfile" = {
     # the swapfile is located in /swap subvolume, so we need to mount /swap first.
-    depends = [ "/swap" ];
+    depends = ["/swap"];
 
     device = "/swap/swapfile";
     fsType = "none";
-    options = [ "bind" "rw" ];
+    options = ["bind" "rw"];
   };
 
-  fileSystems = {
-    "/mnt/media/家" = {
-      device = "/dev/disk/by-uuid/4076D28A76D28058";
-      fsType = "ntfs-3g";
-      options = [
-        "rw"
-        "uid=1000"
-        "gid=100"
-        "nofail"
-      ];
+  fileSystems."/persistent" =
+    { device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
+      fsType = "btrfs";
+      options = [ "subvol=@persistent" "compress-force=zstd:1" ];
     };
-  };
 
-  swapDevices = [
-    { device = "/swap/swapfile"; }
-  ];
+  fileSystems."/snapshots" =
+    { device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
+      fsType = "btrfs";
+      options = [ "subvol=@snapshots" "compress-force=zstd:1" ];
+    };
 
-# hardware
-  # CPU settings
+  fileSystems."/boot" =
+    { device = "/dev/disk/by-uuid/1BA3-945B";
+      fsType = "vfat";
+      options = [ "fmask=0022" "dmask=0022" ];
+    };
+
+  swapDevices = [ {device = "/swap/swapfile";} ];
+
+  # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
+  # (the default) this is the recommended approach. When using systemd-networkd it's
+  # still possible to use this option, but it's recommended to use it in conjunction
+  # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
+  networking.useDHCP = lib.mkDefault true;
+  # networking.interfaces.enp3s0f4u2.useDHCP = lib.mkDefault true;
+  # networking.interfaces.wlo1.useDHCP = lib.mkDefault true;
+
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

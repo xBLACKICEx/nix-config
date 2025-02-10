@@ -23,7 +23,6 @@
   imports = [
     # 导入一些常用的配置
     outputs.homeManagerModules.fcitx5
-    outputs.homeManagerModules.wm-hyprland
   ];
 
   # 通过 home.packages 安装一些常用的软件
@@ -81,6 +80,8 @@
     ltrace # library call monitoring
     lsof # list open files
 
+    warp-terminal
+
     # system tools
     sysstat
     lm_sensors # for `sensors` command
@@ -94,6 +95,7 @@
     telegram-desktop
     element-desktop
     discord
+    zed-editor
   ];
 
   # git 相关配置
@@ -176,7 +178,7 @@
   # You can update Home Manager without changing this value. See
   # the Home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = "24.05";
+  home.stateVersion = "25.05";
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;

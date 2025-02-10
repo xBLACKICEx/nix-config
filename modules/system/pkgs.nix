@@ -1,17 +1,22 @@
-{ pkgs, inputs, ...}:
+{ pkgs, inputs, ... }:
+let
+  waveterm = pkgs.callPackage  ../../waveterm.nix  { };
+in
 {
   # system leve apps
   environment.systemPackages = with pkgs; [
     neofetch
 
     vscode
-    nushellFull
+    nushell
     zoxide
     bat
     starship
     fzf
     git
     nil
+    nixd
+    motrix
 
     # nix tools
     nixpkgs-fmt
@@ -23,8 +28,8 @@
     unzip
     p7zip
 
-    # 这里从 helix 这个 inputs 数据源安装了 helix 程序
-    inputs.helix.packages."${pkgs.system}".helix
+    waveterm
+
   ];
 
   # others
@@ -34,3 +39,4 @@
   ];
 
 }
+ 

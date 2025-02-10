@@ -8,6 +8,7 @@
     ./peripherals.nix
     ./pkgs.nix
   ];
+  programs.direnv.enable = true;
   # others
   nix.settings = {
     experimental-features = [

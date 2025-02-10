@@ -32,16 +32,5 @@
     ];
   };
 
-  users.users.poporo = {
-    isNormalUser = true;
-    description = "poporo";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-      firefox
-      kate
-    ];
-  };
-
-
-  system.stateVersion = "24.05"; # Did you read the comment?
+  system.stateVersion = "25.05"; # Did you read the comment?
 }
