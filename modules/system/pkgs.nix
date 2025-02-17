@@ -3,11 +3,12 @@ let
   # waveterm = pkgs.callPackage  ../../waveterm.nix  { };
 in
 {
+  qt.style = "kvantum";
   # system leve apps
   environment.systemPackages = with pkgs; [
     neofetch
 
-    vscode
+    vscode-fhs
     nushell
     zoxide
     bat
@@ -18,7 +19,7 @@ in
     nixd
     motrix
 
-    # nix tools
+    # nix tools 
     nixpkgs-fmt
     nix-output-monitor
 
