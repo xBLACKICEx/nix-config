@@ -7,7 +7,7 @@ in
   # system leve apps
   environment.systemPackages = with pkgs; [
     neofetch
-
+    git
     vscode-fhs
     nushell
     zoxide

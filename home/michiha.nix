@@ -1,4 +1,4 @@
-{ pkgs, outputs, ... }:
+{ pkgs, inputs, outputs, ... }:
 
 {
   # 注意修改这里的用户名与用户目录
@@ -29,6 +29,10 @@
   # 这些软件将仅在当前用户下可用，不会影响系统级别的配置
   # 建议将所有 GUI 软件，以及与 OS 关系不大的 CLI 软件，都通过 home.packages 安装
   home.packages = with pkgs;[
+    # 一些常用的软件
+    inputs.zen-browser.packages."${system}".default
+    anytype
+  
     # 如下是我常用的一些命令行工具，你可以根据自己的需要进行增删
 
     yazi # terminal file manager
@@ -160,6 +164,8 @@
     # TODO 在这里添加你的自定义 bashrc 内容
     bashrcExtra = ''
       export PATH="$PATH:$HOME/bin:$HOME/.local/bin:$HOME/go/bin"
+      eval "$(starship init bash)"
+      eval "$(zoxide init bash)"
     '';
 
     # TODO 设置一些别名方便使用，你可以根据自己的需要进行增删
