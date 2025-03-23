@@ -28,7 +28,7 @@
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
       firefox
-      kdePackages.kateclear
+      kdePackages.kate
     ];
   };
 

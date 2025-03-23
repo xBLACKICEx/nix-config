@@ -29,6 +29,7 @@ in
     unzip
     p7zip
 
+    awscli2
   ];
 
   # others
