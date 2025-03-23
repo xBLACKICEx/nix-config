@@ -23,6 +23,8 @@ in
     nixpkgs-fmt
     nix-output-monitor
 
+    kikoplay
+
     # archives
     zip
     xz
