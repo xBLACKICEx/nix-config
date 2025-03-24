@@ -7,7 +7,7 @@ in
   # system leve apps
   environment.systemPackages = with pkgs; [
     neofetch
-
+    git
     vscode-fhs
     nushell
     zoxide
@@ -23,12 +23,15 @@ in
     nixpkgs-fmt
     nix-output-monitor
 
+    kikoplay
+
     # archives
     zip
     xz
     unzip
     p7zip
 
+    awscli2
   ];
 
   # others

@@ -19,7 +19,7 @@
   };
 
   # Define hostname michiha@suzyha, poporo@suzyha ...
-  networking.hostName = "suzuha"; 
+  networking.hostName = "suzuha";
 
   # Users on system
   users.users.michiha = {
@@ -28,7 +28,7 @@
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [
       firefox
-      kate
+      kdePackages.kate
     ];
   };
 
