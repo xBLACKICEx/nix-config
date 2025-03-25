@@ -1,37 +1,61 @@
 { pkgs, inputs, ... }:
-let
-  # waveterm = pkgs.callPackage  ../../waveterm.nix  { };
-in
 {
   qt.style = "kvantum";
   # system leve apps
   environment.systemPackages = with pkgs; [
-    neofetch
-    git
-    vscode-fhs
-    nushell
-    zoxide
+    # archiving
+    p7zip
+    unzip
+    xz
+    zip
+
+    # cli tools
+    awscli2
     bat
-    starship
     fzf
     git
+    neofetch
     nil
-    nixd
-    motrix
+    nushell
 
-    # nix tools 
-    nixpkgs-fmt
+    # formatting for nushell
+    topiary
+    tree-sitter
+    tree-sitter-grammars.tree-sitter-nu
+
+    starship
+    zoxide
+
+    vscode-fhs
+    (zed-editor.overrideAttrs (oldAttrs: {
+        postPatch = ''
+          substituteInPlace $cargoDepsCopy/webrtc-sys-*/build.rs \
+            --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
+
+          substituteInPlace script/generate-licenses \
+            --replace-fail 'CARGO_ABOUT_VERSION="0.6"' 'CARGO_ABOUT_VERSION="0.7"'
+        '';
+    }))
+
+    # nix tooling
     nix-output-monitor
+    nixd
+    nixpkgs-fmt
 
+    # multimedia
     kikoplay
+    obs-studio
 
-    # archives
-    zip
-    xz
-    unzip
-    p7zip
+    # system
+    expect
+    xdg-user-dirs
 
-    awscli2
+
+    # Virtualization
+    quickemu
+
+    # Downloaders
+    motrix
   ];
 
   # others

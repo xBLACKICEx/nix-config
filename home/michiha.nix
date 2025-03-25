@@ -65,6 +65,8 @@
     gnupg
     keepassxc
 
+    # zed-editor
+
     # nix related
     #
     # it provides the command `nom` works just like `nix`
@@ -99,7 +101,6 @@
     telegram-desktop
     element-desktop
     discord
-    zed-editor
   ];
 
   # git 相关配置

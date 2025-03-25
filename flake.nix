@@ -16,11 +16,16 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    anyrun = {
+      url = "github:anyrun-org/anyrun";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
   };
 
   # 这里的 `self` 是个特殊参数，它指向 `outputs` 函数返回的 attribute set 自身，即自引用
-  outputs = { self, nixpkgs, dedsec-grub-theme, home-manager, zen-browser, ... }@inputs:
+  outputs = { self, nixpkgs, dedsec-grub-theme, home-manager, zen-browser, anyrun, ... }@inputs:
     let
       inherit (self) outputs;
       system = "x86_64-linux"; # System architecture
@@ -33,7 +38,7 @@
       homeManagerModules = import ./modules/home;
 
       nixosConfigurations = {
-        "suzuha" = import ./hosts/suzuha-laptop { inherit nixpkgs dedsec-grub-theme home-manager inputs outputs pkgs; };
+        "suzuha" = import ./hosts/suzuha-laptop { inherit nixpkgs dedsec-grub-theme home-manager inputs outputs anyrun pkgs; };
       };
     };
 }

@@ -25,7 +25,7 @@
   users.users.michiha = {
     isNormalUser = true;
     description = "michiha";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "input"];
     packages = with pkgs; [
       firefox
       kdePackages.kate
