@@ -26,7 +26,7 @@
     starship
     zoxide
 
-    vscode-fhs
+    vscode
     (zed-editor.overrideAttrs (oldAttrs: {
         postPatch = ''
           substituteInPlace $cargoDepsCopy/webrtc-sys-*/build.rs \

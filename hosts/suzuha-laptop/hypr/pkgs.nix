@@ -1,6 +1,8 @@
 { pkgs, inputs, anyrun, ... }: {
   environment.systemPackages = with pkgs; [
     waybar
+    inputs.quickshell.packages.${pkgs.system}.default
+    qml-ts-mode
     eww
 
     hyprlandPlugins.hyprbars
@@ -22,8 +24,8 @@
     slurp
 
     # notify
-    mako # the notification daemon, the same as 
-    # dunst
+    # mako # the notification daemon, the same as 
+    dunst
     libnotify
 
     rofi-wayland

@@ -1,7 +1,7 @@
 { nixpkgs, dedsec-grub-theme, home-manager, inputs, anyrun, outputs, pkgs, ... }:
 
 nixpkgs.lib.nixosSystem {
-  specialArgs = { inherit inputs outputs anyrun; };
+  specialArgs = { inherit inputs outputs anyrun pkgs; };
   system = "x86_64-linux";
   modules = [
     ./configuration.nix
