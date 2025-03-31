@@ -18,6 +18,13 @@
     };
   };
 
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    gtk3
+    # Add any missing dynamic libraries for unpackaged programs
+    # here, NOT in environment.systemPackages
+  ];
+  
   # Define hostname michiha@suzyha, poporo@suzyha ...
   networking.hostName = "suzuha";
 
@@ -31,6 +38,7 @@
       kdePackages.kate
     ];
   };
+  users.groups.libvirtd.members = [ "michiha" ];
 
   nix.settings.trusted-users = [ "michiha" ];
   system.stateVersion = "25.05"; # Did you read the comment?

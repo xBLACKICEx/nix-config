@@ -2,6 +2,7 @@
   environment.systemPackages = with pkgs; [
     waybar
     inputs.quickshell.packages.${pkgs.system}.default
+    kdePackages.qtdeclarative
     qml-ts-mode
     eww
 

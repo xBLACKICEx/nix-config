@@ -8,7 +8,6 @@
     ./peripherals.nix
     ./pkgs.nix
   ];
-  programs.direnv.enable = true;
 
   environment.sessionVariables = {
     XDG_CACHE_HOME = "$HOME/.cache";
@@ -16,6 +15,10 @@
     XDG_DATA_HOME = "$HOME/.local/share";
     XDG_STATE_HOME = "$HOME/.local/state";
   };
+
+  programs.virt-manager.enable = true;
+  virtualisation.libvirtd.enable = true;
+  virtualisation.spiceUSBRedirection.enable = true;
 
   nix.settings = {
     experimental-features = [

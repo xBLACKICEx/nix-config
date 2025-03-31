@@ -1,6 +1,7 @@
 { pkgs, inputs, ... }:
 {
   qt.style = "kvantum";
+  # home-manager.backupFileExtension = "backup-" + pkgs.lib.readFile "${pkgs.runCommand "timestamp" {} "echo -n `date '+%Y%m%d%H%M%S'` > $out"}";
   # system leve apps
   environment.systemPackages = with pkgs; [
     # archiving

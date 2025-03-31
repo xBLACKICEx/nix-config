@@ -23,6 +23,7 @@
   imports = [
     # 导入一些常用的配置
     outputs.homeManagerModules.fcitx5
+    outputs.homeManagerModules.my_fonts
   ];
 
   # 通过 home.packages 安装一些常用的软件
@@ -32,29 +33,28 @@
     # 一些常用的软件
     inputs.zen-browser.packages."${system}".default
     anytype
-  
-    # 如下是我常用的一些命令行工具，你可以根据自己的需要进行增删
 
-    yazi # terminal file manager
+    # 终端文件管理器
+    yazi
 
-    # utils
-    ripgrep # recursively searches directories for a regex pattern
-    fd # replacement of find
-    jq # A lightweight and flexible command-line JSON processor
-    yq-go # yaml processer https://github.com/mikefarah/yq
+    # 常用工具
+    ripgrep # 递归搜索目录中的正则表达式模式
+    fd # find 的替代品
+    jq # 轻量级且灵活的命令行 JSON 处理器
+    yq-go # YAML 处理器 https://github.com/mikefarah/yq
     lsd
 
-    # networking tools
-    mtr # A network diagnostic tool
+    # 网络工具
+    mtr # 网络诊断工具
     iperf3
     dnsutils # `dig` + `nslookup`
-    ldns # replacement of `dig`, it provide the command `drill`
-    aria2 # A lightweight multi-protocol & multi-source command-line download utility
-    socat # replacement of openbsd-netcat
-    nmap # A utility for network discovery and security auditing
-    ipcalc # it is a calculator for the IPv4/v6 addresses
+    ldns # `dig` 的替代品，提供 `drill` 命令
+    aria2 # 轻量级多协议 & 多源命令行下载工具
+    socat # openbsd-netcat 的替代品
+    nmap # 用于网络发现和安全审计的实用程序
+    ipcalc # IPv4/v6 地址计算器
 
-    # misc
+    # 其他工具
     cowsay
     file
     which
@@ -65,43 +65,40 @@
     gnupg
     keepassxc
 
-    # zed-editor
 
-    # nix related
-    #
-    # it provides the command `nom` works just like `nix`
-    # with more details log output
+    # editors
+    helix
+    helix-gpt
 
+    # 效率工具
+    hugo # 静态站点生成器
+    glow # 终端中的 Markdown 预览器
 
-    # productivity
-    hugo # static site generator
-    glow # markdown previewer in terminal
+    btop # htop/nmon 的替代品
+    iotop # IO 监控
+    iftop # 网络监控
 
-    btop # replacement of htop/nmon
-    iotop # io monitoring
-    iftop # network monitoring
-
-    # system call monitoring
-    strace # system call monitoring
-    ltrace # library call monitoring
-    lsof # list open files
+    # 系统调用监控
+    strace # 系统调用监控
+    ltrace # 库调用监控
+    lsof # 列出打开的文件
 
     warp-terminal
 
-    # system tools
+    # 系统工具
     sysstat
-    lm_sensors # for `sensors` command
+    lm_sensors # 用于 `sensors` 命令
     ethtool
     pciutils # lspci
     usbutils # lsusb
-    brightnessctl # control the brightness of the screen, for hyprland
-    # pueue #  A command scheduler for shells https://github.com/Nukesor/pueue
+    brightnessctl # 控制屏幕亮度，用于 Hyprland
 
     # 聊天工具
     telegram-desktop
     element-desktop
     discord
   ];
+
 
   # git 相关配置
   programs.git = {
@@ -158,6 +155,31 @@
   #   };
   # };
 
+  programs.direnv = {
+    enable = true;
+    enableBashIntegration = true; # see note on other shells below
+    # enableNushellIntegration = true; # see note on other shells below
+    nix-direnv.enable = true;
+  };
+
+  # programs.nushell.enable = true;
+
+  programs.emacs = {
+    enable = true;
+    extraConfig = ''
+      (use-package qml-ts-mode
+        :after lsp-mode
+        :config
+        (add-to-list 'lsp-language-id-configuration '(qml-ts-mode . "qml-ts"))
+        (lsp-register-client
+         (make-lsp-client :new-connection (lsp-stdio-connection '("qmlls", "-E"))
+                          :activation-fn (lsp-activate-on "qml-ts")
+                          :server-id 'qmlls))
+        (add-hook 'qml-ts-mode-hook (lambda ()
+                                      (setq-local electric-indent-chars '(?\n ?\( ?\) ?{ ?\] ?\; ?,))
+                                      (lsp-deferred))))
+    '';
+  };
 
   programs.bash = {
     enable = true;
@@ -167,6 +189,7 @@
       export PATH="$PATH:$HOME/bin:$HOME/.local/bin:$HOME/go/bin"
       eval "$(starship init bash)"
       eval "$(zoxide init bash)"
+      alias ls=lsd;
     '';
 
     # TODO 设置一些别名方便使用，你可以根据自己的需要进行增删
@@ -186,6 +209,14 @@
   # the Home Manager release notes for a list of state version
   # changes in each release.
   home.stateVersion = "25.05";
+
+  dconf.settings = {
+    "org/virt-manager/virt-manager/connections" = {
+      autoconnect = [ "qemu:///system" ];
+      uris = [ "qemu:///system" ];
+    };
+  };
+
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;

@@ -1,4 +1,4 @@
-{ pkgs, fetchFromGitHub, trivialBuild ? pkgs.emacsPackages.trivialBuild }: {
+{ pkgs, fetchFromGitHub, trivialBuild ? pkgs.emacsPackages.trivialBuild }: trivialBuild {
   pname = "qml-ts-mode";
   version = "master";
   src = fetchFromGitHub {
