@@ -4,6 +4,7 @@
   inputs = {
     # NixOS 官方软件源，这里使用 nixos-unstable 分支
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    impermanence.url = "github:nix-community/impermanence";
 
     # ixpkgs.config.allowUnfree = true;
     dedsec-grub-theme = {

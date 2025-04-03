@@ -71,11 +71,13 @@
     };
   };
 
-  
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
-      fsType = "btrfs";
-    };  
+    {
+      device = "tmpfs";
+      fsType = "tmpfs";
+      # 必须设置 mode=755，否则默认的权限将是 777，导致 OpenSSH 报错并拒绝用户登录
+      options = [ "relatime" "mode=755" ];
+    };
 
   fileSystems."/nix" =
     { device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
@@ -115,6 +117,8 @@
     { device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
       fsType = "btrfs";
       options = [ "subvol=@persistent" "compress-force=zstd:1" ];
+      # impermanence's data is required for booting.
+      neededForBoot = true;
     };
 
   fileSystems."/snapshots" =

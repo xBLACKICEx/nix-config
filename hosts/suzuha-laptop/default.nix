@@ -6,6 +6,8 @@ nixpkgs.lib.nixosSystem {
   modules = [
     ./configuration.nix
     ./hypr
+
+    inputs.impermanence.nixosModules.impermanence
     dedsec-grub-theme.nixosModule
     home-manager.nixosModules.home-manager
     {

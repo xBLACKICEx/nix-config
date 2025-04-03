@@ -7,6 +7,7 @@
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
+    ./impermanence.nix
     ../../modules/system
   ];
 
@@ -18,13 +19,25 @@
     };
   };
 
+  systemd.services.nix-daemon = {
+    environment = {
+      # 指定临时文件的位置
+      TMPDIR = "/var/cache/nix";
+    };
+    serviceConfig = {
+      # 在 Nix Daemon 启动时自动创建 /var/cache/nix
+      CacheDirectory = "nix";
+    };
+  };
+  environment.variables.NIX_REMOTE = "daemon";
+  
   programs.nix-ld.enable = true;
   programs.nix-ld.libraries = with pkgs; [
     gtk3
     # Add any missing dynamic libraries for unpackaged programs
     # here, NOT in environment.systemPackages
   ];
-  
+
   # Define hostname michiha@suzyha, poporo@suzyha ...
   networking.hostName = "suzuha";
 
@@ -37,6 +50,7 @@
       firefox
       kdePackages.kate
     ];
+    hashedPassword = "$6$5RL6IW3tvRdIELcy$mSKtkhUEHBl6Xedq1bxImfUyX.jFift82bRIyj2MVHO.OS1tMSYf6aTk3DkIhnTJ0oEczLUqJZaAiz4h3pg7j/";
   };
   users.groups.libvirtd.members = [ "michiha" ];
 
