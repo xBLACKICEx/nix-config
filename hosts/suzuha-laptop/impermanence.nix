@@ -26,6 +26,9 @@
     hideMounts = true;
     directories = [
       "/etc/NetworkManager/system-connections"
+      "/etc/shadow"
+      "/etc/passwd"
+      "/etc/group"
       "/home"
       "/etc/ssh"
       "/root"
