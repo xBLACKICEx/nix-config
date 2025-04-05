@@ -6,6 +6,10 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     impermanence.url = "github:nix-community/impermanence";
 
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v0.4.2";
+    };
+
     # ixpkgs.config.allowUnfree = true;
     dedsec-grub-theme = {
       url = "gitlab:VandalByte/dedsec-grub-theme";
@@ -31,33 +35,35 @@
   };
 
   # 这里的 `self` 是个特殊参数，它指向 `outputs` 函数返回的 attribute set 自身，即自引用
-  outputs = {
-    self,
-    nixpkgs,
-    dedsec-grub-theme,
-    home-manager,
-    zen-browser,
-    anyrun,
-    ...
-  } @ inputs: let
-    overlays = [
-      # 添加自定义包
-      self.overlays.additions
-      # 修改现有包
-      self.overlays.modifications
-    ];
+  outputs =
+    { self
+    , nixpkgs
+    , dedsec-grub-theme
+    , home-manager
+    , zen-browser
+    , anyrun
+    , ...
+    } @ inputs:
+    let
+      overlays = [
+        # 添加自定义包
+        self.overlays.additions
+        # 修改现有包
+        self.overlays.modifications
+      ];
 
-    inherit (self) outputs;
-    system = "x86_64-linux"; # System architecture
-    pkgs = import nixpkgs {
-      inherit system overlays;
-      config.allowUnfree = true; # Allow proprietary software
+      inherit (self) outputs;
+      system = "x86_64-linux"; # System architecture
+      pkgs = import nixpkgs {
+        inherit system overlays;
+        config.allowUnfree = true; # Allow proprietary software
+      };
+    in
+    {
+      homeManagerModules = import ./modules/home;
+      overlays = import ./overlays;
+      nixosConfigurations = {
+        "suzuha" = import ./hosts/suzuha-laptop { inherit nixpkgs dedsec-grub-theme home-manager inputs outputs anyrun pkgs; };
+      };
     };
-  in {
-    homeManagerModules = import ./modules/home;
-    overlays = import ./overlays;
-    nixosConfigurations = {
-      "suzuha" = import ./hosts/suzuha-laptop {inherit nixpkgs dedsec-grub-theme home-manager inputs outputs anyrun pkgs;};
-    };
-  };
 }

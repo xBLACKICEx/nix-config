@@ -10,7 +10,7 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
-  
+
   # networking bug fix for rtw89_8852be
   # https://github.com/lwfinger/rtw89/issues/308
   boot.extraModprobeConfig = ''
@@ -39,17 +39,19 @@
     "exfat"
   ];
 
-# Dual Boot using grub
+  # Dual Boot using grub
   boot.loader = {
     efi = {
       canTouchEfiVariables = true;
 
       efiSysMountPoint = "/boot";
     };
+    # systemd-boot.enable = false;
+
     grub = {
       devices = [ "nodev" ];
       efiSupport = true;
-      enable = true;
+      enable = false;
       useOSProber = true;
       dedsec-theme = {
         # grub theme module dedsec-theme
@@ -79,42 +81,54 @@
       options = [ "relatime" "mode=755" ];
     };
 
+  fileSystems."/btr_pool" =
+    {
+      device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
+      fsType = "btrfs";
+      options = [ "subvolid=5" ];
+    };
+
   fileSystems."/nix" =
-    { device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
+    {
+      device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
       fsType = "btrfs";
       options = [ "subvol=@nix" "noatime" "compress-force=zstd:1" ];
     };
 
   fileSystems."/gnu" =
-    { device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
+    {
+      device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
       fsType = "btrfs";
       options = [ "subvol=@guix" "noatime" "compress-force=zstd:1" ];
     };
 
   fileSystems."/tmp" =
-    { device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
+    {
+      device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
       fsType = "btrfs";
       options = [ "subvol=@tmp" "compress-force=zstd:1" ];
     };
 
   fileSystems."/swap" =
-    { device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
+    {
+      device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
       fsType = "btrfs";
-      options = [ "subvol=@swap" "ro"];
+      options = [ "subvol=@swap" "ro" ];
     };
-  
+
   # remount swapfile in read-write mode
   fileSystems."/swap/swapfile" = {
     # the swapfile is located in /swap subvolume, so we need to mount /swap first.
-    depends = ["/swap"];
+    depends = [ "/swap" ];
 
     device = "/swap/swapfile";
     fsType = "none";
-    options = ["bind" "rw"];
+    options = [ "bind" "rw" ];
   };
 
   fileSystems."/persistent" =
-    { device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
+    {
+      device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
       fsType = "btrfs";
       options = [ "subvol=@persistent" "compress-force=zstd:1" ];
       # impermanence's data is required for booting.
@@ -122,21 +136,24 @@
     };
 
   fileSystems."/snapshots" =
-    { device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
+    {
+      device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
       fsType = "btrfs";
       options = [ "subvol=@snapshots" "compress-force=zstd:1" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/1BA3-945B";
+    {
+      device = "/dev/disk/by-uuid/1BA3-945B";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
-  swapDevices = [ {device = "/swap/swapfile";} ];
+  swapDevices = [{ device = "/swap/swapfile"; }];
 
   fileSystems."/mnt/windows" =
-    { device = "/dev/disk/by-uuid/4ED462C7D462B0BF";
+    {
+      device = "/dev/disk/by-uuid/4ED462C7D462B0BF";
       fsType = "ntfs-3g";
       options = [ "rw" "uid=1000" "gid=100" "dmask=022" "fmask=133" ];
     };

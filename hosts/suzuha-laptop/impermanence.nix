@@ -31,13 +31,14 @@
       "/etc/group"
       "/home"
       "/etc/ssh"
+      "/etc/agenix"
+
       "/root"
       "/var"
     ];
     files = [
       "/etc/machine-id"
     ];
-
     # the following directories will be passed to /persistent/home/$USER
   };
 }
