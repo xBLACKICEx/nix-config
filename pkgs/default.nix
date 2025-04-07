@@ -1,5 +1,3 @@
-{pkgs}: let
-  callPackage = pkgs.lib.callPackageWith pkgs;
-in {
-  qml-ts-mode = callPackage ./qml-ts-mode.nix {};
+pkgs: {
+  my_fonts = pkgs.callPackage ./fonts.nix { };
 }

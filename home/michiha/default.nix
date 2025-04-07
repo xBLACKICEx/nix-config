@@ -23,7 +23,6 @@
   imports = [
     # 导入一些常用的配置
     outputs.homeManagerModules.fcitx5
-    outputs.homeManagerModules.my_fonts
   ];
 
   # 通过 home.packages 安装一些常用的软件
@@ -43,6 +42,7 @@
     jq # 轻量级且灵活的命令行 JSON 处理器
     yq-go # YAML 处理器 https://github.com/mikefarah/yq
     lsd
+    vscode
 
     # 网络工具
     mtr # 网络诊断工具
@@ -64,6 +64,7 @@
     zstd
     gnupg
     keepassxc
+    kikoplay
 
 
     # editors

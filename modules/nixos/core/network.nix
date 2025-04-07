@@ -1,4 +1,4 @@
-{ lib, ... }: {
+{lib, ...}: {
   # Network
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
@@ -18,7 +18,7 @@
   # networking.interfaces.wlo1.useDHCP = lib.mkDefault true;
 
   networking = {
-    nameservers = [ "127.0.0.1" "::1" ];
+    nameservers = ["127.0.0.1" "::1"];
 
     # If using dhcpcd:
     dhcpcd.extraConfig = "nohook resolv.conf";
@@ -52,5 +52,4 @@
   systemd.services.dnscrypt-proxy2.serviceConfig = {
     StateDirectory = "dnscrypt-proxy";
   };
-
 }

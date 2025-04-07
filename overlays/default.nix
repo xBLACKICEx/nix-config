@@ -1,10 +1,18 @@
-{
-  # 导入自定义包并添加到nixpkgs
-  additions = final: prev: import ../pkgs { pkgs = final; };
+{inputs, ...}: {
+  # This one brings our custom packages from the 'pkgs' directory
+  additions = final: _prev: import ../pkgs final.pkgs;
 
-  # 为已有包添加修改
+  # This one contains whatever you want to overlay
+  # You can change versions, add patches, set compilation flags, anything really.
+  # https://nixos.wiki/wiki/Overlays
   modifications = final: prev: {
-    # 示例：修改某个包
-    # somePackage = prev.somePackage.override { ... };
+
+  };
+
+  stable-packages = final: _prev: {
+    stable = import inputs.nixpkgs-stable {
+      system = final.system;
+      config.allowUnfree = true;
+    };
   };
 }

@@ -8,7 +8,6 @@
 
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
   # networking bug fix for rtw89_8852be
@@ -38,30 +37,6 @@
     "vfat"
     "exfat"
   ];
-
-  # Dual Boot using grub
-  boot.loader = {
-    efi = {
-      canTouchEfiVariables = true;
-
-      efiSysMountPoint = "/boot";
-    };
-    # systemd-boot.enable = false;
-
-    grub = {
-      devices = [ "nodev" ];
-      efiSupport = true;
-      enable = false;
-      useOSProber = true;
-      dedsec-theme = {
-        # grub theme module dedsec-theme
-        enable = true;
-        style = "hackerden";
-        icon = "color";
-        resolution = "1080p";
-      };
-    };
-  };
 
   boot.initrd = {
     luks.devices."crypted-nixos" = {
