@@ -2,6 +2,7 @@
 
   imports = [
     ./kde.nix
+    ./hyprland.nix
   ];
 
   environment.sessionVariables = {

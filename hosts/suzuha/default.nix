@@ -27,7 +27,8 @@ nixpkgs.lib.nixosSystem {
       home-manager.useGlobalPkgs = true;
       home-manager.useUserPackages = true;
 
-      home-manager.users.michiha = ../../home/michiha;
+      home-manager.users.michiha = ./michiha;
+      home-manager.users.beatrice= ./beatrice;
       home-manager.extraSpecialArgs = { inherit inputs outputs; };
     }
   ];

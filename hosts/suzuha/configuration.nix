@@ -14,6 +14,7 @@
 
   # BEGIN -- CUSTOM NIXOS MODULES CONFIGURATION -- BEGIN #
   desktop.kde.enable = true;
+  desktop.hypr.enable = true;
 
   # NixOS Modules Core Setups
   core.impermanence = {
@@ -26,6 +27,7 @@
         "/etc/passwd"
         "/etc/shadow"
         "/etc/group"
+        "/etc/nixos/nix-config"
 
         "/etc/agenix"
 

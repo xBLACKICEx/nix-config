@@ -14,6 +14,7 @@ with lib; {
       enable = true;
       autoNumlock = true;
       wayland.enable = true;
+      enableHidpi = true;
     };
 
     security.pam.services.plasma6.enableKwallet = true;
