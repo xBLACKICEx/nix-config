@@ -14,6 +14,7 @@
       desktop.wayland.enable = true;
       wayland.windowManager.hyprland = {
         enable = true;
+        systemd.enable = false;
 
         package = inputs.hyprland.packages.${pkgs.system}.hyprland;
         portalPackage = inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland;

@@ -66,6 +66,7 @@
     keepassxc
     kikoplay
 
+    carapace
 
     # editors
     helix
@@ -106,6 +107,10 @@
     enable = true;
     userName = "xblackicex";
     userEmail = "xblackicex@outlook.com";
+    extraConfig = ''
+[safe]
+    directory = /home/shards/nix-config
+    '';
   };
 
   services.pueue.enable = true;
@@ -217,7 +222,6 @@
       uris = [ "qemu:///system" ];
     };
   };
-
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;

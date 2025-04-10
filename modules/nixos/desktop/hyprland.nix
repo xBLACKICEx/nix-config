@@ -6,6 +6,7 @@ with lib; {
   config = mkIf config.desktop.hypr.enable {
     programs.hyprland = {
       enable = true;
+      withUWSM = true;
 
       # set the flake package
       package = inputs.hyprland.packages.${pkgs.system}.hyprland;

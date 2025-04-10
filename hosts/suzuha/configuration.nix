@@ -26,7 +26,6 @@
         "/etc/ssh"
         "/etc/passwd"
         "/etc/shadow"
-        "/etc/group"
         "/etc/nixos/nix-config"
 
         "/etc/agenix"
@@ -45,10 +44,17 @@
   virtualisation.libvirtd.enable = true;
   virtualisation.spiceUSBRedirection.enable = true;
 
+  programs.steam.enable = true;
 
   environment.systemPackages = with pkgs;[
     kdePackages.qtdeclarative
+    kdePackages.wallpaper-engine-plugin
+    # linux-wallpaperengine
   ];
+
+  users.groups.shards = {
+    gid = 4672;
+  };
 
   # Users on system
   users.users.michiha = {
@@ -56,6 +62,7 @@
     description = "michiha";
     enable = true;
     extraGroups = [
+      "shards"
       "wheel"
       "networkmanager"
       "libvirtd"
@@ -73,6 +80,7 @@
     description = "beatrice";
     enable = true;
     extraGroups = [
+      "shards"
       "wheel"
       "networkmanager"
       "libvirtd"

@@ -105,6 +105,10 @@
 
   # BEGIN -- CUSTOM HOME MANAGER MODULES CONFIGURATION -- BEGIN #
   desktop.hypr.enable = true;
+
+  xdg.portal.enable = true;
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+
   # END -- CUSTOM HOME MANAGER MODULES CONFIGURATION -- END #
 
   xdg.userDirs = {
@@ -129,12 +133,6 @@
         urldecode = "python3 -c 'import sys, urllib.parse as ul; print(ul.unquote_plus(sys.stdin.read()))'";
         urlencode = "python3 -c 'import sys, urllib.parse as ul; print(ul.quote_plus(sys.stdin.read()))'";
       };
-    };
-
-    direnv = {
-      enable = true;
-      enableBashIntegration = true;
-      nix-direnv.enable = true;
     };
 
     emacs = {
@@ -170,7 +168,23 @@
     #   };
     # };
 
-    # nushell.enable = true;
+    nushell.enable = true;
+
+    carapace.enable = true;
+    carapace.enableNushellIntegration = true;
+
+    direnv.enable = true;
+    direnv.enableBashIntegration = true;
+    direnv.nix-direnv.enable = true;
+
+    starship.enable = true;
+    starship.enableNushellIntegration = true;
+
+    zoxide.enable = true;
+    zoxide.enableNushellIntegration = true;
+
+    yazi.enable = true;
+    yazi.enableNushellIntegration = true;
   };
 
   services = {
@@ -211,6 +225,11 @@
         profiles = { };
       };
     };
+  };
+
+  services.linux-wallpaper-engine = {
+    enable = true;
+    assetsPath = "/home/michiha/nix-config/assets";
   };
 
   dconf.settings = {
