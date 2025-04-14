@@ -66,6 +66,8 @@
     keepassxc
     kikoplay
 
+    libreoffice-qt6
+
     carapace
 
     # editors

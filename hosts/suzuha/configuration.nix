@@ -2,7 +2,7 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ pkgs, outputs, ... }:
+{ pkgs, inputs, outputs, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -37,6 +37,9 @@
   };
   # END -- CUSTOM NIXOS MODULES CONFIGURATION -- END #
 
+  qt.style = "kvantum";
+
+
   virtualisation.virtualbox.host.enable = true;
   users.extraGroups.vboxusers.members = [ "michiha" ];
 
@@ -49,7 +52,8 @@
   environment.systemPackages = with pkgs;[
     kdePackages.qtdeclarative
     kdePackages.wallpaper-engine-plugin
-    # linux-wallpaperengine
+    kdePackages.neochat
+    inputs.quickshell.packages.${pkgs.system}.default
   ];
 
   users.groups.shards = {
@@ -92,6 +96,10 @@
       "qemu-libvirtd"
     ];
   };
+
+  nixpkgs.config.permittedInsecurePackages = [
+    "olm-3.2.16"
+  ];
   users.groups.libvirtd.members = [ "michiha" "beatrice" ];
   nix.settings.trusted-users = [ "michiha" "beatrice" ];
 }
