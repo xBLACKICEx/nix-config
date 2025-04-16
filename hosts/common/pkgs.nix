@@ -1,4 +1,4 @@
-{ pkgs, outputs, ... }: {
+{ pkgs, inputs, outputs, ... }: {
 
   nixpkgs = {
     # You can add overlays here
@@ -39,6 +39,7 @@
 
     # Shell and Terminal Utilities
     nushell # Modern shell written in Rust
+    nufmt # Format Nushell scripts
     starship # Cross-shell prompt
 
     # Network and Download Tools
