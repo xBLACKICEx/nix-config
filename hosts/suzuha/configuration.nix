@@ -54,6 +54,7 @@
     kdePackages.wallpaper-engine-plugin
     kdePackages.neochat
     inputs.quickshell.packages.${pkgs.system}.default
+    zed-editor
   ];
 
   users.groups.shards = {

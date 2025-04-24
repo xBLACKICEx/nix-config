@@ -35,10 +35,6 @@
 
     # Shell and Terminal Utilities
     nushell # Modern shell written in Rust
-    starship # Cross-shell prompt
-
-    # Shell and Terminal Utilities
-    nushell # Modern shell written in Rust
     nufmt # Format Nushell scripts
     starship # Cross-shell prompt
 

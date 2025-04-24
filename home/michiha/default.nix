@@ -109,10 +109,11 @@
     enable = true;
     userName = "xblackicex";
     userEmail = "xblackicex@outlook.com";
-    extraConfig = ''
-[safe]
-    directory = /home/shards/nix-config
-    '';
+    extraConfig = {
+      safe = {
+        directory = "/home/shards/nix-config";
+      };
+    };
   };
 
   services.pueue.enable = true;

@@ -17,6 +17,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    illogical-impulse.url = "github:sitolam/end-4-dots";
+    illogical-impulse.inputs.nixpkgs.follows = "nixpkgs";
+
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";

@@ -70,13 +70,6 @@
       options = [ "subvol=@nix" "noatime" "compress-force=zstd:1" ];
     };
 
-  fileSystems."/gnu" =
-    {
-      device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
-      fsType = "btrfs";
-      options = [ "subvol=@guix" "noatime" "compress-force=zstd:1" ];
-    };
-
   fileSystems."/tmp" =
     {
       device = "/dev/disk/by-uuid/25577768-cc01-4436-842f-0da51f2a2925";
