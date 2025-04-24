@@ -16,6 +16,8 @@
           "flakes"
         ];
 
+        auto-optimise-store = true; # 自动优化 Nix 存储
+
         # 通用的二进制缓存配置
         # extra-substituters = [
         #   "https://anyrun.cachix.org"

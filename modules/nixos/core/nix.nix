@@ -12,4 +12,6 @@
     # 可信用户设置（NixOS 特有的系统级别配置）
     # trusted-users = [ "h4x0r_k4n3da" ];
   };
+
+  nix.optimise.automatic = true;
 }
