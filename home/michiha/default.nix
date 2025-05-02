@@ -101,6 +101,7 @@
     telegram-desktop
     element-desktop
     discord
+    wechat-uos
   ];
 
 
