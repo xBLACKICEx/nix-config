@@ -65,6 +65,7 @@
     gnupg
     keepassxc
     kikoplay
+    exercism
 
     libreoffice-qt6
 

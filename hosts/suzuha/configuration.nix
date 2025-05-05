@@ -24,8 +24,6 @@
         "/etc/NetworkManager/system-connections"
         "/home"
         "/etc/ssh"
-        "/etc/passwd"
-        "/etc/shadow"
         "/etc/nixos/nix-config"
 
         "/etc/agenix"
@@ -78,7 +76,7 @@
     jetbrains.clion
     jetbrains.goland
     jetbrains.rust-rover
-  
+
   ];
 
   users.groups.shards = {
@@ -87,7 +85,11 @@
 
   # Users on system
   users.users = {
+    root = {
+      hashedPassword = "$6$BKXv3QWuBJAnRYNK$uP.PDS1qmkCDvr2IBLw9mLyNhUP0Js7hGfPYBnRTE3Jc8Om24/ae/O6hn7jH58eCYM9L7zIM7EXb9es.10iO00";
+    };
     michiha = {
+      hashedPassword = "$6$iBSb93jkx9FGya9x$q7riq6BxEZhXyNAoVCvPc62Br98Y2x69U4lgME8H4cJbXpebRVZsT7NZhhw2h1zumLuVZtJF.ZyXVicNQr1/7.";
       isNormalUser = true;
       description = "michiha";
       enable = true;
@@ -106,6 +108,7 @@
     };
 
     beatrice = {
+      hashedPassword = "$6$Q1OL1OyubefZMdhd$1IV3ZgdT07h7o1sU3DUXJZm4sFqGecdE9tPk7dtkkr25N1WNWVYRPfyEnIqDfuQnWNR5Uvi4LMmqsolnqDt/G0";
       isNormalUser = true;
       description = "beatrice";
       enable = true;
@@ -123,28 +126,11 @@
       ];
     };
 
-    miwu = {
-      isNormalUser = true;
-      description = "beatrice";
-      enable = true;
-      extraGroups = [
-        "shards"
-        "wheel"
-        "networkmanager"
-        "libvirtd"
-        "audio"
-        "video"
-        "plugdev"
-        "input"
-        "kvm"
-        "qemu-libvirtd"
-      ];
-    };
   };
 
   nixpkgs.config.permittedInsecurePackages = [
     "olm-3.2.16"
   ];
-  users.groups.libvirtd.members = [ "michiha" "beatrice" "miwu" ];
-  nix.settings.trusted-users = [ "michiha" "beatrice" "miwu" ];
+  users.groups.libvirtd.members = [ "michiha" "beatrice" ];
+  nix.settings.trusted-users = [ "michiha" "beatrice" ];
 }
