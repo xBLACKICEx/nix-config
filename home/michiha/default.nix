@@ -22,6 +22,7 @@
 
   imports = [
     # 导入一些常用的配置
+    inputs.zen-browser.homeModules.beta
     outputs.homeManagerModules.fcitx5
   ];
 
@@ -29,8 +30,6 @@
   # 这些软件将仅在当前用户下可用，不会影响系统级别的配置
   # 建议将所有 GUI 软件，以及与 OS 关系不大的 CLI 软件，都通过 home.packages 安装
   home.packages = with pkgs;[
-    # 一些常用的软件
-    inputs.zen-browser.packages."${system}".default
     anytype
 
     # 终端文件管理器
@@ -66,6 +65,8 @@
     keepassxc
     kikoplay
     exercism
+    devenv
+    mysql-workbench
 
     libreoffice-qt6
 
@@ -103,8 +104,16 @@
     element-desktop
     discord
     wechat-uos
+    qq
   ];
 
+  programs.zen-browser = {
+    enable = true;
+    policies = {
+      DisableAppUpdate = true;
+      DisableTelemetry = true;
+    };
+  };
 
   # git 相关配置
   programs.git = {
@@ -113,7 +122,7 @@
     userEmail = "xblackicex@outlook.com";
     extraConfig = {
       safe = {
-        directory = "/home/shards/nix-config";
+        directory = "/home/shards/nixconfig";
       };
     };
   };

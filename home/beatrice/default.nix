@@ -5,11 +5,13 @@ in
 {
   imports = [
     ../common
-   
+
     outputs.homeManagerModules.fcitx5
     outputs.homeManagerModules.desktop
-   
+
+    inputs.zen-browser.homeModules.beta
     inputs.illogical-impulse.homeManagerModules.default
+
   ];
 
   home = {
@@ -19,9 +21,7 @@ in
 
     packages = with pkgs; [
       # 一些常用的软件
-      inputs.zen-browser.packages."${system}".default
-      # 一些常用的软件
-      inputs.zen-browser.packages."${system}".default
+
 
       anytype
 
@@ -107,45 +107,45 @@ in
     #     xxx
     # '';
 
-    stateVersion = "25.05";
+    stateVersion = "25.11";
   };
 
-### BEGIN -- CUSTOM HOME MANAGER MODULES CONFIGURATION -- BEGIN ###
-  # desktop.hypr.enable = true;
- 
-  illogical-impulse = {
-    # Enable Dotfiles
-    enable = true;
-    hyprland = {
-      # Monitor preference
-      monitor = [ ",preferred,auto,1" ];
-      # Use customize hyprland packages
-      package = hypr.hyprland;
-      xdgPortalPackage = hypr.xdg-desktop-portal-hyprland;
-      # Set NIXOS_OZONE_WL=1
-      ozoneWayland.enable = true;
-    };
-    theme = {
-      # Customize Cursors,
-      # the following config is the default config
-      # if you don't set.
-      cursor = {
-        package = pkgs.bibata-cursors;
-        theme = "Bibata-Modern-Ice";
-      };
-    };
-    # Use custom ags package, the following package is the default.
-    # agsPackage = ags.packages.${pkgs.system}.default.override {
-    #   extraPackages = with pkgs; [ 
-    #     gtksourceview
-    #     gtksourceview4
-    #     webkitgtk
-    #     webp-pixbuf-loader
-    #     ydotool
-    #   ];
-    # };
-  };
-### END -- CUSTOM HOME MANAGER MODULES CONFIGURATION -- END ###
+  ### BEGIN -- CUSTOM HOME MANAGER MODULES CONFIGURATION -- BEGIN ###
+  desktop.hypr.enable = true;
+
+  # illogical-impulse = {
+  #   # Enable Dotfiles
+  #   enable = true;
+  #   hyprland = {
+  #     # Monitor preference
+  #     monitor = [ ",preferred,auto,1" ];
+  #     # Use customize hyprland packages
+  #     package = hypr.hyprland;
+  #     xdgPortalPackage = hypr.xdg-desktop-portal-hyprland;
+  #     # Set NIXOS_OZONE_WL=1
+  #     ozoneWayland.enable = true;
+  #   };
+  #   theme = {
+  #     # Customize Cursors,
+  #     # the following config is the default config
+  #     # if you don't set.
+  #     cursor = {
+  #       package = pkgs.bibata-cursors;
+  #       theme = "Bibata-Modern-Ice";
+  #     };
+  #   };
+  #   # Use custom ags package, the following package is the default.
+  #   # agsPackage = ags.packages.${pkgs.system}.default.override {
+  #   #   extraPackages = with pkgs; [ 
+  #   #     gtksourceview
+  #   #     gtksourceview4
+  #   #     webkitgtk
+  #   #     webp-pixbuf-loader
+  #   #     ydotool
+  #   #   ];
+  #   # };
+  # };
+  ### END -- CUSTOM HOME MANAGER MODULES CONFIGURATION -- END ###
 
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
@@ -173,10 +173,25 @@ in
                                         (lsp-deferred))))
       '';
     };
-  };
 
-  programs.rio.enable = true;
-  programs.kitty.font.name = "JetBrainsMono Nerd Font";
+    git.extraConfig = {
+      safe = {
+        directory = "/home/shards/nixconfig";
+      };
+    };
+
+    zen-browser = {
+      enable = true;
+      policies = {
+        DisableAppUpdate = true;
+        DisableTelemetry = true;
+      };
+    };
+
+    rio.enable = true;
+    kitty.font.name = "JetBrainsMono Nerd Font";
+
+  };
 
   dconf.settings = {
     "org/virt-manager/virt-manager/connections" = {

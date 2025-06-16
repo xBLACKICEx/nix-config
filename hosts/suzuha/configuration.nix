@@ -54,20 +54,18 @@
   # };
   # services.xserver.enable = true;
 
-  qt.style = "kvantum";
-
-
-  virtualisation.virtualbox.host.enable = true;
-  users.extraGroups.vboxusers.members = [ "michiha" ];
-
   programs.virt-manager.enable = true;
   virtualisation.libvirtd.enable = true;
   virtualisation.spiceUSBRedirection.enable = true;
 
   programs.steam.enable = true;
 
+  qt.style = "kvantum";
+  qt.platformTheme = "qt5ct";
+  qt.enable = true;
   environment.systemPackages = with pkgs;[
     kdePackages.qtdeclarative
+    kdePackages.qt5compat
     kdePackages.wallpaper-engine-plugin
     kdePackages.neochat
     inputs.quickshell.packages.${pkgs.system}.default
@@ -77,6 +75,8 @@
     jetbrains.goland
     jetbrains.rust-rover
 
+    firefox
+    google-chrome
   ];
 
   users.groups.shards = {
@@ -127,6 +127,12 @@
     };
 
   };
+
+  virtualisation.docker.enable = true;
+  virtualisation.virtualbox.host.enable = true;
+
+  users.extraGroups.vboxusers.members = [ "michiha" ];
+  users.groups.docker.members = [ "michiha" ];
 
   nixpkgs.config.permittedInsecurePackages = [
     "olm-3.2.16"
