@@ -35,6 +35,7 @@
   };
   # END -- CUSTOM NIXOS MODULES CONFIGURATION -- END #
 
+  security.pam.services.hyprlock = {};
 
   # services.xserver.desktopManager.deepin.enable = true;
 
@@ -60,9 +61,7 @@
 
   programs.steam.enable = true;
 
-  qt.style = "kvantum";
-  qt.platformTheme = "qt5ct";
-  qt.enable = true;
+
   environment.systemPackages = with pkgs;[
     kdePackages.qtdeclarative
     kdePackages.qt5compat
@@ -74,6 +73,7 @@
     jetbrains.clion
     jetbrains.goland
     jetbrains.rust-rover
+    jetbrains.datagrip
 
     firefox
     google-chrome

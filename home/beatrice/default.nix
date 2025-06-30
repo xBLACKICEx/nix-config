@@ -21,8 +21,6 @@ in
 
     packages = with pkgs; [
       # 一些常用的软件
-
-
       anytype
 
       # 终端文件管理器
@@ -111,43 +109,26 @@ in
   };
 
   ### BEGIN -- CUSTOM HOME MANAGER MODULES CONFIGURATION -- BEGIN ###
-  desktop.hypr.enable = true;
+  # desktop.hypr.enable = tru
 
-  # illogical-impulse = {
-  #   # Enable Dotfiles
-  #   enable = true;
-  #   hyprland = {
-  #     # Monitor preference
-  #     monitor = [ ",preferred,auto,1" ];
-  #     # Use customize hyprland packages
-  #     package = hypr.hyprland;
-  #     xdgPortalPackage = hypr.xdg-desktop-portal-hyprland;
-  #     # Set NIXOS_OZONE_WL=1
-  #     ozoneWayland.enable = true;
-  #   };
-  #   theme = {
-  #     # Customize Cursors,
-  #     # the following config is the default config
-  #     # if you don't set.
-  #     cursor = {
-  #       package = pkgs.bibata-cursors;
-  #       theme = "Bibata-Modern-Ice";
-  #     };
-  #   };
-  #   # Use custom ags package, the following package is the default.
-  #   # agsPackage = ags.packages.${pkgs.system}.default.override {
-  #   #   extraPackages = with pkgs; [ 
-  #   #     gtksourceview
-  #   #     gtksourceview4
-  #   #     webkitgtk
-  #   #     webp-pixbuf-loader
-  #   #     ydotool
-  #   #   ];
-  #   # };
-  # };
+  illogical-impulse = {
+    # Enable Dotfiles
+    enable = true;
+    hyprland = {
+      # Use customize hyprland packages
+      package = hypr.hyprland;
+      xdgPortalPackage = hypr.xdg-desktop-portal-hyprland;
+      # Set NIXOS_OZONE_WL=1
+      ozoneWayland.enable = true;
+    };
+    dotfiles = {
+      anyrun.enable = true;
+      fish.enable = true;
+      kitty.enable = true;
+    };
+  };
   ### END -- CUSTOM HOME MANAGER MODULES CONFIGURATION -- END ###
 
-  xdg.portal.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
   xdg.userDirs = {
     enable = true;
@@ -156,6 +137,15 @@ in
 
   programs = {
     home-manager.enable = true;
+
+    nushell.extraLogin = ''
+      uwsm check may-start -i ; uwsm select ; exec uwsm start default
+    '';
+    bash.profileExtra = ''
+      if uwsm check may-start && uwsm select; then
+        exec uwsm start default
+      fi
+    '';
 
     emacs = {
       enable = true;

@@ -17,7 +17,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    illogical-impulse.url = "github:sitolam/end-4-dots";
+    illogical-impulse.url = "github:xBLACKICEx/end-4-dots-hyprland-nixos";
     illogical-impulse.inputs.nixpkgs.follows = "nixpkgs";
 
     disko = {

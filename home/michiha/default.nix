@@ -66,7 +66,6 @@
     kikoplay
     exercism
     devenv
-    mysql-workbench
 
     libreoffice-qt6
 
