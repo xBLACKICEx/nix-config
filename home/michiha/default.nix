@@ -21,6 +21,7 @@
   # '';
 
   imports = [
+    ../common
     # 导入一些常用的配置
     inputs.zen-browser.homeModules.beta
     outputs.homeManagerModules.fcitx5
@@ -33,7 +34,7 @@
     anytype
 
     # 终端文件管理器
-    yazi
+    # yazi
 
     # 常用工具
     ripgrep # 递归搜索目录中的正则表达式模式
@@ -116,9 +117,6 @@
 
   # git 相关配置
   programs.git = {
-    enable = true;
-    userName = "xblackicex";
-    userEmail = "xblackicex@outlook.com";
     extraConfig = {
       safe = {
         directory = "/home/shards/nixconfig";
@@ -126,60 +124,7 @@
     };
   };
 
-  services.pueue.enable = true;
-  services.pueue.settings = {
-    client = {
-      restart_in_place = false;
-      read_local_logs = true;
-      show_confirmation_questions = false;
-      show_expanded_aliases = false;
-      dark_mode = false;
-      max_status_lines = null;
-      status_time_format = "%H:%M:%S";
-      status_datetime_format = "%Y-%m-%d\n%H:%M:%S";
-    };
-    daemon = {
-      pause_group_on_failure = false;
-      pause_all_on_failure = false;
-      callback = null;
-      env_vars = { };
-      callback_log_lines = 10;
-      shell_command = null;
-    };
-    shared = {
-      pueue_directory = null;
-      runtime_directory = null;
-      alias_file = null;
-      use_unix_socket = true;
-      unix_socket_path = null;
-      host = "127.0.0.1";
-      port = "6924";
-      pid_path = null;
-      daemon_cert = null;
-      daemon_key = null;
-      shared_secret_path = null;
-    };
-    profiles = { };
-  };
 
-  # # 启用 starship，这是一个漂亮的 shell 提示符
-  # programs.starship = {
-  #   enable = true;
-  #   # 自定义配置
-  #   settings = {
-  #     add_newline = false;
-  #     aws.disabled = true;
-  #     gcloud.disabled = true;
-  #     line_break.disabled = true;
-  #   };
-  # };
-
-  programs.direnv = {
-    enable = true;
-    enableBashIntegration = true; # see note on other shells below
-    # enableNushellIntegration = true; # see note on other shells below
-    nix-direnv.enable = true;
-  };
 
   # programs.nushell.enable = true;
 
@@ -198,20 +143,6 @@
                                       (setq-local electric-indent-chars '(?\n ?\( ?\) ?{ ?\] ?\; ?,))
                                       (lsp-deferred))))
     '';
-  };
-
-  programs.bash = {
-    enable = true;
-    enableCompletion = true;
-    bashrcExtra = ''
-      alias ls=lsd;
-    '';
-
-    shellAliases = {
-      k = "kubectl";
-      urldecode = "python3 -c 'import sys, urllib.parse as ul; print(ul.unquote_plus(sys.stdin.read()))'";
-      urlencode = "python3 -c 'import sys, urllib.parse as ul; print(ul.quote_plus(sys.stdin.read()))'";
-    };
   };
 
   # This value determines the Home Manager release that your

@@ -12,6 +12,11 @@
 
     hyprland.url = "github:hyprwm/Hyprland";
 
+    dotfiles = {
+      url = "github:xBLACKICEx/my-dotfiles";
+      flake = false;
+    };
+
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v0.4.2";
       inputs.nixpkgs.follows = "nixpkgs";

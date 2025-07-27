@@ -1,3 +1,4 @@
+{ inputs, ... }:
 {
   programs = {
     git = {
@@ -11,6 +12,7 @@
       enableCompletion = true;
       shellAliases = {
         kb = "kubectl";
+        ls = "lsd";
         urldecode = "python3 -c 'import sys, urllib.parse as ul; print(ul.unquote_plus(sys.stdin.read()))'";
         urlencode = "python3 -c 'import sys, urllib.parse as ul; print(ul.quote_plus(sys.stdin.read()))'";
       };
@@ -18,95 +20,84 @@
 
     nushell.enable = true;
     nushell.extraConfig = ''
-$env.config.keybindings = [
-  {
-    name: fuzzy_history
-    modifier: control
-    keycode: char_r
-    mode: [emacs vi_normal vi_insert]
-    event: [
-      {
-        send: ExecuteHostCommand
-        cmd: "commandline edit (
-              history
-                | get command
-                | uniq
-                | reverse
-                | str join (char -i 0)
-                | fzf --scheme=history --read0 --layout=reverse --height=40% -q (commandline)
-                | decode utf-8
-                | str trim
-            )"
-      }
-    ]
-  }
-  {
-    name: fuzzy_filefind
-    modifier: control
-    keycode: char_t
-    mode: [emacs vi_normal vi_insert]
-    event: [
-      {
-        send: ExecuteHostCommand
-        cmd: "
-                        if ((commandline | str trim | str length) == 0) {
+      $env.config.keybindings = [
+        {
+          name: fuzzy_filefind
+          modifier: control
+          keycode: char_t
+          mode: [emacs vi_normal vi_insert]
+          event: [
+            {
+              send: ExecuteHostCommand
+              cmd: "
+                              if ((commandline | str trim | str length) == 0) {
 
-                        # if empty, search and use result
-                        (fzf --preview 'bat -n --color=always {}' --layout=reverse | decode utf-8 | str trim)
+                              # if empty, search and use result
+                              (fzf --preview 'bat -n --color=always {}' --layout=reverse | decode utf-8 | str trim)
 
-                        } else if (commandline | str ends-with ' ') {
+                              } else if (commandline | str ends-with ' ') {
 
-                        # if trailing space, search and append result
-                        [
-                            (commandline)
-                            (fzf --preview 'bat -n --color=always {}' --layout=reverse | decode utf-8 | str trim)
-                        ] | str join
+                              # if trailing space, search and append result
+                              [
+                                  (commandline)
+                                  (fzf --preview 'bat -n --color=always {}' --layout=reverse | decode utf-8 | str trim)
+                              ] | str join
 
-                        } else {
-                        # otherwise search for last token
+                              } else {
+                              # otherwise search for last token
 
-                        [
-                            (commandline | split words | reverse | skip 1 | reverse | str join ' ')
-                            (fzf
-                                --layout=reverse
-                                --preview 'bat -n --color=always {}'
-                                -q (commandline | split words | last)
-                            | decode utf-8 | str trim)
-                        ] | str join ' '
+                              [
+                                  (commandline | split words | reverse | skip 1 | reverse | str join ' ')
+                                  (fzf
+                                      --layout=reverse
+                                      --preview 'bat -n --color=always {}'
+                                      -q (commandline | split words | last)
+                                  | decode utf-8 | str trim)
+                              ] | str join ' '
 
-                        }
-                    "
-      }
-    ]
-  }
-  {
-    name: change_dir_with_fzf
-    modifier: control
-    keycode: char_y
-    mode: [emacs vi_normal vi_insert]
-    event: {
-      send: ExecuteHostCommand
-      cmd: "zi"
-    }
-  }
-]
+                              }
+                          "
+            }
+          ]
+        }
+        {
+          name: change_dir_with_fzf
+          modifier: control
+          keycode: char_y
+          mode: [emacs vi_normal vi_insert]
+          event: {
+            send: ExecuteHostCommand
+            cmd: "zi"
+          }
+        }
+      ]
     '';
 
-    carapace = {
+    atuin = {
       enable = true;
+      settings = builtins.fromTOML (builtins.readFile "${inputs.dotfiles}/general/atuin/config.toml");
       enableNushellIntegration = true;
       enableBashIntegration = true;
     };
 
-    direnv.enable = true;
-    direnv.enableBashIntegration = true;
-    direnv.nix-direnv.enable = true;
+    carapace = {
+      enable = true;
+      enableBashIntegration = true;
+      enableNushellIntegration = true;
+    };
+
+    direnv = {
+      enable = true;
+      enableBashIntegration = true;
+      enableNushellIntegration = true;
+      nix-direnv.enable = true;
+  };
 
     starship = {
       enable = true;
-      enableNushellIntegration = true;
       enableBashIntegration = true;
-      settings = builtins.fromTOML (builtins.readFile ./dotfile/starship.toml);
+      enableNushellIntegration = true;
+      settings = builtins.fromTOML (builtins.readFile "${inputs.dotfiles}/general/starship.toml");
     };
 
     fzf = {
@@ -115,11 +106,17 @@ $env.config.keybindings = [
       changeDirWidgetCommand = "fd --type d";
     };
 
-    zoxide.enable = true;
-    zoxide.enableNushellIntegration = true;
+    yazi = {
+      enable = true;
+      enableNushellIntegration = true;
+      enableBashIntegration = true;
+    };
 
-    yazi.enable = true;
-    yazi.enableNushellIntegration = true;
+    zoxide = {
+      enable = true;
+      enableNushellIntegration = true;
+      enableBashIntegration = true;
+    };
   };
 
   services = {

@@ -191,6 +191,22 @@
         "type": "github"
       }
     },
+    "dotfiles": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1753293916,
+        "narHash": "sha256-35YMcnZAn8mMohkvyKQaTWXvj2ir8cLMZIi0Ft4Ycd4=",
+        "owner": "xBLACKICEx",
+        "repo": "my-dotfiles",
+        "rev": "a318ac295a37956983abc34ae1c5d014652ee6b5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "xBLACKICEx",
+        "repo": "my-dotfiles",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -1419,6 +1435,7 @@
         "agenix": "agenix",
         "dedsec-grub-theme": "dedsec-grub-theme",
         "disko": "disko",
+        "dotfiles": "dotfiles",
         "home-manager": "home-manager_2",
         "hyprland": "hyprland",
         "hyprland-plugins": "hyprland-plugins",
