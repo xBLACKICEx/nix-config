@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, inputs, pkgs, ... }:
 
 with lib; {
   options.desktop.kde.enable = mkEnableOption "Enable KDE Plasma Desktop Environment";
@@ -19,5 +19,10 @@ with lib; {
 
     security.pam.services.plasma6.enableKwallet = true;
     programs.kdeconnect.enable = true;
+
+    environment.systemPackages = [
+      inputs.kwin-effects-forceblur.packages.${pkgs.system}.default # Wayland
+      inputs.kwin-effects-forceblur.packages.${pkgs.system}.x11 # X11
+    ];
   };
 }

@@ -54,6 +54,11 @@
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    kwin-effects-forceblur = {
+      url = "github:taj-ny/kwin-effects-forceblur";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -63,7 +68,7 @@
     , home-manager
     , nixpkgs
     , ...
-    } @ inputs:
+    }@inputs:
     let
       inherit (self) outputs;
     in

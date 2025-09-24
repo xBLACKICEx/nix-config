@@ -38,6 +38,27 @@
     "exfat"
   ];
 
+  boot.loader = {
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/boot";
+    };
+    grub = {
+      devices = [ "nodev" ];
+      efiSupport = true;
+      enable = true;
+      useOSProber = true;
+      dedsec-theme = {
+        # grub theme module dedsec-theme
+        enable = true;
+        style = "hackerden";
+        icon = "color";
+        resolution = "1080p";
+      };
+    };
+  };
+
+
   boot.initrd = {
     luks.devices."crypted-nixos" = {
       device = "/dev/disk/by-uuid/f865468b-13bd-4363-a1ab-44b764fc0f05";

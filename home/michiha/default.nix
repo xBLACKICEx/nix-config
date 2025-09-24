@@ -30,7 +30,19 @@
   # 通过 home.packages 安装一些常用的软件
   # 这些软件将仅在当前用户下可用，不会影响系统级别的配置
   # 建议将所有 GUI 软件，以及与 OS 关系不大的 CLI 软件，都通过 home.packages 安装
-  home.packages = with pkgs;[
+  home.packages = with pkgs; [
+
+    # (inputs.zen-browser.packages.${pkgs.system}.default.override
+    #   {
+    #     extraPrefsFiles = [
+    #       (builtins.fetchurl {
+    #         url = "https://raw.githubusercontent.com/MrOtherGuy/fx-autoconfig/master/program/config.js";
+    #         sha256 = "1mx679fbc4d9x4bnqajqx5a95y1lfasvf90pbqkh9sm3ch945p40";
+    #       })
+    #     ];
+    #   }
+    #   { })
+
     anytype
 
     # 终端文件管理器
@@ -42,7 +54,6 @@
     jq # 轻量级且灵活的命令行 JSON 处理器
     yq-go # YAML 处理器 https://github.com/mikefarah/yq
     lsd
-    vscode
 
     # 网络工具
     mtr # 网络诊断工具
@@ -67,7 +78,7 @@
     kikoplay
     exercism
     devenv
-
+    jetbrains-toolbox
     libreoffice-qt6
 
     carapace
@@ -103,7 +114,7 @@
     telegram-desktop
     element-desktop
     discord
-    wechat-uos
+    # wechat-uos
     qq
   ];
 
@@ -124,7 +135,9 @@
     };
   };
 
-
+  programs.vscode = {
+    enable = true;
+  };
 
   # programs.nushell.enable = true;
 

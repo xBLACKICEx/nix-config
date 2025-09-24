@@ -15,7 +15,7 @@ nixpkgs.lib.nixosSystem {
     ./configuration.nix # host-specific configuration
 
     # custom configuration modules
-    outputs.nixosModules.secureboot
+    # outputs.nixosModules.secureboot
 
     inputs.dedsec-grub-theme.nixosModule
     inputs.disko.nixosModules.disko

@@ -122,7 +122,6 @@ in
       ozoneWayland.enable = true;
     };
     dotfiles = {
-      anyrun.enable = true;
       fish.enable = true;
       kitty.enable = true;
     };
