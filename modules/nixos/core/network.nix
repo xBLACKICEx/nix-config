@@ -28,11 +28,13 @@
     networkmanager.dns = "none";
   };
 
-  services.dnscrypt-proxy2 = {
+  services.dnscrypt-proxy = {
     enable = true;
     settings = {
       ipv6_servers = true;
       require_dnssec = true;
+      require_nolog = true;
+      require_nofilter = true;
 
       sources.public-resolvers = {
         urls = [
