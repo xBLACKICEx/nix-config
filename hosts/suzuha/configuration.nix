@@ -13,8 +13,10 @@
   system.stateVersion = "25.05";
 
   # BEGIN -- CUSTOM NIXOS MODULES CONFIGURATION -- BEGIN #
-  desktop.kde.enable = true;
+  # desktop.kde.enable = true;
+  desktop.cosmic.enable = true;
   desktop.hypr.enable = true;
+
 
   # NixOS Modules Core Setups
   core.impermanence = {

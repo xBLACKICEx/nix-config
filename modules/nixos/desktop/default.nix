@@ -2,6 +2,7 @@
 
   imports = [
     ./kde.nix
+    ./cosmic.nix
     ./hyprland.nix
   ];
 
