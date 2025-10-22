@@ -54,7 +54,7 @@ in
       zstd
       gnupg
       keepassxc
-      kikoplay
+      # kikoplay
 
 
       # editors

@@ -13,8 +13,8 @@
   system.stateVersion = "25.05";
 
   # BEGIN -- CUSTOM NIXOS MODULES CONFIGURATION -- BEGIN #
-  # desktop.kde.enable = true;
-  desktop.cosmic.enable = true;
+  desktop.kde.enable = true;
+  # desktop.cosmic.enable = true;
   desktop.hypr.enable = true;
 
 
@@ -62,7 +62,13 @@
   virtualisation.spiceUSBRedirection.enable = true;
 
   programs.steam.enable = true;
-
+  services.printing.enable = true;
+  services.printing.drivers = with pkgs; [ cnijfilter2 ];
+  services.avahi = {
+  enable = true;
+  nssmdns4 = true;
+  openFirewall = true;
+};
 
   environment.systemPackages = with pkgs;[
     kdePackages.qtdeclarative

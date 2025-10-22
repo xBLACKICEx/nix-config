@@ -75,7 +75,7 @@
     zstd
     gnupg
     keepassxc
-    kikoplay
+    # kikoplay
     exercism
     devenv
     jetbrains-toolbox

@@ -17,6 +17,16 @@
       flake = false;
     };
 
+    fcitx5-theme-ayaya = {
+      url = "github:witt-bit/fcitx5-theme-ayaya";
+      flake = false;
+    };
+
+    fcitx5-themes-candlelight = {
+      url = "github:thep0y/fcitx5-themes-candlelight";
+      flake = false;
+    };
+
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v0.4.2";
       inputs.nixpkgs.follows = "nixpkgs";

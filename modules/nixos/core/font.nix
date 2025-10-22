@@ -6,14 +6,15 @@
     nerd-fonts.fira-code
     nerd-fonts.caskaydia-cove
     nerd-fonts.jetbrains-mono
+    lxgw-wenkai
   ];
 
   fonts.fontconfig = {
     enable = true;
     defaultFonts = {
-      sansSerif = [ "AaOS可爱小海狸 (非商业使用)" ];
-      serif = [ "AaOS可爱小海狸 (非商业使用)" ];
-      monospace = [ "AaOS可爱小海狸 (非商业使用)" ];
+      sansSerif = [ "lxgw-wenkai" ];
+      serif = [ "lxgw-wenkai" ];
+      monospace = [ "lxgw-wenkai" ];
     };
   };
 }

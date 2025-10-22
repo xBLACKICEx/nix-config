@@ -33,6 +33,9 @@
     unzipNLS # Unzip with native language support
     p7zip # 7-zip compression program
 
+    mission-center
+    copyq
+
     # Shell and Terminal Utilities
     nushell # Modern shell written in Rust
     nufmt # Format Nushell scripts
