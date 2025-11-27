@@ -10,7 +10,7 @@ in
     outputs.homeManagerModules.desktop
 
     inputs.zen-browser.homeModules.beta
-    inputs.illogical-impulse.homeManagerModules.default
+    # inputs.illogical-impulse.homeManagerModules.default
 
   ];
 
@@ -111,21 +111,21 @@ in
   ### BEGIN -- CUSTOM HOME MANAGER MODULES CONFIGURATION -- BEGIN ###
   # desktop.hypr.enable = tru
 
-  illogical-impulse = {
-    # Enable Dotfiles
-    enable = true;
-    hyprland = {
-      # Use customize hyprland packages
-      package = hypr.hyprland;
-      xdgPortalPackage = hypr.xdg-desktop-portal-hyprland;
-      # Set NIXOS_OZONE_WL=1
-      ozoneWayland.enable = true;
-    };
-    dotfiles = {
-      fish.enable = true;
-      kitty.enable = true;
-    };
-  };
+  # illogical-impulse = {
+  #   # Enable Dotfiles
+  #   enable = true;
+  #   hyprland = {
+  #     # Use customize hyprland packages
+  #     package = hypr.hyprland;
+  #     xdgPortalPackage = hypr.xdg-desktop-portal-hyprland;
+  #     # Set NIXOS_OZONE_WL=1
+  #     ozoneWayland.enable = true;
+  #   };
+  #   dotfiles = {
+  #     fish.enable = true;
+  #     kitty.enable = true;
+  #   };
+  # };
   ### END -- CUSTOM HOME MANAGER MODULES CONFIGURATION -- END ###
 
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];

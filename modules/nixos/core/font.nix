@@ -11,6 +11,7 @@
 
   fonts.fontconfig = {
     enable = true;
+    useEmbeddedBitmaps = true;
     defaultFonts = {
       sansSerif = [ "lxgw-wenkai" ];
       serif = [ "lxgw-wenkai" ];

@@ -73,8 +73,8 @@
   environment.systemPackages = with pkgs;[
     kdePackages.qtdeclarative
     kdePackages.qt5compat
-    kdePackages.wallpaper-engine-plugin
-    kdePackages.neochat
+    # kdePackages.wallpaper-engine-plugin
+    # kdePackages.neochat
     inputs.quickshell.packages.${pkgs.system}.default
 
     zed-editor
