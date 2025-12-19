@@ -163,7 +163,7 @@ in
       '';
     };
 
-    git.extraConfig = {
+    git.settings = {
       safe = {
         directory = "/home/shards/nixconfig";
       };

@@ -1,10 +1,14 @@
-{ inputs, ... }:
+{ inputs, pkgs,... }:
 {
   programs = {
     git = {
       enable = true;
-      userName = "xblackicex";
-      userEmail = "xblackicex@outlook.com";
+      settings = {
+        user = {
+          eame = "xblackicex";
+          email = "xblackicex@outlook.com";
+        };
+      };
     };
 
     bash = {
@@ -19,6 +23,9 @@
     };
 
     nushell.enable = true;
+    nushell.package = pkgs.nushell.override {
+      additionalFeatures = p: p ++ [ "mcp" ];
+    };
     nushell.extraConfig = ''
       $env.config.keybindings = [
         {
