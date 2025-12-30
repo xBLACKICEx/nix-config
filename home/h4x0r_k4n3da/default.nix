@@ -1,6 +1,6 @@
 { pkgs, inputs, outputs, ... }: {
   programs.home-manager.enable = true;
-  home.stateVersion = "25.05";
+  home.stateVersion = "26.05";
 
   xdg.userDirs = {
     enable = true;

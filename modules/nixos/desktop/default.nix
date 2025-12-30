@@ -1,9 +1,10 @@
-{ ... }: {
+{ pkgs, ... }: {
 
   imports = [
     ./kde.nix
     ./cosmic.nix
     ./hyprland.nix
+    ./niri.nix
   ];
 
   environment.sessionVariables = {
@@ -13,10 +14,10 @@
     XDG_STATE_HOME = "$HOME/.local/state";
   };
 
-  # environment.systemPackages = with pkgs; [
+  environment.systemPackages = with pkgs; [
   #   grim
   #   xdg-user-dirs
-  #   qt6.qtwayland
+  kdePackages.qtwayland
   #   waypipe
   #   wf-recorder
   #   wl-mirror
@@ -24,5 +25,5 @@
   #   wlogout
   #   wtype
   #   ydotool
-  # ];
+  ];
 }

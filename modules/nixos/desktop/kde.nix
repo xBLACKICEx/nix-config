@@ -11,18 +11,18 @@ with lib; {
 
     # SDDM
     services.displayManager.sddm = {
-      enable = true;
+      enable = false;
       autoNumlock = true;
       wayland.enable = true;
       enableHidpi = true;
     };
 
-    security.pam.services.plasma6.enableKwallet = true;
+    security.pam.services.plasma6.enableKwallet = false;
     programs.kdeconnect.enable = true;
 
     environment.systemPackages = [
-      inputs.kwin-effects-forceblur.packages.${pkgs.system}.default # Wayland
-      inputs.kwin-effects-forceblur.packages.${pkgs.system}.x11 # X11
+      inputs.kwin-effects-forceblur.packages.${pkgs.stdenv.hostPlatform.system}.default # Wayland
+      inputs.kwin-effects-forceblur.packages.${pkgs.stdenv.hostPlatform.system}.x11 # X11
     ];
   };
 }

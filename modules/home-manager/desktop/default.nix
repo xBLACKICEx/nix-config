@@ -1,6 +1,6 @@
 {
   imports = [
     ./hypr
-    ./linix-wallper-engine.nix
+    ./linux-wallpaper-engine.nix
   ];
 }

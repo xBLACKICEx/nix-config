@@ -7,7 +7,8 @@
   ];
 
   config =
-    let hyprConfig = "${config.home.homeDirectory}/modules/home-manager/desktop/dotfiles/hyprland/hyprland.conf";
+    let
+      # hyprConfig = "${config.home.homeDirectory}/modules/home-manager/desktop/dotfiles/hyprland/hyprland.conf";
     in
     lib.mkIf config.desktop.hypr.enable {
 
@@ -16,8 +17,8 @@
         enable = true;
         systemd.enable = false;
 
-        package = inputs.hyprland.packages.${pkgs.system}.hyprland;
-        portalPackage = inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland;
+        package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+        portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
 
         extraConfig = ''
           $configs = $HOME/.config/hypr/configs
@@ -30,7 +31,7 @@
           source= $configs/animations.conf
         '';
 
-        plugins = with inputs.hyprland-plugins.packages.${pkgs.system}; [
+        plugins = with inputs.hyprland-plugins.packages.${pkgs.stdenv.hostPlatform.system}; [
           hyprbars
         ];
 
@@ -45,7 +46,7 @@
         QT_QPA_PLATFORM = "wayland;xcb";
         QT_WAYLAND_DISABLE_WINDOWDECORATION = "1";
 
-        #SDL_VIDEODRIVER = "wayland";
+        SDL_VIDEODRIVER = "wayland";
         _JAVA_AWT_WM_NONREPARENTING = "1";
         CLUTTER_BACKEND = "wayland";
         GDK_BACKEND = "wayland,x11";

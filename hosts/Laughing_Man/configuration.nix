@@ -98,5 +98,5 @@
   users.groups.libvirtd.members = [ "h4x0r_k4n3da" ];
 
   nix.settings.trusted-users = [ "h4x0r_k4n3da" ];
-  system.stateVersion = "25.05"; # Did you read the comment?
+  system.stateVersion = "26.05"; # Did you read the comment?
 }

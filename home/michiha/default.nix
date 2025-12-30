@@ -23,7 +23,6 @@
   imports = [
     ../common
     # 导入一些常用的配置
-    inputs.zen-browser.homeModules.beta
     outputs.homeManagerModules.fcitx5
   ];
 
@@ -31,18 +30,6 @@
   # 这些软件将仅在当前用户下可用，不会影响系统级别的配置
   # 建议将所有 GUI 软件，以及与 OS 关系不大的 CLI 软件，都通过 home.packages 安装
   home.packages = with pkgs; [
-
-    # (inputs.zen-browser.packages.${pkgs.system}.default.override
-    #   {
-    #     extraPrefsFiles = [
-    #       (builtins.fetchurl {
-    #         url = "https://raw.githubusercontent.com/MrOtherGuy/fx-autoconfig/master/program/config.js";
-    #         sha256 = "1mx679fbc4d9x4bnqajqx5a95y1lfasvf90pbqkh9sm3ch945p40";
-    #       })
-    #     ];
-    #   }
-    #   { })
-
     anytype
 
     # 终端文件管理器
@@ -118,17 +105,9 @@
     qq
   ];
 
-  programs.zen-browser = {
-    enable = true;
-    policies = {
-      DisableAppUpdate = true;
-      DisableTelemetry = true;
-    };
-  };
-
   # git 相关配置
   programs.git = {
-    extraConfig = {
+    settings = {
       safe = {
         directory = "/home/shards/nixconfig";
       };
@@ -166,7 +145,7 @@
   # You can update Home Manager without changing this value. See
   # the Home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = "25.05";
+  home.stateVersion = "26.05";
 
   dconf.settings = {
     "org/virt-manager/virt-manager/connections" = {

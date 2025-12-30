@@ -59,5 +59,11 @@
     neofetch # System information tool with ASCII art logo
 
     expect # Automate interactive applications
+    spacedrive
   ];
+
+  # https://github.com/NixOS/nixpkgs/issues/149812
+  environment.extraInit = ''
+    export XDG_DATA_DIRS="$XDG_DATA_DIRS:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}"
+  '';
 }

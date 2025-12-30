@@ -8,7 +8,11 @@
 
     impermanence.url = "github:nix-community/impermanence";
 
-    zen-browser.url = "github:0xc000022070/zen-browser-flake";
+    zen-browser = {
+      url = "github:0xc000022070/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
 
     hyprland.url = "github:hyprwm/Hyprland";
 
@@ -35,6 +39,36 @@
     # illogical-impulse.url = "github:xBLACKICEx/end-4-dots-hyprland-nixos";
     # illogical-impulse.inputs.nixpkgs.follows = "nixpkgs";
 
+    caelestia-shell = {
+      url = "github:caelestia-dots/shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # dms = {
+    #   url = "github:AvengeMedia/DankMaterialShell/stable";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+
+    # dms-plugins = {
+    #   url = "github:AvengeMedia/dms-plugins";
+    #   flake = false;
+    # };
+
+    # dms-wallpaperengine = {
+    #   url = "github:sgtaziz/dms-wallpaperengine";
+    #   flake = false;
+    # };
+
+    # danksearch = {
+    #   url = "github:AvengeMedia/danksearch";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+
+    unofficial-niri = {
+      url = "github:yayuuu/niri";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -47,11 +81,6 @@
 
     dedsec-grub-theme = {
       url = "gitlab:VandalByte/dedsec-grub-theme";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    quickshell = {
-      url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

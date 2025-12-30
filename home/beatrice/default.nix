@@ -1,6 +1,10 @@
-{ pkgs, inputs, outputs, ... }:
+{
+  pkgs,
+  inputs,
+  outputs,
+  ...
+}:
 let
-  hypr = inputs.hyprland.packages.${pkgs.system};
 in
 {
   imports = [
@@ -9,9 +13,11 @@ in
     outputs.homeManagerModules.fcitx5
     outputs.homeManagerModules.desktop
 
-    inputs.zen-browser.homeModules.beta
     # inputs.illogical-impulse.homeManagerModules.default
+    inputs.caelestia-shell.homeManagerModules.default
 
+    # inputs.dms.homeModules.dankMaterialShell.default
+    # inputs.danksearch.homeModules.default
   ];
 
   home = {
@@ -55,7 +61,6 @@ in
       gnupg
       keepassxc
       # kikoplay
-
 
       # editors
       helix
@@ -105,7 +110,7 @@ in
     #     xxx
     # '';
 
-    stateVersion = "25.11";
+    stateVersion = "26.05";
   };
 
   ### BEGIN -- CUSTOM HOME MANAGER MODULES CONFIGURATION -- BEGIN ###
@@ -133,6 +138,38 @@ in
     enable = true;
     createDirectories = true;
   };
+
+  # programs.dankMaterialShell = {
+  #   enable = false;
+
+  #   systemd = {
+  #     enable = true;             # Systemd service for auto-start
+  #     restartIfChanged = true;   # Auto-restart dms.service when dankMaterialShell changes
+  #   };
+
+  #   plugins = {
+  #     DockerManager = {
+  #       enable = true;
+  #       src = pkgs.fetchFromGitHub {
+  #         owner = "LuckShiba";
+  #         repo = "DmsDockerManager";
+  #         rev = "v1.2.0";
+  #         sha256 = "sha256-VoJCaygWnKpv0s0pqTOmzZnPM922qPDMHk4EPcgVnaU=";
+  #       };
+  #     };
+  #     DankPomodoroTimer.src = "${inputs.dms-plugins}/DankPomodoroTimer";
+  #     DankBatteryAlerts.src = "${inputs.dms-plugins}/DankBatteryAlerts";
+  #     dms-wallpaperengine.src = "${inputs.dms-wallpaperengine}";
+  #   };
+
+  #   enableSystemMonitoring = true;     # System monitoring widgets (dgop)
+  #   enableClipboard = true;            # Clipboard history manager
+  #   enableVPN = true;                  # VPN management widget
+  #   enableDynamicTheming = true;       # Wallpaper-based theming (matugen)
+  #   enableAudioWavelength = true;      # Audio visualizer (cava)
+  #   enableCalendarEvents = true;       # Calendar integration (khal)
+  # };
+  # programs.dsearch.enable = false;
 
   programs = {
     home-manager.enable = true;
@@ -169,17 +206,29 @@ in
       };
     };
 
-    zen-browser = {
-      enable = true;
-      policies = {
-        DisableAppUpdate = true;
-        DisableTelemetry = true;
-      };
-    };
-
     rio.enable = true;
     kitty.font.name = "JetBrainsMono Nerd Font";
 
+    caelestia = {
+      enable = true;
+
+      settings = {
+        bar.status = {
+          showBattery = true;
+          showNetwork = true;
+        };
+        paths.wallpaperDir = "~/Pictures/wallpapers";
+        appearance.transparency.enabled = true;
+      };
+
+      # 命令行工具设置
+      cli = {
+        enable = true; # 将 caelestia-cli 添加到 PATH
+        settings = {
+          theme.enableGtk = true;
+        };
+      };
+    };
   };
 
   dconf.settings = {

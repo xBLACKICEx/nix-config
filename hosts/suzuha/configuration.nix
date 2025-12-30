@@ -8,15 +8,21 @@
     ./hardware-configuration.nix
     outputs.nixosModules.core
     outputs.nixosModules.desktop
+    # inputs.dms.nixosModules.greeter
   ];
   networking.hostName = "suzuha";
-  system.stateVersion = "25.05";
+  system.stateVersion = "26.05";
 
   # BEGIN -- CUSTOM NIXOS MODULES CONFIGURATION -- BEGIN #
   desktop.kde.enable = true;
   # desktop.cosmic.enable = true;
   desktop.hypr.enable = true;
+  desktop.niri.enable = false;
 
+  services.displayManager.dms-greeter = {
+    enable = true;
+    compositor.name = "hyprland";  # Or "hyprland" or "sway"
+  };
 
   # NixOS Modules Core Setups
   core.impermanence = {
@@ -37,7 +43,9 @@
   };
   # END -- CUSTOM NIXOS MODULES CONFIGURATION -- END #
 
-  security.pam.services.hyprlock = {};
+
+  security.polkit.enable = true;
+  services.gnome.gnome-keyring.enable = true;
 
   # services.xserver.desktopManager.deepin.enable = true;
 
@@ -61,7 +69,10 @@
   virtualisation.libvirtd.enable = true;
   virtualisation.spiceUSBRedirection.enable = true;
 
+  
+  programs.dconf.enable = true;
   programs.steam.enable = true;
+
   services.printing.enable = true;
   services.printing.drivers = with pkgs; [ cnijfilter2 ];
   services.avahi = {
@@ -75,8 +86,6 @@
     kdePackages.qt5compat
     # kdePackages.wallpaper-engine-plugin
     # kdePackages.neochat
-    inputs.quickshell.packages.${pkgs.system}.default
-
     zed-editor
     jetbrains.clion
     jetbrains.goland
@@ -84,6 +93,7 @@
     jetbrains.datagrip
 
     firefox
+    zen-browser
     google-chrome
   ];
 
