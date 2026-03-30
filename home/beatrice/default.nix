@@ -5,19 +5,25 @@
   ...
 }:
 let
+  caelestiaPackage = inputs.caelestia-shell.packages.${pkgs.stdenv.hostPlatform.system}.with-cli.override {
+    app2unit = pkgs.app2unit;
+  };
 in
 {
   imports = [
     ../common
 
     outputs.homeManagerModules.fcitx5
-    outputs.homeManagerModules.desktop
+    # outputs.homeManagerModules.desktop
 
     # inputs.illogical-impulse.homeManagerModules.default
+
     inputs.caelestia-shell.homeManagerModules.default
 
-    # inputs.dms.homeModules.dankMaterialShell.default
-    # inputs.danksearch.homeModules.default
+    inputs.dms.homeModules.dank-material-shell
+    inputs.dms-plugin-registry.modules.default
+    inputs.danksearch.homeModules.default
+
   ];
 
   home = {
@@ -64,7 +70,7 @@ in
 
       # editors
       helix
-      helix-gpt
+      # helix-gpt
 
       # 效率工具
       hugo # 静态站点生成器
@@ -139,37 +145,42 @@ in
     createDirectories = true;
   };
 
-  # programs.dankMaterialShell = {
-  #   enable = false;
+  programs.dank-material-shell = {
+    enable = true;
 
-  #   systemd = {
-  #     enable = true;             # Systemd service for auto-start
-  #     restartIfChanged = true;   # Auto-restart dms.service when dankMaterialShell changes
-  #   };
+    systemd = {
+      enable = true;             # Systemd service for auto-start
+      restartIfChanged = true;   # Auto-restart dms.service when dankMaterialShell changes
+    };
 
-  #   plugins = {
-  #     DockerManager = {
-  #       enable = true;
-  #       src = pkgs.fetchFromGitHub {
-  #         owner = "LuckShiba";
-  #         repo = "DmsDockerManager";
-  #         rev = "v1.2.0";
-  #         sha256 = "sha256-VoJCaygWnKpv0s0pqTOmzZnPM922qPDMHk4EPcgVnaU=";
-  #       };
-  #     };
-  #     DankPomodoroTimer.src = "${inputs.dms-plugins}/DankPomodoroTimer";
-  #     DankBatteryAlerts.src = "${inputs.dms-plugins}/DankBatteryAlerts";
-  #     dms-wallpaperengine.src = "${inputs.dms-wallpaperengine}";
-  #   };
+    plugins = {
+      dankBatteryAlerts.enable = true;
+      dockerManager.enable = true;
+      dankPomodoroTimer.enable = true;
+      appShortcut.enable = true;
+      linuxWallpaperEngine.enable = true;
+      # DockerManager = {
+      #   enable = true;
+      #   src = pkgs.fetchFromGitHub {
+      #     owner = "LuckShiba";
+      #     repo = "DmsDockerManager";
+      #     rev = "v1.2.0";
+      #     sha256 = "sha256-VoJCaygWnKpv0s0pqTOmzZnPM922qPDMHk4EPcgVnaU=";
+      #   };
+      # };
+      # DankPomodoroTimer.src = "${inputs.dms-plugins}/DankPomodoroTimer";
+      # DankBatteryAlerts.src = "${inputs.dms-plugins}/DankBattery Alerts";
+      # dms-wallpaperengine.src = "${inputs.dms-wallpaperengine}";
+    };
 
-  #   enableSystemMonitoring = true;     # System monitoring widgets (dgop)
-  #   enableClipboard = true;            # Clipboard history manager
-  #   enableVPN = true;                  # VPN management widget
-  #   enableDynamicTheming = true;       # Wallpaper-based theming (matugen)
-  #   enableAudioWavelength = true;      # Audio visualizer (cava)
-  #   enableCalendarEvents = true;       # Calendar integration (khal)
-  # };
-  # programs.dsearch.enable = false;
+    enableSystemMonitoring = true;     # System monitoring widgets (dgop)
+    enableClipboardPaste = true;            # Clipboard history manager
+    enableVPN = true;                  # VPN management widget
+    enableDynamicTheming = true;       # Wallpaper-based theming (matugen)
+    enableAudioWavelength = true;      # Audio visualizer (cava)
+    enableCalendarEvents = true;       # Calendar integration (khal)
+  };
+  programs.dsearch.enable = true;
 
   programs = {
     home-manager.enable = true;
@@ -211,6 +222,12 @@ in
 
     caelestia = {
       enable = true;
+      package = caelestiaPackage;
+      systemd = {
+        enable = false; # if you prefer starting from your compositor
+        target = "graphical-session.target";
+        environment = [];
+      };
 
       settings = {
         bar.status = {

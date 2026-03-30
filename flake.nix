@@ -2,7 +2,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
 
     agenix.url = "github:ryantm/agenix";
 
@@ -14,7 +14,22 @@
       inputs.home-manager.follows = "home-manager";
     };
 
-    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland = {
+      url = "github:hyprwm/Hyprland";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    hyprland-plugins = {
+      url = "github:hyprwm/hyprland-plugins";
+      inputs.hyprland.follows = "hyprland";
+    };
+
+
+    hydenix = {
+      url = "github:richen604/hydenix";
+      inputs.nixpkgs.follows = "nixpkgs-stable";
+    };
+
 
     dotfiles = {
       url = "github:xBLACKICEx/my-dotfiles";
@@ -40,32 +55,37 @@
     # illogical-impulse.inputs.nixpkgs.follows = "nixpkgs";
 
     caelestia-shell = {
-      url = "github:caelestia-dots/shell";
+      url = "github:caelestia-dots/shell/v1.4.1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # dms = {
-    #   url = "github:AvengeMedia/DankMaterialShell/stable";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    dms = {
+      url = "github:AvengeMedia/DankMaterialShell/stable";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-    # dms-plugins = {
-    #   url = "github:AvengeMedia/dms-plugins";
-    #   flake = false;
-    # };
+    dms-plugin-registry = {
+      url = "github:AvengeMedia/dms-plugin-registry";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
-    # dms-wallpaperengine = {
-    #   url = "github:sgtaziz/dms-wallpaperengine";
-    #   flake = false;
-    # };
+    dms-plugins = {
+      url = "github:AvengeMedia/dms-plugins";
+      flake = false;
+    };
 
-    # danksearch = {
-    #   url = "github:AvengeMedia/danksearch";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    # # dms-wallpaperengine = {
+    # #   url = "github:sgtaziz/dms-wallpaperengine";
+    # #   flake = false;
+    # # };
+
+    danksearch = {
+      url = "github:AvengeMedia/danksearch";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     unofficial-niri = {
-      url = "github:yayuuu/niri";
+      url = "github:niri-wm/niri/4a7e443b6c816e4f673f6e25cc0a5aa37697d667";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -81,12 +101,7 @@
 
     dedsec-grub-theme = {
       url = "gitlab:VandalByte/dedsec-grub-theme";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    hyprland-plugins = {
-      url = "github:hyprwm/hyprland-plugins";
-      inputs.hyprland.follows = "hyprland";
+      flake = false;
     };
 
     nur = {

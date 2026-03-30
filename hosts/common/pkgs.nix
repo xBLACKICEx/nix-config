@@ -8,6 +8,8 @@
       outputs.overlays.modifications
       outputs.overlays.stable-packages
 
+      # inputs.hydenix.overlays.default
+
       # You can also add overlays exported from other flakes:
       # neovim-nightly-overlay.overlays.default
 
@@ -56,11 +58,21 @@
     zoxide # Smarter cd command
 
     # System Information
-    neofetch # System information tool with ASCII art logo
+    fastfetch # System information tool with ASCII art logo
 
     expect # Automate interactive applications
     spacedrive
+    codex
+    codex-acp
   ];
+
+  services.udev.packages = with pkgs; [
+    platformio-core
+    openocd
+    stlink
+    probe-rs-tools
+  ];
+
 
   # https://github.com/NixOS/nixpkgs/issues/149812
   environment.extraInit = ''

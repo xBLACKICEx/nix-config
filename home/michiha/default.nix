@@ -72,7 +72,7 @@
 
     # editors
     helix
-    helix-gpt
+    # helix-gpt
 
     # 效率工具
     hugo # 静态站点生成器

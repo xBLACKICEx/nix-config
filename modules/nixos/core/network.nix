@@ -1,4 +1,11 @@
-{lib, ...}: {
+{ lib, pkgs, ... }:
+let
+  forwardFile = pkgs.writeText "dnscrypt-forwarding-rules.txt" ''
+    bytel.fr 192.168.1.254
+    bbox.lan 192.168.1.254
+  '';
+in
+{
   # Network
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
@@ -18,13 +25,15 @@
   # networking.interfaces.wlo1.useDHCP = lib.mkDefault true;
 
   networking = {
-    nameservers = ["127.0.0.1" "::1"];
+    networkmanager.enable = true;
 
+    nameservers = [
+      "127.0.0.1"
+      "::1"
+    ];
     # If using dhcpcd:
     dhcpcd.extraConfig = "nohook resolv.conf";
-
     # If using NetworkManager:
-    networkmanager.enable = true;
     networkmanager.dns = "none";
   };
 
@@ -54,4 +63,5 @@
   systemd.services.dnscrypt-proxy.serviceConfig = {
     StateDirectory = "dnscrypt-proxy";
   };
+  services.dnscrypt-proxy.settings.forwarding_rules = forwardFile;
 }

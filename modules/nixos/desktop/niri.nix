@@ -10,8 +10,8 @@ with lib; {
     };
 
     security.polkit.enable = true; # polkit
-    services.gnome.gnome-keyring.enable = true; # secret service
-    security.pam.services.swaylock = {};
+    # services.gnome.gnome-keyring.enable = true; # secret service
+    # security.pam.services.swaylock = {};
 
     environment.sessionVariables = {
         # XDG_CURRENT_DESKTOP = "Niri";

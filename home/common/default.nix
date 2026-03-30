@@ -82,7 +82,7 @@
 
     atuin = {
       enable = true;
-      settings = builtins.fromTOML (builtins.readFile "${inputs.dotfiles}/general/atuin/config.toml");
+      settings = fromTOML (builtins.readFile "${inputs.dotfiles}/general/atuin/config.toml");
       enableNushellIntegration = true;
       enableBashIntegration = true;
     };
@@ -104,7 +104,7 @@
       enable = true;
       enableBashIntegration = true;
       enableNushellIntegration = true;
-      settings = builtins.fromTOML (builtins.readFile "${inputs.dotfiles}/general/starship.toml");
+      settings = fromTOML (builtins.readFile "${inputs.dotfiles}/general/starship.toml");
     };
 
     fzf = {

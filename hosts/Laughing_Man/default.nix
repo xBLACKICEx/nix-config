@@ -16,7 +16,7 @@ nixpkgs.lib.nixosSystem {
 
     # custom configuration modules
 
-    inputs.dedsec-grub-theme.nixosModule
+    outputs.nixosModules.dedsecGrubTheme
     inputs.disko.nixosModules.disko
     inputs.impermanence.nixosModules.impermanence
 

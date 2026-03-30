@@ -3,6 +3,14 @@
 , inputs
 , ...
 }: {
+  nixpkgs.overlays = [ (final: prev: {
+    inherit (prev.lixPackageSets.stable)
+      nixpkgs-review
+      nix-eval-jobs
+      nix-fast-build
+      colmena;
+  }) ];
+
   # 所有平台上的 Nix 通用设置
   nix =
     let
@@ -15,6 +23,9 @@
           "nix-command"
           "flakes"
         ];
+        # Temporary compatibility for older upstream flakes that still use
+        # unquoted URL literals like `github:owner/repo`.
+        extra-deprecated-features = [ "url-literals" ];
 
         auto-optimise-store = true; # 自动优化 Nix 存储
 
@@ -28,7 +39,9 @@
       };
       registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
       nixPath = [ "/etc/nix/path" ] ++ lib.mapAttrsToList (flakeName: _: "${flakeName}=flake:${flakeName}") flakeInputs;
+      package = pkgs.lixPackageSets.stable.lix;
     };
+    
 
   # 通用的 Nix 工具，适用于任何使用 Nix 的系统
   environment.systemPackages = with pkgs; [

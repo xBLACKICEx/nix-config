@@ -17,7 +17,7 @@ nixpkgs.lib.nixosSystem {
     # custom configuration modules
     # outputs.nixosModules.secureboot
 
-    inputs.dedsec-grub-theme.nixosModule
+    outputs.nixosModules.dedsecGrubTheme
     inputs.disko.nixosModules.disko
     inputs.impermanence.nixosModules.impermanence
 
@@ -31,6 +31,7 @@ nixpkgs.lib.nixosSystem {
 
       home-manager.users.michiha = ./michiha;
       home-manager.users.beatrice = ./beatrice;
+      home-manager.users.hydenix = ./hydenix;
 
       home-manager.extraSpecialArgs = { inherit inputs outputs; };
     }

@@ -9,6 +9,7 @@
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ "kvm-amd"];
   boot.extraModulePackages = [ ];
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # networking bug fix for rtw89_8852be
   # https://github.com/lwfinger/rtw89/issues/308
