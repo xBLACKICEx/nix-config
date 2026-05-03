@@ -1,9 +1,15 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     pulseaudio # provides `pactl`, which is required by some apps(e.g. sonic-pi)
   ];
+
+# some 2.4Ghz keyboard detectable as hid_apple, but it doesn't work well with fn keys, this is a workaround for that.
+  boot.extraModprobeConfig = ''
+    options hid_apple fnmode=2
+  '';
 
   # PipeWire is a new low-level multimedia framework.
   # It aims to offer capture and playback for both audio and video with minimal latency.
