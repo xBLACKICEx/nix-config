@@ -84,8 +84,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    unofficial-niri = {
-      url = "github:niri-wm/niri/4a7e443b6c816e4f673f6e25cc0a5aa37697d667";
+    niri = {
+      url = "github:niri-wm/niri/";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -110,7 +110,7 @@
     };
 
     kwin-effects-forceblur = {
-      url = "github:taj-ny/kwin-effects-forceblur";
+      url = "github:can1357/kde-blur";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };

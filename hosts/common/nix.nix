@@ -3,13 +3,15 @@
 , inputs
 , ...
 }: {
-  nixpkgs.overlays = [ (final: prev: {
-    inherit (prev.lixPackageSets.stable)
-      nixpkgs-review
-      nix-eval-jobs
-      nix-fast-build
-      colmena;
-  }) ];
+  nixpkgs.overlays = [
+    (final: prev: {
+      inherit (prev.lixPackageSets.stable)
+        nixpkgs-review
+        nix-eval-jobs
+        nix-fast-build
+        colmena;
+    })
+  ];
 
   # 所有平台上的 Nix 通用设置
   nix =
@@ -41,7 +43,7 @@
       nixPath = [ "/etc/nix/path" ] ++ lib.mapAttrsToList (flakeName: _: "${flakeName}=flake:${flakeName}") flakeInputs;
       package = pkgs.lixPackageSets.stable.lix;
     };
-    
+
 
   # 通用的 Nix 工具，适用于任何使用 Nix 的系统
   environment.systemPackages = with pkgs; [

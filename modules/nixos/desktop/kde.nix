@@ -9,19 +9,23 @@ with lib; {
     # Enable the KDE Plasma Desktop Environment.
     services.desktopManager.plasma6.enable = true;
 
-    # SDDM
-    services.displayManager.sddm = {
-      enable = false;
-      autoNumlock = true;
-      wayland.enable = true;
-      enableHidpi = true;
+    # # SDDM
+    # services.displayManager.sddm = {
+    #   enable = true;
+    #   autoNumlock = true;
+    #   wayland.enable = true;
+    #   enableHidpi = true;
+    # };
+
+    services.displayManager = {
+      plasma-login-manager.enable = true;
     };
 
     security.pam.services.plasma6.enableKwallet = true;
     programs.kdeconnect.enable = true;
 
     environment.systemPackages = with  pkgs; [
-      # inputs.kwin-effects-forceblur.packages.${pkgs.stdenv.hostPlatform.system}.default # Wayland
+      inputs.kwin-effects-forceblur.packages.${pkgs.stdenv.hostPlatform.system}.default # Wayland
       # inputs.kwin-effects-forceblur.packages.${pkgs.stdenv.hostPlatform.system}.x11 # X11
       kdePackages.wallpaper-engine-plugin
     ];

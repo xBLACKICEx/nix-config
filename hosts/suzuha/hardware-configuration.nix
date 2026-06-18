@@ -7,9 +7,12 @@
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "usb_storage" "sd_mod" ];
-  boot.initrd.kernelModules = [ "kvm-amd"];
+  boot.initrd.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.linuxPackages_zen;
+
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+  nix.settings.extra-platforms = [ "aarch64-linux" ];
 
   # networking bug fix for rtw89_8852be
   # https://github.com/lwfinger/rtw89/issues/308
@@ -148,11 +151,11 @@
       options = [ "uid=1002" "gid=4672" "umask=002" ];
     };
 
-    fileSystems."/mnt/dev" = {
-      device = "/dev/nvme0n1p6";
-      fsType = "ntfs3";
-      options = [ "uid=1002" "gid=4672" "umask=002" ];
-    };
+  fileSystems."/mnt/dev" = {
+    device = "/dev/nvme0n1p6";
+    fsType = "ntfs3";
+    options = [ "uid=1002" "gid=4672" "umask=002" ];
+  };
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's

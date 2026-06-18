@@ -63,7 +63,13 @@
     expect # Automate interactive applications
     spacedrive
     codex
-    codex-acp
+    # codex-acp
+    # rio
+    # kitty
+
+    freecad
+    orca-slicer
+    kicad
   ];
 
   services.udev.packages = with pkgs; [

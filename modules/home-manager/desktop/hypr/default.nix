@@ -65,7 +65,6 @@
         cava
         swww
         swaybg
-        kitty
         waybar
         rofi-wayland
         swaynotificationcenter

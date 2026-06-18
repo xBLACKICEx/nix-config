@@ -1,9 +1,8 @@
-{
-  pkgs,
-  inputs,
-  outputs,
-  lib,
-  ...
+{ pkgs
+, inputs
+, outputs
+, lib
+, ...
 }:
 let
   commonUserGroups = [
@@ -35,10 +34,10 @@ in
   # Desktop
   desktop.hypr.enable = true;
   desktop.kde.enable = true;
-  desktop.niri.enable = true;
+  desktop.niri.enable = false;
   # desktop.cosmic.enable = true;
   services.displayManager.dms-greeter = {
-    enable = true;
+    enable = false;
     compositor.name = "niri";
 
     # compositor.customConfig = ''

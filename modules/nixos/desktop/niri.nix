@@ -6,7 +6,7 @@ with lib; {
   config = mkIf config.desktop.niri.enable {
     programs.niri = {
       enable = true;
-      package = inputs.unofficial-niri.packages.${pkgs.stdenv.hostPlatform.system}.niri;
+      package = inputs.niri.packages.${pkgs.stdenv.hostPlatform.system}.niri;
     };
 
     security.polkit.enable = true; # polkit
