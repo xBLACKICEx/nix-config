@@ -24,6 +24,7 @@
     config = {
       # Disable if you don't want unfree packages
       allowUnfree = true;
+      # problems.handlers.spacedrive.broken = "warn";
     };
   };
 
@@ -61,7 +62,7 @@
     fastfetch # System information tool with ASCII art logo
 
     expect # Automate interactive applications
-    spacedrive
+    # spacedrive
     codex
     # codex-acp
     # rio
