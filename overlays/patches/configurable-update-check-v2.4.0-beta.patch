@@ -1,0 +1,86 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4416bec9d..0b8f9af64 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -136,6 +136,13 @@ option(SLIC3R_MSVC_PDB          "Generate PDB files on MSVC in Release mode" 1)
+ option(SLIC3R_ASAN              "Enable ASan on Clang and GCC" 0)
+ # If SLIC3R_FHS is 1 -> SLIC3R_DESKTOP_INTEGRATION is always 0, othrewise variable.
+ CMAKE_DEPENDENT_OPTION(SLIC3R_DESKTOP_INTEGRATION "Allow performing desktop integration during runtime" 1 "NOT SLIC3R_FHS" 0)
++option(ORCA_VERSION_CHECK_DEFAULT "Whether to check for new versions on startup by default" ON)
++
++if (ORCA_VERSION_CHECK_DEFAULT)
++  add_definitions(-DORCA_VERSION_CHECK_DEFAULT=true)
++else ()
++  add_definitions(-DORCA_VERSION_CHECK_DEFAULT=false)
++endif ()
+ 
+ set(OPENVDB_FIND_MODULE_PATH "" CACHE PATH "Path to OpenVDB installation's find modules.")
+ 
+diff --git a/README.md b/README.md
+index 0fe4466de..12b8e29d8 100644
+--- a/README.md
++++ b/README.md
+@@ -193,6 +193,10 @@ resolution: 0.1
+ 
+ # Supports
+ 
++# Note if building for a package manager
++
++If you're building this as a package for a package manager (`apt`, `brew`, `pacman`, `nix`, `chocolatey`, etc.) where the user is not going to be manually updating the software, you should disable the version check with `-DORCA_VERSION_CHECK_DEFAULT=OFF` flag to cmake
++
+ **OrcaSlicer** is an open-source project and I'm deeply grateful to all my sponsors and backers.  
+ Their generous support enables me to purchase filaments and other essential 3D printing materials for the project.  
+ Thank you! :)
+diff --git a/src/libslic3r/AppConfig.cpp b/src/libslic3r/AppConfig.cpp
+index 4ce577f22..3583068d5 100644
+--- a/src/libslic3r/AppConfig.cpp
++++ b/src/libslic3r/AppConfig.cpp
+@@ -394,6 +394,13 @@ void AppConfig::set_defaults()
+         set_bool("check_stable_update_only", false);
+     }
+ 
++    if (get("do_version_check").empty()) {
++#ifndef ORCA_VERSION_CHECK_DEFAULT
++#define ORCA_VERSION_CHECK_DEFAULT true
++#endif
++      set_bool("do_version_check", ORCA_VERSION_CHECK_DEFAULT);
++    }
++
+     // Orca
+     if(get("show_splash_screen").empty()) {
+         set_bool("show_splash_screen", true);
+diff --git a/src/slic3r/GUI/GUI_App.cpp b/src/slic3r/GUI/GUI_App.cpp
+index 4cdd30e77..239d6977c 100644
+--- a/src/slic3r/GUI/GUI_App.cpp
++++ b/src/slic3r/GUI/GUI_App.cpp
+@@ -940,7 +940,9 @@ void GUI_App::post_init()
+                 this->preset_updater->sync(http_url, language, network_ver, sys_preset ? preset_bundle : nullptr);
+             }
+ 
+-            this->check_new_version_sf();
++            if (this->preset_updater->version_check_enabled()) {
++                this->check_new_version_sf();
++            }
+             const auto cloud_provider = get_printer_cloud_provider();
+             if (is_user_login(cloud_provider) && !app_config->get_stealth_mode()) {
+               // this->check_privacy_version(0);
+diff --git a/src/slic3r/Utils/PresetUpdater.cpp b/src/slic3r/Utils/PresetUpdater.cpp
+index d5c6f3991..0724f1e10 100644
+--- a/src/slic3r/Utils/PresetUpdater.cpp
++++ b/src/slic3r/Utils/PresetUpdater.cpp
+@@ -250,7 +250,6 @@ PresetUpdater::priv::priv()
+ 	, cancel(false)
+ {
+ 	//BBS: refine preset updater logic
+-	enabled_version_check = true;
+ 	set_download_prefs(GUI::wxGetApp().app_config);
+ 	// Install indicies from resources. Only installs those that are either missing or older than in resources.
+ 	check_installed_vendor_profiles();
+@@ -264,6 +263,7 @@ PresetUpdater::priv::priv()
+ void PresetUpdater::priv::set_download_prefs(AppConfig *app_config)
+ {
+ 	version_check_url = app_config->version_check_url();
++	enabled_version_check = app_config->get_bool("do_version_check");
+ 
+ 	auto profile_update_url = app_config->profile_update_url();
+ 	if (!profile_update_url.empty())

@@ -1,4 +1,10 @@
-{ pkgs, inputs, outputs, ... }: {
+{
+  pkgs,
+  inputs,
+  outputs,
+  ...
+}:
+{
 
   nixpkgs = {
     # You can add overlays here
@@ -50,7 +56,7 @@
     aria2 # Lightweight multi-protocol download utility
 
     # File and Text Processing
-    lsd #  modern replacement for ls
+    lsd # modern replacement for ls
     fd # Simple, fast and user-friendly alternative to find
     ripgrep # Fast text search tool
     jq # Command-line JSON processor
@@ -79,7 +85,6 @@
     stlink
     probe-rs-tools
   ];
-
 
   # https://github.com/NixOS/nixpkgs/issues/149812
   environment.extraInit = ''

@@ -7,6 +7,32 @@
   # https://nixos.wiki/wiki/Overlays
   modifications = final: prev: {
     warp-terminal = prev.warp-terminal.override { waylandSupport = true; };
+    orca-slicer = (prev.orca-slicer.override {
+      eigen = prev.eigen_5;
+      wxwidgets_3_1 = prev.wxwidgets_3_3 // {
+        override = _args: prev.wxwidgets_3_3;
+      };
+    }).overrideAttrs (oldAttrs: {
+      version = "2.4.0-beta";
+
+      src = prev.fetchFromGitHub {
+        owner = "OrcaSlicer";
+        repo = "OrcaSlicer";
+        rev = "fc9a8aa93f7d341c3028d275781d77d2f385023e";
+        hash = "sha256-bx4faVtEkcqBXzSXBXIsntDA4EFxDxWyUeI583tYhdw=";
+      };
+
+      patches =
+        builtins.filter
+          (patch: !(prev.lib.hasInfix "pr-7650-configurable-update-check.patch" (toString patch)))
+          (oldAttrs.patches or [])
+        ++ prev.lib.optional (builtins.pathExists ./patches/configurable-update-check-v2.4.0-beta.patch)
+          ./patches/configurable-update-check-v2.4.0-beta.patch;
+
+      meta = oldAttrs.meta // {
+        changelog = "https://github.com/OrcaSlicer/OrcaSlicer/releases/tag/v2.4.0-beta";
+      };
+    });
     # app2unit = prev.app2unit.overrideAttrs (old: {
     #   # Upstream script changed; keep shebang rewrite strict but allow terminal-handler
     #   # replacement to be skipped when the pattern no longer exists.

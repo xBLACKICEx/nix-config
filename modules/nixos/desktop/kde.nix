@@ -25,7 +25,7 @@ with lib; {
     programs.kdeconnect.enable = true;
 
     environment.systemPackages = with  pkgs; [
-      inputs.kwin-effects-forceblur.packages.${pkgs.stdenv.hostPlatform.system}.default # Wayland
+      # inputs.kwin-effects-forceblur.packages.${pkgs.stdenv.hostPlatform.system}.default # Wayland
       # inputs.kwin-effects-forceblur.packages.${pkgs.stdenv.hostPlatform.system}.x11 # X11
       kdePackages.wallpaper-engine-plugin
     ];
