@@ -133,6 +133,7 @@
 
       nixosConfigurations = {
         # Laughing_Man = import ./hosts/Laughing_Man { inherit inputs outputs nixpkgs; };
+        NERV_Recreation = import ./hosts/NERV_Recreation { inherit inputs outputs nixpkgs; };
         suzuha = import ./hosts/suzuha { inherit inputs outputs nixpkgs; };
       };
     };
