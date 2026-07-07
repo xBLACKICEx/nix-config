@@ -110,7 +110,8 @@
     fzf = {
       enable = true;
       enableBashIntegration = true;
-      changeDirWidgetCommand = "fd --type d";
+      changeDirWidget.command = "fd --type d";
+      historyWidget.command = "";
     };
 
     yazi = {

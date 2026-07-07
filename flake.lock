@@ -255,11 +255,11 @@
     "dotfiles": {
       "flake": false,
       "locked": {
-        "lastModified": 1759828875,
-        "narHash": "sha256-7xy8atNl4UieWsmXWuZ35XI0biR7mn+YGL86TC/R1GY=",
+        "lastModified": 1783464541,
+        "narHash": "sha256-OAluEg4UhdhuR6GhenQTeASyj/z2vDQvSdGlItPkPPM=",
         "owner": "xBLACKICEx",
         "repo": "my-dotfiles",
-        "rev": "ecf6326af42809885381a507e2074cbbac892ab6",
+        "rev": "2ff4ddb2e577ab858f0d6897c679860e0be3d3c0",
         "type": "github"
       },
       "original": {

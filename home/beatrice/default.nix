@@ -2,6 +2,7 @@
   pkgs,
   inputs,
   outputs,
+  lib,
   ...
 }:
 let
@@ -184,6 +185,10 @@ in
 
   programs = {
     home-manager.enable = true;
+
+    nushell.extraConfig = lib.mkAfter ''
+      use ${inputs.dotfiles}/apps/nushell/nixos/mod.nu *
+    '';
 
     nushell.extraLogin = ''
       uwsm check may-start -i ; uwsm select ; exec uwsm start default
