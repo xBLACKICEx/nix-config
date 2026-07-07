@@ -15,7 +15,7 @@ let
     "networkmanager"
     "plugdev"
     "qemu-libvirtd"
-    "shards"
+    "shared"
     "video"
     "wheel"
   ];
@@ -23,13 +23,14 @@ in
 {
   imports = [
     ./hardware-configuration.nix
+    ./impermanence.nix
     outputs.nixosModules.core
     outputs.nixosModules.desktop
     inputs.dms.nixosModules.greeter
   ];
 
   networking.hostName = "NERV_Recreation";
-  system.stateVersion = lib.mkForce "26.05";
+  system.stateVersion = lib.mkForce "26.11";
 
   # Desktop
   desktop.kde.enable = true;
@@ -58,24 +59,6 @@ in
     memoryPercent = 50;
   };
 
-  # Core persistence
-  core.impermanence = {
-    enable = true;
-    persistence = {
-      directories = [
-        "/etc/NetworkManager/system-connections"
-        "/etc/ssh"
-        "/etc/nixos/nix-config"
-        "/etc/agenix"
-        "/root"
-        "/var"
-      ];
-      files = [
-        "/etc/machine-id"
-      ];
-    };
-  };
-
   # Security / keyring
   security.polkit.enable = true;
   services.gnome.gnome-keyring.enable = true;
@@ -93,7 +76,18 @@ in
   virtualisation.docker.enable = true;
   virtualisation.libvirtd.enable = true;
   virtualisation.spiceUSBRedirection.enable = true;
-
+  systemd.services = {
+    libvirtd.serviceConfig = {
+      LoadCredentialEncrypted = lib.mkForce [ ];
+      LoadCredential = [
+        "secrets-encryption-key:/var/lib/libvirt/secrets/secrets-encryption-key"
+      ];
+    };
+    virt-secret-init-encryption.serviceConfig.ExecStart = lib.mkForce [
+      ""
+      "${pkgs.bash}/bin/bash -c 'umask 0077 && ${pkgs.coreutils}/bin/mkdir -p /var/lib/libvirt/secrets && ${pkgs.coreutils}/bin/dd if=/dev/random of=/var/lib/libvirt/secrets/secrets-encryption-key status=none bs=32 count=1'"
+    ];
+  };
   # Networking / discovery
   services.avahi = {
     enable = true;
@@ -122,32 +116,34 @@ in
   ];
 
   users.groups = {
-    docker.members = [ "michiha" ];
-    libvirtd.members = [ "michiha" ];
+    docker.members = [ "beatrice" ];
+    libvirtd.members = [ "beatrice" ];
     plugdev = { };
-    shards = {
-      gid = 4672;
-    };
+    shared = { };
+    syncthing-shared = { };
+    configs = { };
   };
 
   users.users = {
     root = {
       hashedPassword = "$6$BKXv3QWuBJAnRYNK$uP.PDS1qmkCDvr2IBLw9mLyNhUP0Js7hGfPYBnRTE3Jc8Om24/ae/O6hn7jH58eCYM9L7zIM7EXb9es.10iO00";
     };
-    michiha = {
+    beatrice = {
       hashedPassword = "$6$iBSb93jkx9FGya9x$q7riq6BxEZhXyNAoVCvPc62Br98Y2x69U4lgME8H4cJbXpebRVZsT7NZhhw2h1zumLuVZtJF.ZyXVicNQr1/7.";
       isNormalUser = true;
-      description = "michiha";
+      description = "beatrice";
       enable = true;
       extraGroups = commonUserGroups ++ [
         "docker"
         "scanner"
         "lp"
+        "configs"
+        "syncthing-shared"
       ];
     };
   };
 
-  nix.settings.trusted-users = [ "michiha" ];
+  nix.settings.trusted-users = [ "beatrice" ];
   nixpkgs.config.permittedInsecurePackages = [
     "olm-3.2.16"
   ];

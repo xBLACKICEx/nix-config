@@ -1,11 +1,11 @@
-{ inputs, pkgs,... }:
+{ inputs, pkgs, ... }:
 {
   programs = {
     git = {
       enable = true;
       settings = {
         user = {
-          eame = "xblackicex";
+          name = "xblackicex";
           email = "xblackicex@outlook.com";
         };
       };
@@ -98,7 +98,7 @@
       enableBashIntegration = true;
       enableNushellIntegration = true;
       nix-direnv.enable = true;
-  };
+    };
 
     starship = {
       enable = true;

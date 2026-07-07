@@ -29,7 +29,7 @@ in
   ];
 
   networking.hostName = "suzuha";
-  system.stateVersion = lib.mkForce "26.05";
+  system.stateVersion = lib.mkForce "26.11";
 
   # Desktop
   desktop.hypr.enable = true;

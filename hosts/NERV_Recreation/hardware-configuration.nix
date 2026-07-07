@@ -24,8 +24,8 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
-  boot.kernelPackages = pkgs.linuxPackages_zen;
-  system.boot.loader.kernelFile = "vmlinuz";
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # system.boot.loader.kernelFile = "vmlinuz";
 
   boot.supportedFilesystems = [
     "btrfs"

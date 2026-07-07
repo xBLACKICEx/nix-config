@@ -12,5 +12,5 @@
   # };
 
   # programs.home-manager.enable = true;
-  home.stateVersion = lib.mkForce "26.05";
+  home.stateVersion = lib.mkForce "26.11";
 }

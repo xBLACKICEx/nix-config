@@ -11,6 +11,4 @@
 
     wheelNeedsPassword = true;
   };
-
-  users.users.michiha.extraGroups = [ "wheel" ];
 }

@@ -116,7 +116,7 @@ in
     #     xxx
     # '';
 
-    stateVersion = "26.05";
+    stateVersion = "26.11";
   };
 
   ### BEGIN -- CUSTOM HOME MANAGER MODULES CONFIGURATION -- BEGIN ###
@@ -221,7 +221,7 @@ in
     # kitty.font.name = "JetBrainsMono Nerd Font";
 
     caelestia = {
-      enable = true;
+      enable = false;
       package = caelestiaPackage;
       systemd = {
         enable = false; # if you prefer starting from your compositor
