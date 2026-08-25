@@ -6,6 +6,7 @@
   ...
 }:
 let
+  codexCli = inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default;
   caelestiaPackage = inputs.caelestia-shell.packages.${pkgs.stdenv.hostPlatform.system}.with-cli.override {
     app2unit = pkgs.app2unit;
   };
@@ -20,6 +21,31 @@ in
     # inputs.illogical-impulse.homeManagerModules.default
 
     inputs.caelestia-shell.homeManagerModules.default
+    inputs.codex-desktop-linux.homeManagerModules.default
+
+    # # The local Waywallen checkout currently exposes `programs` beside an
+    # # explicit `config`, which Home Manager rejects. Normalize it here until
+    # # the upstream module is fixed.
+    # (
+    #   {
+    #     config,
+    #     lib,
+    #     pkgs,
+    #     ...
+    #   }@moduleArgs:
+    #   let
+    #     waywallenModule = inputs.waywallen.homeModules.default moduleArgs;
+    #   in
+    #   (builtins.removeAttrs waywallenModule [ "programs" ])
+    #   // {
+    #     config = lib.mkMerge [
+    #       (waywallenModule.config or { })
+    #       { programs = waywallenModule.programs or { }; }
+    #     ];
+    #   }
+    # )
+    # inputs.waywallen-display.homeModules.default
+    # inputs.open-wallpaper-engine.homeModules.default
 
     # inputs.dms.homeModules.dank-material-shell
     # inputs.dms-plugin-registry.modules.default
@@ -46,6 +72,11 @@ in
       yq-go # YAML 处理器 https://github.com/mikefarah/yq
       lsd
       vscode
+
+      # Codex CLI is shared with the Desktop launcher below. Node.js is needed
+      # by plugin-provided MCP servers such as codex-security.
+      codexCli
+      nodejs_22
 
       # 网络工具
       mtr # 网络诊断工具
@@ -120,6 +151,19 @@ in
     stateVersion = "26.11";
   };
 
+  # programs.waywallen = {
+  #   enable = true;
+
+  #   display.backend = "kde";
+
+  #   plugins.openWallpaperEngine = {
+  #     enable = true;
+  #     resolution = "5120x2160";
+  #     fps = 30;
+  #     msaa = 2;
+  #   };
+  # };
+
   ### BEGIN -- CUSTOM HOME MANAGER MODULES CONFIGURATION -- BEGIN ###
   # desktop.hypr.enable = tru
 
@@ -185,6 +229,14 @@ in
 
   programs = {
     home-manager.enable = true;
+
+    codexDesktopLinux = {
+      enable = true;
+      cliPackage = codexCli;
+    };
+
+    nushell.plugins = [
+    ];
 
     nushell.extraConfig = lib.mkAfter ''
       use ${inputs.dotfiles}/apps/nushell/nixos/mod.nu *

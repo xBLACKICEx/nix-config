@@ -129,9 +129,10 @@ in
       hashedPassword = "$6$BKXv3QWuBJAnRYNK$uP.PDS1qmkCDvr2IBLw9mLyNhUP0Js7hGfPYBnRTE3Jc8Om24/ae/O6hn7jH58eCYM9L7zIM7EXb9es.10iO00";
     };
     beatrice = {
+      linger = true;
       hashedPassword = "$6$iBSb93jkx9FGya9x$q7riq6BxEZhXyNAoVCvPc62Br98Y2x69U4lgME8H4cJbXpebRVZsT7NZhhw2h1zumLuVZtJF.ZyXVicNQr1/7.";
       isNormalUser = true;
-      description = "beatrice";
+      description = "ベアトリス";
       enable = true;
       extraGroups = commonUserGroups ++ [
         "docker"

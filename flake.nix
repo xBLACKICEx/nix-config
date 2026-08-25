@@ -6,6 +6,16 @@
 
     agenix.url = "github:ryantm/agenix";
 
+    codex-cli-nix = {
+      url = "github:sadjow/codex-cli-nix/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    codex-desktop-linux = {
+      url = "github:ilysenko/codex-desktop-linux/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     impermanence.url = "github:nix-community/impermanence";
 
     zen-browser = {
