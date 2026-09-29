@@ -65,7 +65,7 @@
     # illogical-impulse.inputs.nixpkgs.follows = "nixpkgs";
 
     caelestia-shell = {
-      url = "github:caelestia-dots/shell/v1.4.1";
+      url = "github:caelestia-dots/shell";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
