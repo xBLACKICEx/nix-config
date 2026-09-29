@@ -21,7 +21,6 @@
   boot.initrd.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
   boot.kernelPackages = pkgs.linuxPackages_zen;
-  system.boot.loader.kernelFile = "vmlinuz";
 
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   nix.settings.extra-platforms = [ "aarch64-linux" ];
@@ -179,16 +178,22 @@
       "uid=1002"
       "gid=4672"
       "umask=002"
+      "nofail"
+      "x-systemd.automount"
+      "x-systemd.device-timeout=3s"
     ];
   };
 
   fileSystems."/mnt/dev" = {
-    device = "/dev/nvme0n1p6";
+    device = "/dev/disk/by-uuid/CAD6477BD64766B3";
     fsType = "ntfs3";
     options = [
       "uid=1002"
       "gid=4672"
       "umask=002"
+      "nofail"
+      "x-systemd.automount"
+      "x-systemd.device-timeout=3s"
     ];
   };
 
