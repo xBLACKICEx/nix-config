@@ -1,6 +1,7 @@
 { pkgs
 , inputs
 , outputs
+, config
 , lib
 , ...
 }:
@@ -24,9 +25,62 @@ in
     ./hardware-configuration.nix
     outputs.nixosModules.core
     outputs.nixosModules.desktop
+    outputs.nixosModules.agentdock
     # inputs.hydenix.nixosModules.default
     inputs.dms.nixosModules.greeter
   ];
+
+  age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  age.secrets.ionos-acme = {
+    file = ../../secrets/ionos-acme.env.age;
+    owner = "root";
+    group = "root";
+    mode = "0400";
+  };
+
+  security.acme = {
+    acceptTerms = true;
+    certs."mcp.xblackicex.me" = {
+      server = "https://acme-v02.api.letsencrypt.org/directory";
+      dnsProvider = "ionos";
+      environmentFile = config.age.secrets.ionos-acme.path;
+      group = config.services.nginx.group;
+    };
+  };
+
+  services.nginx = {
+    enable = true;
+    virtualHosts."mcp.xblackicex.me" = {
+      onlySSL = true;
+      listen = [
+        {
+          addr = "0.0.0.0";
+          port = 443;
+          ssl = true;
+        }
+        {
+          addr = "[::]";
+          port = 443;
+          ssl = true;
+        }
+      ];
+      useACMEHost = "mcp.xblackicex.me";
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:8765";
+        recommendedProxySettings = true;
+        extraConfig = ''
+          proxy_http_version 1.1;
+          proxy_set_header Connection "";
+          proxy_buffering off;
+          proxy_cache off;
+          proxy_read_timeout 3600s;
+          proxy_send_timeout 3600s;
+        '';
+      };
+    };
+  };
+
+  networking.firewall.allowedTCPPorts = [ 443 ];
 
   networking.hostName = "suzuha";
   system.stateVersion = lib.mkForce "26.11";
@@ -125,6 +179,17 @@ in
     openFirewall = true;
   };
   services.syncthing.enable = true;
+
+  services.agentdock = {
+    enable = true;
+    user = "michiha";
+    workspace = "/home/michiha/AgentDock";
+    tunnel.enable = false;
+    oauth = {
+      enable = true;
+      serverUrl = "https://mcp.xblackicex.me";
+    };
+  };
 
   # Printing / scanning
   services.printing.enable = true;

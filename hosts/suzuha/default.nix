@@ -12,7 +12,14 @@ nixpkgs.lib.nixosSystem {
 
   modules = [
     ../common
+    inputs.agenix.nixosModules.default
     ./configuration.nix # host-specific configuration
+
+    {
+      environment.systemPackages = [
+        inputs.agenix.packages.${system}.default
+      ];
+    }
 
     # custom configuration modules
     # outputs.nixosModules.secureboot

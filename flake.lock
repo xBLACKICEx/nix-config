@@ -21,6 +21,23 @@
         "type": "github"
       }
     },
+    "agentdock": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1789677908,
+        "narHash": "sha256-tbg8B6FYBaBs/7mHiPDIleBfg9LpSDzIH0oEECAvDSk=",
+        "path": "/home/michiha/my_nixpgs/agentdock",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/michiha/my_nixpgs/agentdock",
+        "type": "path"
+      }
+    },
     "aquamarine": {
       "inputs": {
         "hyprutils": [
@@ -1441,6 +1458,7 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
+        "agentdock": "agentdock",
         "caelestia-shell": "caelestia-shell",
         "codex-cli-nix": "codex-cli-nix",
         "codex-desktop-linux": "codex-desktop-linux",

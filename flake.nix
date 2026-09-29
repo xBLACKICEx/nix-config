@@ -4,6 +4,11 @@
 
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
 
+    agentdock = {
+      url = "path:/home/michiha/my_nixpgs/agentdock";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     agenix.url = "github:ryantm/agenix";
 
     codex-cli-nix = {
