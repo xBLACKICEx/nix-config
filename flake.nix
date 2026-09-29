@@ -84,6 +84,11 @@
       flake = false;
     };
 
+    dgop = {
+      url = "github:AvengeMedia/dgop";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # # dms-wallpaperengine = {
     # #   url = "github:sgtaziz/dms-wallpaperengine";
     # #   flake = false;

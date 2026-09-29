@@ -49,5 +49,5 @@
   services.blueman.enable = true;
 
   hardware.logitech.wireless.enable = true;
-  hardware.logitech.wireless.enableGraphical = true;
+  programs.solaar.enable = true;
 }

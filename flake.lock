@@ -160,6 +160,22 @@
         "type": "github"
       }
     },
+    "dank-qml-common": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1788376015,
+        "narHash": "sha256-/tT8rTznLADndTwLBzdgzzgfJH1ZhYQibYo5v/F8U+U=",
+        "owner": "AvengeMedia",
+        "repo": "dank-qml-common",
+        "rev": "26396ce432d6c71c3f5367438f96f4a8d667e160",
+        "type": "github"
+      },
+      "original": {
+        "owner": "AvengeMedia",
+        "repo": "dank-qml-common",
+        "type": "github"
+      }
+    },
     "danksearch": {
       "inputs": {
         "nixpkgs": [
@@ -167,11 +183,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1782736090,
-        "narHash": "sha256-TnoKATODjWk4e1w3VhRYLWGMdXMJzDyvQF8mtD6WRGA=",
+        "lastModified": 1788455393,
+        "narHash": "sha256-C9mVxnPCaA6mtz8H5GwMfBjOdhLRmXrpzcDc7z99iOo=",
         "owner": "AvengeMedia",
         "repo": "danksearch",
-        "rev": "1269b4688cc94cbd271e1cbbf19a6e7caa2293de",
+        "rev": "984f86e644a93d2a366d960e3c56233260a501de",
         "type": "github"
       },
       "original": {
@@ -218,6 +234,26 @@
         "type": "gitlab"
       }
     },
+    "dgop": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1789138077,
+        "narHash": "sha256-q7f+CiEu+YatKTSpaHGEeIj4N8YPI/MeVAq70bmtI3w=",
+        "owner": "AvengeMedia",
+        "repo": "dgop",
+        "rev": "bc726cad136cd81573d96af3e35ed2b767dc490f",
+        "type": "github"
+      },
+      "original": {
+        "owner": "AvengeMedia",
+        "repo": "dgop",
+        "type": "github"
+      }
+    },
     "disko": {
       "inputs": {
         "nixpkgs": [
@@ -240,17 +276,18 @@
     },
     "dms": {
       "inputs": {
+        "dank-qml-common": "dank-qml-common",
+        "flake-compat": "flake-compat",
         "nixpkgs": [
           "nixpkgs"
-        ],
-        "quickshell": "quickshell_2"
+        ]
       },
       "locked": {
-        "lastModified": 1777431599,
-        "narHash": "sha256-g6r/Gx8PTDzO3jCNzzySA+Ff1lmLF9nDlMCNyyoQjoE=",
+        "lastModified": 1788959433,
+        "narHash": "sha256-MAbxGEomcpGomFfw+WYurNkSKBIh7PKEc1U5OV0X6oU=",
         "owner": "AvengeMedia",
         "repo": "DankMaterialShell",
-        "rev": "eb5afcdc40ea5446c27e18552ff4a19f9daf9484",
+        "rev": "fe293b7379a51f62a4db7043fc09df71f78e72ef",
         "type": "github"
       },
       "original": {
@@ -267,11 +304,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1783331514,
-        "narHash": "sha256-O+km4+080E2M3O3jsgYzxuwSGZiXEdUl3OVPYHNks10=",
+        "lastModified": 1789439590,
+        "narHash": "sha256-X0R9AVlCavuFAvGcFIIrNdeHD2ypFf8MGpAEXOzPgiE=",
         "owner": "AvengeMedia",
         "repo": "dms-plugin-registry",
-        "rev": "e6b906a8af3845312ae792055d718ad501f51483",
+        "rev": "d5bb0d6d1c74278840e1bc92bac8add1b34d31bc",
         "type": "github"
       },
       "original": {
@@ -283,11 +320,11 @@
     "dms-plugins": {
       "flake": false,
       "locked": {
-        "lastModified": 1780332225,
-        "narHash": "sha256-QkQPqP7Wmo5DLRyKNSY5NuOau4LSaSfz3DYdHDLxluA=",
+        "lastModified": 1788827778,
+        "narHash": "sha256-KGpNgxN/zXiMjLLm4zLX+Wgnj1vx8bGGd6WwGBWo7Ds=",
         "owner": "AvengeMedia",
         "repo": "dms-plugins",
-        "rev": "f4583449f12920e0a2f16808b00a860c27f0173d",
+        "rev": "6fc7f25bfb24f93b6488fb8a36ed67b5f242abdb",
         "type": "github"
       },
       "original": {
@@ -1401,28 +1438,6 @@
         "url": "https://git.outfoxxed.me/outfoxxed/quickshell"
       }
     },
-    "quickshell_2": {
-      "inputs": {
-        "nixpkgs": [
-          "dms",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1776854048,
-        "narHash": "sha256-lLbV66V3RMNp1l8/UelmR4YzoJ5ONtgvEtiUMJATH/o=",
-        "ref": "refs/heads/master",
-        "rev": "783c953987dc56ff0601abe6845ed96f1d00495a",
-        "revCount": 806,
-        "type": "git",
-        "url": "https://git.outfoxxed.me/quickshell/quickshell"
-      },
-      "original": {
-        "rev": "783c953987dc56ff0601abe6845ed96f1d00495a",
-        "type": "git",
-        "url": "https://git.outfoxxed.me/quickshell/quickshell"
-      }
-    },
     "root": {
       "inputs": {
         "agenix": "agenix",
@@ -1431,6 +1446,7 @@
         "codex-desktop-linux": "codex-desktop-linux",
         "danksearch": "danksearch",
         "dedsec-grub-theme": "dedsec-grub-theme",
+        "dgop": "dgop",
         "disko": "disko",
         "dms": "dms",
         "dms-plugin-registry": "dms-plugin-registry",

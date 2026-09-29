@@ -102,7 +102,7 @@
     element-desktop
     discord
     # wechat-uos
-    qq
+    # qq
   ];
 
   # git 相关配置
