@@ -1,5 +1,7 @@
 { pkgs, inputs, outputs, ... }:
-
+let
+  codexCli = inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default;
+in
 {
   # 注意修改这里的用户名与用户目录
   # home.username = username;
@@ -24,6 +26,7 @@
     ../common
     # 导入一些常用的配置
     outputs.homeManagerModules.fcitx5
+    inputs.codex-desktop-linux.homeManagerModules.default
   ];
 
   # 通过 home.packages 安装一些常用的软件
@@ -62,6 +65,10 @@
     zstd
     gnupg
     keepassxc
+
+    codexCli
+    nodejs_22
+
     # kikoplay
     exercism
     devenv
@@ -135,6 +142,12 @@
                                       (setq-local electric-indent-chars '(?\n ?\( ?\) ?{ ?\] ?\; ?,))
                                       (lsp-deferred))))
     '';
+  };
+
+
+  programs.codexDesktopLinux = {
+    enable = true;
+    cliPackage = codexCli;
   };
 
   # This value determines the Home Manager release that your
