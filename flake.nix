@@ -4,11 +4,6 @@
 
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
 
-    agentdock = {
-      url = "path:/home/michiha/my_nixpgs/agentdock";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     agenix.url = "github:ryantm/agenix";
 
     codex-cli-nix = {
@@ -52,14 +47,6 @@
       url = "github:richen604/hydenix";
       inputs.nixpkgs.follows = "nixpkgs-stable";
     };
-
-    # 本地打包的 Headroom 上下文压缩 CLI（uvx 拉起 headroom-ai）。
-    # 供 services.headroom 常驻本机代理使用。
-    headroom = {
-      url = "path:/home/michiha/my_nixpgs/headroom";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
 
     dotfiles = {
       url = "github:xBLACKICEx/my-dotfiles";

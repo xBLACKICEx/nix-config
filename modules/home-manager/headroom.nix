@@ -1,7 +1,6 @@
 { config
 , lib
 , pkgs
-, inputs
 , ...
 }:
 let
@@ -98,8 +97,8 @@ in
 
     package = lib.mkOption {
       type = lib.types.package;
-      default = inputs.headroom.packages.${pkgs.stdenv.hostPlatform.system}.default;
-      defaultText = lib.literalExpression "inputs.headroom.packages.\${pkgs.stdenv.hostPlatform.system}.default";
+      default = pkgs.callPackage ../../pkgs/headroom.nix { };
+      defaultText = lib.literalExpression "pkgs.callPackage ../../pkgs/headroom.nix { }";
       description = "提供 `headroom` 命令的包。";
     };
 

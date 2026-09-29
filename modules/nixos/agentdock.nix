@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   inherit (lib) mkEnableOption mkIf mkOption types;
@@ -117,8 +117,8 @@ in
 
     package = mkOption {
       type = types.package;
-      default = inputs.agentdock.packages.${pkgs.stdenv.hostPlatform.system}.default;
-      defaultText = lib.literalExpression "inputs.agentdock.packages.\${pkgs.stdenv.hostPlatform.system}.default";
+      default = pkgs.callPackage ../../pkgs/agentdock.nix { };
+      defaultText = lib.literalExpression "pkgs.callPackage ../../pkgs/agentdock.nix { }";
       description = "AgentDock package to run.";
     };
 

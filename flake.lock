@@ -21,23 +21,6 @@
         "type": "github"
       }
     },
-    "agentdock": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1789677908,
-        "narHash": "sha256-tbg8B6FYBaBs/7mHiPDIleBfg9LpSDzIH0oEECAvDSk=",
-        "path": "/home/michiha/my_nixpgs/agentdock",
-        "type": "path"
-      },
-      "original": {
-        "path": "/home/michiha/my_nixpgs/agentdock",
-        "type": "path"
-      }
-    },
     "aquamarine": {
       "inputs": {
         "hyprutils": [
@@ -587,23 +570,6 @@
         "owner": "hercules-ci",
         "repo": "gitignore.nix",
         "type": "github"
-      }
-    },
-    "headroom": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1789541034,
-        "narHash": "sha256-C2QMzgNp7swEsykgdIpkLFX5K62lNE36k4t10WoP5F4=",
-        "path": "/home/michiha/my_nixpgs/headroom",
-        "type": "path"
-      },
-      "original": {
-        "path": "/home/michiha/my_nixpgs/headroom",
-        "type": "path"
       }
     },
     "home-manager": {
@@ -1518,7 +1484,6 @@
     "root": {
       "inputs": {
         "agenix": "agenix",
-        "agentdock": "agentdock",
         "caelestia-shell": "caelestia-shell",
         "codex-cli-nix": "codex-cli-nix",
         "codex-desktop-linux": "codex-desktop-linux",
@@ -1533,7 +1498,6 @@
         "dotfiles": "dotfiles",
         "fcitx5-theme-ayaya": "fcitx5-theme-ayaya",
         "fcitx5-themes-candlelight": "fcitx5-themes-candlelight",
-        "headroom": "headroom",
         "home-manager": "home-manager_2",
         "hydenix": "hydenix",
         "hyprland": "hyprland",
