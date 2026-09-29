@@ -31,6 +31,15 @@
 
         auto-optimise-store = true; # 自动优化 Nix 存储
 
+        # DeepSeek Harness 的上游 Cachix。dsh 及其 bundle 是 pnpm 全量依赖树，
+        # 不订阅这个缓存的话首次 rebuild 会全部本地构建。
+        extra-substituters = [
+          "https://deepseek-harness-nix.cachix.org"
+        ];
+        extra-trusted-public-keys = [
+          "deepseek-harness-nix.cachix.org-1:5NrkwLN9veNMhiINtU5ZeV4isXFhFsOwn6Ms7J1M+TA="
+        ];
+
         # 通用的二进制缓存配置
         # extra-substituters = [
         #   "https://anyrun.cachix.org"

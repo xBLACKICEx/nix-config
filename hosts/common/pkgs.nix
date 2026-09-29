@@ -14,6 +14,13 @@
       outputs.overlays.modifications
       outputs.overlays.stable-packages
 
+      # DeepSeek Harness 的 `dsh` scope，供 home/michiha 里的
+      # programs.dsh 使用。home-manager 开了
+      # useGlobalPkgs = true，overlay 必须加在 NixOS 这一层；写在用户模块的
+      # nixpkgs.overlays 里不会影响 Home Manager 看到的 pkgs，会报
+      # `attribute 'dsh' missing`。
+      inputs.deepseek-harness.overlays.default
+
       # inputs.hydenix.overlays.default
 
       # You can also add overlays exported from other flakes:

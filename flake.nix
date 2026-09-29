@@ -21,6 +21,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # DeepSeek Harness 的社区 Nix 打包（dsh CLI + bundle/preset + NixOS/HM 模块）。
+    # 它的 overlay 要求默认 `pnpm >= 11.22.0`；本 flake 锁的 nixpkgs 已满足，
+    # 因此照常 follow 根 nixpkgs，避免多拉一份 nixpkgs。
+    deepseek-harness = {
+      url = "github:moraxyc/deepseek-harness.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     impermanence.url = "github:nix-community/impermanence";
 
     zen-browser = {
@@ -43,6 +51,13 @@
     hydenix = {
       url = "github:richen604/hydenix";
       inputs.nixpkgs.follows = "nixpkgs-stable";
+    };
+
+    # 本地打包的 Headroom 上下文压缩 CLI（uvx 拉起 headroom-ai）。
+    # 供 services.headroom 常驻本机代理使用。
+    headroom = {
+      url = "path:/home/michiha/my_nixpgs/headroom";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
 

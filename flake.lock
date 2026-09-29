@@ -251,6 +251,28 @@
         "type": "gitlab"
       }
     },
+    "deepseek-harness": {
+      "inputs": {
+        "flake-parts": "flake-parts",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": "systems_4"
+      },
+      "locked": {
+        "lastModified": 1789805379,
+        "narHash": "sha256-8eh5PLud1SzCtBwQtGnD8Vtf6/9Mj4xF3uFXMab0yu8=",
+        "owner": "moraxyc",
+        "repo": "deepseek-harness.nix",
+        "rev": "92d04e23ab93d9b8af17b2c0526dd85cefa43229",
+        "type": "github"
+      },
+      "original": {
+        "owner": "moraxyc",
+        "repo": "deepseek-harness.nix",
+        "type": "github"
+      }
+    },
     "dgop": {
       "inputs": {
         "nixpkgs": [
@@ -446,6 +468,27 @@
         "type": "github"
       }
     },
+    "flake-parts": {
+      "inputs": {
+        "nixpkgs-lib": [
+          "deepseek-harness",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1788450739,
+        "narHash": "sha256-glZLQlzIn1fXH6PazR2iUmTo7kzzyYSshrWhLS9TqCU=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "31729ca8cbdb4fa927b34e5f4353e6a83f39e993",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
     "flake-parts_2": {
       "inputs": {
         "nixpkgs-lib": [
@@ -544,6 +587,23 @@
         "owner": "hercules-ci",
         "repo": "gitignore.nix",
         "type": "github"
+      }
+    },
+    "headroom": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1789541034,
+        "narHash": "sha256-C2QMzgNp7swEsykgdIpkLFX5K62lNE36k4t10WoP5F4=",
+        "path": "/home/michiha/my_nixpgs/headroom",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/michiha/my_nixpgs/headroom",
+        "type": "path"
       }
     },
     "home-manager": {
@@ -1464,6 +1524,7 @@
         "codex-desktop-linux": "codex-desktop-linux",
         "danksearch": "danksearch",
         "dedsec-grub-theme": "dedsec-grub-theme",
+        "deepseek-harness": "deepseek-harness",
         "dgop": "dgop",
         "disko": "disko",
         "dms": "dms",
@@ -1472,6 +1533,7 @@
         "dotfiles": "dotfiles",
         "fcitx5-theme-ayaya": "fcitx5-theme-ayaya",
         "fcitx5-themes-candlelight": "fcitx5-themes-candlelight",
+        "headroom": "headroom",
         "home-manager": "home-manager_2",
         "hydenix": "hydenix",
         "hyprland": "hyprland",
@@ -1567,6 +1629,21 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "systems_4": {
+      "locked": {
+        "lastModified": 1776166891,
+        "narHash": "sha256-bI8yrEGjrohR5hkQox7UrxDH7XqrYMwI8SL/LrJ1+S8=",
+        "owner": "nix-systems",
+        "repo": "triplet",
+        "rev": "6de7bc09397911ce03636afbcf6118745ab2cda0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "triplet",
         "type": "github"
       }
     },

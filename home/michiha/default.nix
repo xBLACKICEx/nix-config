@@ -1,4 +1,4 @@
-{ pkgs, inputs, outputs, ... }:
+{ pkgs, inputs, outputs, config, ... }:
 let
   codexCli = inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default;
 in
@@ -26,7 +26,12 @@ in
     ../common
     # 导入一些常用的配置
     outputs.homeManagerModules.fcitx5
+    outputs.homeManagerModules.headroom
     inputs.codex-desktop-linux.homeManagerModules.default
+    # DeepSeek Harness：声明 profile、种子文件与 `$DSH_HOME/cordis.patch.yml`。
+    # 需要全局 pkgs 里已有 `dsh`（见 hosts/common/pkgs.nix 的 overlay）。
+    # Web UI 由下方的 `services.dsh` 使用同一份 profile 启动。
+    inputs.deepseek-harness.homeModules.default
   ];
 
   # 通过 home.packages 安装一些常用的软件
@@ -148,6 +153,88 @@ in
   programs.codexDesktopLinux = {
     enable = true;
     cliPackage = codexCli;
+  };
+
+  # Headroom 上下文压缩代理：常驻本机，压缩 DSH 的上下文。
+  # 一个代理每种协议形状只有一个上游，所以按上游拆成两个实例：
+  #   headroom            127.0.0.1:8787 → DeepSeek 官方（原生 API，只是先压缩）
+  #   headroom-opencode-go 127.0.0.1:8788 → OpenCode Zen Go 网关
+  # 压缩策略不传参，用 Headroom 默认（`coding` profile / `cache` 模式）。
+  # 默认的 CCR 模式不需要 DSH 这边做任何事：代理会把 `headroom_retrieve`
+  # 工具注入上游请求，并在响应里自己拦下模型的取回调用（Anthropic / OpenAI
+  # 路径对客户端透明），原始内容放在 `~/.headroom/ccr_store.db`（SQLite，
+  # 默认 TTL 1800s），两个实例共用同一份。只有在完全不想要标记时才需要
+  # `extraArgs = [ "--lossless" ]`（代价是没有取回回合，压缩也更保守）。
+  services.headroom = {
+    enable = true;
+
+    # 主实例：DSH 的 `deepseek-official`（Messages 协议）走这里，
+    # 上游仍然是 DeepSeek 自己的 API；chat-completions 协议也一并指过去。
+    anthropicApiUrl = "https://api.deepseek.com/anthropic";
+    openaiApiUrl = "https://api.deepseek.com/v1";
+
+    # OpenCode Go 订阅的模型（deepseek / gpt / claude / 小米…）都在这个网关上，
+    # 三种协议形状都转发到同一处，所以一个实例就够。
+    instances.opencode-go = {
+      port = 8788;
+      providerName = "OpenCode Go";
+      anthropicApiUrl = "https://opencode.ai/zen/go";
+      openaiApiUrl = "https://opencode.ai/zen/go/v1";
+    };
+  };
+
+  # DeepSeek Harness：CLI、profile 与 Web UI 全部交给 Home Manager 管理，
+  # 取代原来手工执行的
+  #   DEEPSEEK_BASE_URL=http://127.0.0.1:8787/v1 \
+  #     nix run github:moraxyc/deepseek-harness.nix#presets.web-ui --accept-flake-config
+  #
+  programs.dsh = {
+    enable = true;
+
+    profiles.web-ui = {
+      # 等价于上游 `presets.web-ui`：base 层由模块隐式加入，这里只列额外的
+      # bundle（与 presets/web-ui/package.nix 保持一致）。
+      bundles = [
+        pkgs.dsh.bundles.web-app
+        pkgs.dsh.bundles.web-ui
+      ];
+
+      # mutable：Nix 只在 `~/.dsh/profiles/nix-web-ui` 不存在时播种一次，
+      # 之后插件与设置完全由 `dsh plugin` 管理，Nix 不再覆盖本地改动。
+      mode = "mutable";
+    };
+
+    defaultProfile = config.programs.dsh.profiles.web-ui.materializedName;
+
+    # provider → Headroom 的接线。home 级 patch 会被同步到
+    # `$DSH_HOME/cordis.patch.yml`，在每个 profile 的 patch 之后应用，因此
+    # 不管怎么启动 dsh（CLI、Web、headless）都生效，也不依赖 session 变量：
+    #   llm-deepseek → 8787（DeepSeek 官方）
+    #   opencode-go  → 8788（OpenCode Go）
+    # 凭据仍由各自的 credentials 解析（DEEPSEEK_API_KEY / OPENCODE_API_KEY），
+    # Headroom 只做压缩与转发。
+    patch = [
+      {
+        id = "llm-deepseek";
+        config.baseURL = "http://127.0.0.1:8787/v1";
+      }
+      {
+        id = "opencode-go";
+        config.baseURL = "http://127.0.0.1:8788/v1";
+      }
+    ];
+  };
+
+  # 唯一的 DSH Web 实例。服务模块会复用上面声明的 mutable profile 和
+  # `~/.dsh`，因此不会创建第二套配置；启动顺序上等待主 Headroom 代理就绪。
+  services.dsh = {
+    enable = true;
+    profile = config.programs.dsh.profiles.web-ui.materializedName;
+  };
+
+  systemd.user.services.dsh-web.Unit = {
+    After = [ "headroom.service" ];
+    Wants = [ "headroom.service" ];
   };
 
   # This value determines the Home Manager release that your
