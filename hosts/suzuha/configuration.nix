@@ -23,6 +23,7 @@ in
 {
   imports = [
     ./hardware-configuration.nix
+    ../NERV_Recreation/impermanence.nix
     outputs.nixosModules.core
     outputs.nixosModules.desktop
     outputs.nixosModules.agentdock
@@ -112,24 +113,6 @@ in
     autoStart = true;
     capSysAdmin = true; # only needed for Wayland -- omit this when using with Xorg
     openFirewall = true;
-  };
-
-  # Core persistence
-  core.impermanence = {
-    enable = true;
-    persistence = {
-      directories = [
-        "/etc/NetworkManager/system-connections"
-        "/home"
-        "/etc/ssh"
-        "/etc/nixos/nix-config"
-
-        "/etc/agenix"
-
-        "/root"
-        "/var"
-      ];
-    };
   };
 
   # Security / keyring
