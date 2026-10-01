@@ -15,7 +15,7 @@ let
     "networkmanager"
     "plugdev"
     "qemu-libvirtd"
-    "shards"
+    "shared"
     "video"
     "wheel"
   ];
@@ -23,34 +23,33 @@ in
 {
   imports = [
     ./hardware-configuration.nix
-    ../NERV_Recreation/impermanence.nix
+    ./impermanence.nix
     outputs.nixosModules.core
     outputs.nixosModules.desktop
-    outputs.nixosModules.agentdock
-    # inputs.hydenix.nixosModules.default
+    # outputs.nixosModules.agentdock
     inputs.dms.nixosModules.greeter
   ];
 
-  age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-  age.secrets.ionos-acme = {
-    file = ../../secrets/ionos-acme.env.age;
-    owner = "root";
-    group = "root";
-    mode = "0400";
-  };
+  # age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  # age.secrets.ionos-acme = {
+  #   file = ../../secrets/ionos-acme.env.age;
+  #   owner = "root";
+  #   group = "root";
+  #   mode = "0400";
+  # };
 
-  security.acme = {
-    acceptTerms = true;
-    certs."mcp.xblackicex.me" = {
-      server = "https://acme-v02.api.letsencrypt.org/directory";
-      dnsProvider = "ionos";
-      environmentFile = config.age.secrets.ionos-acme.path;
-      group = config.services.nginx.group;
-    };
-  };
+  # security.acme = {
+  #   acceptTerms = true;
+  #   certs."mcp.xblackicex.me" = {
+  #     server = "https://acme-v02.api.letsencrypt.org/directory";
+  #     dnsProvider = "ionos";
+  #     environmentFile = config.age.secrets.ionos-acme.path;
+  #     group = config.services.nginx.group;
+  #   };
+  # };
 
   services.nginx = {
-    enable = true;
+    enable = false;
     virtualHosts."mcp.xblackicex.me" = {
       onlySSL = true;
       listen = [
@@ -147,13 +146,7 @@ in
     "${pkgs.bash}/bin/bash -c 'umask 0077 && (${pkgs.coreutils}/bin/dd if=/dev/random status=none bs=32 count=1 | ${pkgs.systemd}/bin/systemd-creds encrypt --with-key=host --name=secrets-encryption-key - /var/lib/libvirt/secrets/secrets-encryption-key)'"
   ];
   # virtualisation.virtualbox.host.enable = true;
-  users.groups.docker.members = [ "michiha" ];
-  users.groups.libvirtd.members = [
-    "michiha"
-    "beatrice"
-    "hydenix"
-  ];
-  users.extraGroups.vboxusers.members = [ "michiha" ];
+
 
   # Networking / discovery
   services.avahi = {
@@ -163,16 +156,16 @@ in
   };
   services.syncthing.enable = true;
 
-  services.agentdock = {
-    enable = true;
-    user = "michiha";
-    workspace = "/home/michiha/AgentDock";
-    tunnel.enable = false;
-    oauth = {
-      enable = true;
-      serverUrl = "https://mcp.xblackicex.me";
-    };
-  };
+  # services.agentdock = {
+  #   enable = true;
+  #   user = "michiha";
+  #   workspace = "/home/michiha/AgentDock";
+  #   tunnel.enable = false;
+  #   oauth = {
+  #     enable = true;
+  #     serverUrl = "https://mcp.xblackicex.me";
+  #   };
+  # };
 
   # Printing / scanning
   services.printing.enable = true;
@@ -204,11 +197,14 @@ in
 
   # Groups
   users.groups = {
+    docker.members = [ "michiha" ];
+    libvirtd.members = [ "michiha" ];
     plugdev = { };
-    shards = {
-      gid = 4672;
-    };
+    shared = { };
+    syncthing-shared = { };
+    configs = { };
   };
+  users.extraGroups.vboxusers.members = [ "michiha" ];
 
   # Users
   users.users = {
@@ -216,60 +212,24 @@ in
       hashedPassword = "$6$BKXv3QWuBJAnRYNK$uP.PDS1qmkCDvr2IBLw9mLyNhUP0Js7hGfPYBnRTE3Jc8Om24/ae/O6hn7jH58eCYM9L7zIM7EXb9es.10iO00";
     };
     michiha = {
+      linger = true;
       hashedPassword = "$6$iBSb93jkx9FGya9x$q7riq6BxEZhXyNAoVCvPc62Br98Y2x69U4lgME8H4cJbXpebRVZsT7NZhhw2h1zumLuVZtJF.ZyXVicNQr1/7.";
       isNormalUser = true;
       description = "michiha";
       enable = true;
       extraGroups = commonUserGroups ++ [
+        "docker"
         "scanner"
         "lp"
+        "configs"
+        "syncthing-shared"
       ];
     };
 
-    beatrice = {
-      hashedPassword = "$6$Q1OL1OyubefZMdhd$1IV3ZgdT07h7o1sU3DUXJZm4sFqGecdE9tPk7dtkkr25N1WNWVYRPfyEnIqDfuQnWNR5Uvi4LMmqsolnqDt/G0";
-      isNormalUser = true;
-      description = "beatrice";
-      enable = true;
-      extraGroups = commonUserGroups ++ [
-        "scanner"
-        "lp"
-      ];
-    };
-
-    hydenix = {
-      hashedPassword = "$6$Q1OL1OyubefZMdhd$1IV3ZgdT07h7o1sU3DUXJZm4sFqGecdE9tPk7dtkkr25N1WNWVYRPfyEnIqDfuQnWNR5Uvi4LMmqsolnqDt/G0";
-      isNormalUser = true;
-      description = "hydenix";
-      enable = true;
-      extraGroups = commonUserGroups;
-    };
   };
 
-  # Optional hydenix module config
-  # hydenix = {
-  #   enable = true;
-  #
-  #   hostname = "suzuha";
-  #   timezone = "Europe/Paris";
-  #   locale = "zh_CN.UTF-8";
-  #
-  #   audio.enable = false;
-  #   boot.enable = false;
-  #   network.enable = false;
-  #
-  #   hardware.enable = true;
-  #   nix.enable = true;
-  #   system.enable = true;
-  #   sddm.enable = true;
-  # };
-
   # Nix
-  nix.settings.trusted-users = [
-    "michiha"
-    "beatrice"
-    "hydenix"
-  ];
+  nix.settings.trusted-users = [ "michiha" ];
   nixpkgs.config.permittedInsecurePackages = [
     "olm-3.2.16"
   ];

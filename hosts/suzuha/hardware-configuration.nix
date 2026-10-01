@@ -22,7 +22,7 @@
 
     disk.nixosPartition = {
       type = "disk";
-      device = "/dev/disk/by-partuuid/529eabf8-c24c-47c8-85d6-3e236271c3e3";
+      device = "/dev/disk/by-partlabel/nixos";
       destroy = false;
       content = {
         type = "luks";
@@ -52,7 +52,6 @@
             };
             "@swap" = {
               mountpoint = "/swap";
-              mountOptions = [ "ro" ];
               swap.swapfile.size = "16G";
             };
           };
@@ -159,18 +158,18 @@
     ];
   };
 
-  fileSystems."/mnt/dev" = {
-    device = "/dev/disk/by-uuid/CAD6477BD64766B3";
-    fsType = "ntfs3";
-    options = [
-      "uid=1002"
-      "gid=4672"
-      "umask=002"
-      "nofail"
-      "x-systemd.automount"
-      "x-systemd.device-timeout=3s"
-    ];
-  };
+  # fileSystems."/mnt/dev" = {
+  #   device = "/dev/disk/by-uuid/CAD6477BD64766B3";
+  #   fsType = "ntfs3";
+  #   options = [
+  #     "uid=1002"
+  #     "gid=4672"
+  #     "umask=002"
+  #     "nofail"
+  #     "x-systemd.automount"
+  #     "x-systemd.device-timeout=3s"
+  #   ];
+  # };
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
@@ -183,4 +182,9 @@
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
   hardware.graphics.enable = true;
+
+  zramSwap = {
+    enable = true;
+    memoryPercent = 50;
+  };
 }

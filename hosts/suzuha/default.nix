@@ -37,8 +37,6 @@ nixpkgs.lib.nixosSystem {
       home-manager.backupFileExtension = "bkp";
 
       home-manager.users.michiha = ./michiha;
-      home-manager.users.beatrice = ./beatrice;
-      home-manager.users.hydenix = ./hydenix;
 
       home-manager.extraSpecialArgs = { inherit inputs outputs; };
     }
