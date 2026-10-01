@@ -1,26 +1,28 @@
-{ pkgs, inputs, outputs, config, ... }:
+{ pkgs, inputs, outputs, config, lib, ... }:
 let
   codexCli = inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default;
 in
 {
-  # 注意修改这里的用户名与用户目录
-  # home.username = username;
-  # home.homeDirectory = "/home/michiha";  # 直接将当前文件夹的配置文件，链接到 Home 目录下的指定位置
-
-  # 直接将当前文件夹的配置文件，链接到 Home 目录下的指定位置
-  # home.file.".config/i3/wallpaper.jpg".source = ./wallpaper.jpg;
-
-  # 递归将某个文件夹中的文件，链接到 Home 目录下的指定位置
-  # home.file.".config/i3/scripts" = {
-  #   source = ./scripts;
-  #   recursive = true;   # 递归整个文件夹
-  #   executable = true;  # 将其中所有文件添加「执行」权限
+  # home = {
+  #   # 注意修改这里的用户名与用户目录
+  #   username = username;
+  #   homeDirectory = "/home/michiha";
+  #
+  #   # 直接将当前文件夹的配置文件，链接到 Home 目录下的指定位置
+  #   file.".config/i3/wallpaper.jpg".source = ./wallpaper.jpg;
+  #
+  #   # 递归将某个文件夹中的文件，链接到 Home 目录下的指定位置
+  #   file.".config/i3/scripts" = {
+  #     source = ./scripts;
+  #     recursive = true;   # 递归整个文件夹
+  #     executable = true;  # 将其中所有文件添加「执行」权限
+  #   };
+  #
+  #   # 直接以 text 的方式，在 nix 配置文件中硬编码文件内容
+  #   file.".xxx".text = ''
+  #       xxx
+  #   '';
   # };
-
-  # 直接以 text 的方式，在 nix 配置文件中硬编码文件内容
-  # home.file.".xxx".text = ''
-  #     xxx
-  # '';
 
   imports = [
     ../common
@@ -34,125 +36,166 @@ in
     inputs.deepseek-harness.homeModules.default
   ];
 
-  # 通过 home.packages 安装一些常用的软件
-  # 这些软件将仅在当前用户下可用，不会影响系统级别的配置
-  # 建议将所有 GUI 软件，以及与 OS 关系不大的 CLI 软件，都通过 home.packages 安装
-  home.packages = with pkgs; [
-    anytype
+  home = {
+    # 通过 packages 安装一些常用的软件
+    # 这些软件将仅在当前用户下可用，不会影响系统级别的配置
+    # 建议将所有 GUI 软件，以及与 OS 关系不大的 CLI 软件，都通过 packages 安装
+    packages = with pkgs; [
+      anytype
 
-    # 终端文件管理器
-    # yazi
+      # 终端文件管理器
+      # yazi
 
-    # 常用工具
-    ripgrep # 递归搜索目录中的正则表达式模式
-    fd # find 的替代品
-    jq # 轻量级且灵活的命令行 JSON 处理器
-    yq-go # YAML 处理器 https://github.com/mikefarah/yq
-    lsd
+      # 常用工具
+      ripgrep # 递归搜索目录中的正则表达式模式
+      fd # find 的替代品
+      jq # 轻量级且灵活的命令行 JSON 处理器
+      yq-go # YAML 处理器 https://github.com/mikefarah/yq
+      lsd
 
-    # 网络工具
-    mtr # 网络诊断工具
-    iperf3
-    dnsutils # `dig` + `nslookup`
-    ldns # `dig` 的替代品，提供 `drill` 命令
-    aria2 # 轻量级多协议 & 多源命令行下载工具
-    socat # openbsd-netcat 的替代品
-    nmap # 用于网络发现和安全审计的实用程序
-    ipcalc # IPv4/v6 地址计算器
+      # 网络工具
+      mtr # 网络诊断工具
+      iperf3
+      dnsutils # `dig` + `nslookup`
+      ldns # `dig` 的替代品，提供 `drill` 命令
+      aria2 # 轻量级多协议 & 多源命令行下载工具
+      socat # openbsd-netcat 的替代品
+      nmap # 用于网络发现和安全审计的实用程序
+      ipcalc # IPv4/v6 地址计算器
 
-    # 其他工具
-    cowsay
-    file
-    which
-    gnused
-    gnutar
-    gawk
-    zstd
-    gnupg
-    keepassxc
+      # 其他工具
+      cowsay
+      file
+      which
+      gnused
+      gnutar
+      gawk
+      zstd
+      gnupg
+      keepassxc
 
-    codexCli
-    nodejs_22
+      codexCli
+      nodejs_22
 
-    # kikoplay
-    exercism
-    devenv
-    jetbrains-toolbox
-    libreoffice-qt6
+      # kikoplay
+      exercism
+      devenv
+      jetbrains-toolbox
+      libreoffice-qt6
 
-    carapace
+      carapace
 
-    # editors
-    helix
-    # helix-gpt
+      # editors
+      helix
+      # helix-gpt
 
-    # 效率工具
-    hugo # 静态站点生成器
-    glow # 终端中的 Markdown 预览器
+      # 效率工具
+      hugo # 静态站点生成器
+      glow # 终端中的 Markdown 预览器
 
-    btop # htop/nmon 的替代品
-    iotop # IO 监控
-    iftop # 网络监控
+      btop # htop/nmon 的替代品
+      iotop # IO 监控
+      iftop # 网络监控
 
-    # 系统调用监控
-    strace # 系统调用监控
-    ltrace # 库调用监控
-    lsof # 列出打开的文件
+      # 系统调用监控
+      strace # 系统调用监控
+      ltrace # 库调用监控
+      lsof # 列出打开的文件
 
-    warp-terminal
+      warp-terminal
 
-    # 系统工具
-    sysstat
-    lm_sensors # 用于 `sensors` 命令
-    ethtool
-    pciutils # lspci
-    usbutils # lsusb
-    brightnessctl # 控制屏幕亮度，用于 Hyprland
+      # 系统工具
+      sysstat
+      lm_sensors # 用于 `sensors` 命令
+      ethtool
+      pciutils # lspci
+      usbutils # lsusb
+      brightnessctl # 控制屏幕亮度，用于 Hyprland
 
-    # 聊天工具
-    telegram-desktop
-    element-desktop
-    discord
-    # wechat-uos
-    # qq
-  ];
+      # 聊天工具
+      telegram-desktop
+      element-desktop
+      discord
+      # wechat-uos
+      # qq
+    ];
 
-  # git 相关配置
-  programs.git = {
-    settings = {
+    # This value determines the Home Manager release that your
+    # configuration is compatible with. This helps avoid breakage
+    # when a new Home Manager release introduces backwards
+    # incompatible changes.
+    #
+    # You can update Home Manager without changing this value. See
+    # the Home Manager release notes for a list of state version
+    # changes in each release.
+    stateVersion = "26.11";
+  };
+
+  programs = {
+    # git 相关配置
+    git.settings = {
       safe = {
         directory = "/home/shards/nixconfig";
       };
     };
-  };
 
-  programs.vscode = {
-    enable = true;
-  };
+    vscode.enable = true;
 
-  # programs.nushell.enable = true;
+    # nushell.enable = true;
 
-  programs.emacs = {
-    enable = true;
-    extraConfig = ''
-      (use-package qml-ts-mode
-        :after lsp-mode
-        :config
-        (add-to-list 'lsp-language-id-configuration '(qml-ts-mode . "qml-ts"))
-        (lsp-register-client
-         (make-lsp-client :new-connection (lsp-stdio-connection '("qmlls", "-E"))
-                          :activation-fn (lsp-activate-on "qml-ts")
-                          :server-id 'qmlls))
-        (add-hook 'qml-ts-mode-hook (lambda ()
-                                      (setq-local electric-indent-chars '(?\n ?\( ?\) ?{ ?\] ?\; ?,))
-                                      (lsp-deferred))))
+
+    codexDesktopLinux = {
+      enable = true;
+      cliPackage = codexCli;
+    };
+
+    # DeepSeek Harness：CLI、profile 与 Web UI 全部交给 Home Manager 管理，
+    # 取代原来手工执行的
+    #   DEEPSEEK_BASE_URL=http://127.0.0.1:8787/v1 \
+    #     nix run github:moraxyc/deepseek-harness.nix#presets.web-ui --accept-flake-config
+    dsh = {
+      enable = true;
+
+      profiles.web-ui = {
+        # 等价于上游 `presets.web-ui`：base 层由模块隐式加入，这里只列额外的
+        # bundle（与 presets/web-ui/package.nix 保持一致）。
+        bundles = [
+          pkgs.dsh.bundles.web-app
+          pkgs.dsh.bundles.web-ui
+        ];
+
+        # mutable：Nix 只在 `~/.dsh/profiles/nix-web-ui` 不存在时播种一次，
+        # 之后插件与设置完全由 `dsh plugin` 管理，Nix 不再覆盖本地改动。
+        mode = "mutable";
+      };
+
+      defaultProfile = config.programs.dsh.profiles.web-ui.materializedName;
+
+      # provider → Headroom 的接线。home 级 patch 会被同步到
+      # `$DSH_HOME/cordis.patch.yml`，在每个 profile 的 patch 之后应用，因此
+      # 不管怎么启动 dsh（CLI、Web、headless）都生效，也不依赖 session 变量：
+      #   llm-deepseek → 8787（DeepSeek 官方）
+      #   opencode-go  → 8788（OpenCode Go）
+      # 凭据仍由各自的 credentials 解析（DEEPSEEK_API_KEY / OPENCODE_API_KEY），
+      # Headroom 只做压缩与转发。
+      patch = [
+        {
+          id = "llm-deepseek";
+          config.baseURL = "http://127.0.0.1:8787/v1";
+        }
+        {
+          id = "opencode-go";
+          config.baseURL = "http://127.0.0.1:8788/v1";
+        }
+      ];
+    };
+
+    nushell.extraConfig = lib.mkAfter ''
+      use ${inputs.dotfiles}/apps/nushell/nixos/mod.nu *
     '';
-  };
 
-
-  programs.codexDesktopLinux = {
-    enable = true;
-    cliPackage = codexCli;
+    # Let Home Manager install and manage itself.
+    home-manager.enable = true;
   };
 
   # Headroom 上下文压缩代理：常驻本机，压缩 DSH 的上下文。
@@ -183,48 +226,6 @@ in
     };
   };
 
-  # DeepSeek Harness：CLI、profile 与 Web UI 全部交给 Home Manager 管理，
-  # 取代原来手工执行的
-  #   DEEPSEEK_BASE_URL=http://127.0.0.1:8787/v1 \
-  #     nix run github:moraxyc/deepseek-harness.nix#presets.web-ui --accept-flake-config
-  #
-  programs.dsh = {
-    enable = true;
-
-    profiles.web-ui = {
-      # 等价于上游 `presets.web-ui`：base 层由模块隐式加入，这里只列额外的
-      # bundle（与 presets/web-ui/package.nix 保持一致）。
-      bundles = [
-        pkgs.dsh.bundles.web-app
-        pkgs.dsh.bundles.web-ui
-      ];
-
-      # mutable：Nix 只在 `~/.dsh/profiles/nix-web-ui` 不存在时播种一次，
-      # 之后插件与设置完全由 `dsh plugin` 管理，Nix 不再覆盖本地改动。
-      mode = "mutable";
-    };
-
-    defaultProfile = config.programs.dsh.profiles.web-ui.materializedName;
-
-    # provider → Headroom 的接线。home 级 patch 会被同步到
-    # `$DSH_HOME/cordis.patch.yml`，在每个 profile 的 patch 之后应用，因此
-    # 不管怎么启动 dsh（CLI、Web、headless）都生效，也不依赖 session 变量：
-    #   llm-deepseek → 8787（DeepSeek 官方）
-    #   opencode-go  → 8788（OpenCode Go）
-    # 凭据仍由各自的 credentials 解析（DEEPSEEK_API_KEY / OPENCODE_API_KEY），
-    # Headroom 只做压缩与转发。
-    patch = [
-      {
-        id = "llm-deepseek";
-        config.baseURL = "http://127.0.0.1:8787/v1";
-      }
-      {
-        id = "opencode-go";
-        config.baseURL = "http://127.0.0.1:8788/v1";
-      }
-    ];
-  };
-
   # 唯一的 DSH Web 实例。服务模块会复用上面声明的 mutable profile 和
   # `~/.dsh`，因此不会创建第二套配置；启动顺序上等待主 Headroom 代理就绪。
   services.dsh = {
@@ -237,15 +238,10 @@ in
     Wants = [ "headroom.service" ];
   };
 
-  # This value determines the Home Manager release that your
-  # configuration is compatible with. This helps avoid breakage
-  # when a new Home Manager release introduces backwards
-  # incompatible changes.
-  #
-  # You can update Home Manager without changing this value. See
-  # the Home Manager release notes for a list of state version
-  # changes in each release.
-  home.stateVersion = "26.11";
+  xdg.userDirs = {
+    enable = true;
+    createDirectories = true;
+  };
 
   dconf.settings = {
     "org/virt-manager/virt-manager/connections" = {
@@ -253,7 +249,4 @@ in
       uris = [ "qemu:///system" ];
     };
   };
-
-  # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
 }
