@@ -23,9 +23,8 @@
     type = "fcitx5";
     fcitx5.waylandFrontend = true;
     fcitx5.addons = with pkgs; [
-      # for flypy chinese input method
+      # Microsoft double pinyin is configured in the Home Manager module.
       fcitx5-rime
-      # needed enable rime using configtool after installed
       qt6Packages.fcitx5-configtool
       qt6Packages.fcitx5-chinese-addons
       fcitx5-table-extra

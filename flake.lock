@@ -358,11 +358,11 @@
     "dotfiles": {
       "flake": false,
       "locked": {
-        "lastModified": 1783469033,
-        "narHash": "sha256-PSO+w12hJO8tmbn0BtI/niIf90T59AxgGSdBch6a2cA=",
+        "lastModified": 1790869204,
+        "narHash": "sha256-uc41cKmcccdOLzaVBc9ql69/gtZdG/83YKGnI7jfE+o=",
         "owner": "xBLACKICEx",
         "repo": "my-dotfiles",
-        "rev": "b374e55f44428e8725e6de4abf673623c12a3ff2",
+        "rev": "4f2b1cb236aee55f51dcdc59ddb9a76f43497014",
         "type": "github"
       },
       "original": {
