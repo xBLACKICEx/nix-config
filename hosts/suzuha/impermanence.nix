@@ -17,12 +17,6 @@
         "/var/lib/AccountsService" # 登录管理器用户头像/会话偏好，桌面按需
 
         {
-          directory = "/var/lib/colord";
-          user = "colord";
-          group = "colord";
-          mode = "u=rwx,g=rx,o=";
-        }
-        {
           directory = "/srv/sync/shared";
           user = "syncthing";
           group = "syncthing-shared";

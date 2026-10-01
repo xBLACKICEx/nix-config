@@ -1,4 +1,4 @@
-{ ... }: {
+{ config, ... }: {
   # Core persistence
   core.impermanence = {
     enable = true;
@@ -16,12 +16,6 @@
         "/var/lib/syncthing" # Syncthing 设备身份和数据库
         "/var/lib/AccountsService" # 登录管理器用户头像/会话偏好，桌面按需
 
-        {
-          directory = "/var/lib/colord";
-          user = "colord";
-          group = "colord";
-          mode = "u=rwx,g=rx,o=";
-        }
         {
           directory = "/srv/sync/shared";
           user = "syncthing";
