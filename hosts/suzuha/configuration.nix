@@ -26,7 +26,7 @@ in
     outputs.nixosModules.core
     outputs.nixosModules.desktop
     # outputs.nixosModules.agentdock
-    inputs.dms.nixosModules.greeter
+    inputs.dank-greeter.nixosModules.default
   ];
 
   # age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
@@ -89,7 +89,7 @@ in
   desktop.kde.enable = true;
   desktop.niri.enable = false;
   # desktop.cosmic.enable = true;
-  services.displayManager.dms-greeter = {
+  programs.dms-greeter = {
     enable = false;
     compositor.name = "niri";
 
@@ -178,7 +178,7 @@ in
   environment.systemPackages = with pkgs; [
     firefox
     google-chrome
-    inputs.zen-browser.packages."${system}".default
+    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     jetbrains.clion
     jetbrains.datagrip
     jetbrains.goland

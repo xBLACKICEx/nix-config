@@ -26,7 +26,7 @@ in
     ./impermanence.nix
     outputs.nixosModules.core
     outputs.nixosModules.desktop
-    inputs.dms.nixosModules.greeter
+    inputs.dank-greeter.nixosModules.default
   ];
 
   networking.hostName = "NERV_Recreation";
@@ -36,7 +36,7 @@ in
   desktop.kde.enable = true;
   desktop.hypr.enable = false;
   desktop.niri.enable = false;
-  services.displayManager.dms-greeter.enable = false;
+  programs.dms-greeter.enable = false;
 
   # Remote desktop / streaming
   services.sunshine = {
@@ -107,7 +107,7 @@ in
   environment.systemPackages = with pkgs; [
     firefox
     google-chrome
-    inputs.zen-browser.packages."${system}".default
+    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
     kdePackages.qtdeclarative
     kdePackages.qt5compat
     moonlight-qt

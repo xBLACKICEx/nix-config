@@ -25,9 +25,12 @@
           "nix-command"
           "flakes"
         ];
-        # Temporary compatibility for older upstream flakes that still use
-        # unquoted URL literals like `github:owner/repo`.
-        extra-deprecated-features = [ "url-literals" ];
+        # Temporary compatibility for upstream code using syntax deprecated
+        # by newer Lix releases (nixpkgs currently uses both forms).
+        extra-deprecated-features = [
+          "url-literals"
+          "or-as-identifier"
+        ];
 
         auto-optimise-store = true; # 自动优化 Nix 存储
 

@@ -1,15 +1,14 @@
 { nixpkgs, inputs, outputs }:
 let
-  system = "x86_64-linux";
+  hostPlatform = "x86_64-linux";
 in
 nixpkgs.lib.nixosSystem {
-  inherit system;
-
   specialArgs = {
     inherit inputs outputs;
   };
 
   modules = [
+    { nixpkgs.hostPlatform = hostPlatform; }
     ../common
     ./configuration.nix
 

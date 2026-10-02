@@ -1,23 +1,22 @@
 { nixpkgs, inputs, outputs }:
 let
-  system = "x86_64-linux";
+  hostPlatform = "x86_64-linux";
 in
 nixpkgs.lib.nixosSystem {
-  inherit system;
-
   specialArgs = {
     inherit inputs outputs;
   };
 
 
   modules = [
+    { nixpkgs.hostPlatform = hostPlatform; }
     ../common
     inputs.agenix.nixosModules.default
     ./configuration.nix # host-specific configuration
 
     {
       environment.systemPackages = [
-        inputs.agenix.packages.${system}.default
+        inputs.agenix.packages.${hostPlatform}.default
       ];
     }
 
