@@ -1,5 +1,10 @@
 { inputs, pkgs, ... }:
 {
+  imports = [
+    # 注入模块参数 `mylib`，与 NixOS 侧共用 modules/mylib.nix。
+    ../../modules/mylib.nix
+  ];
+
   programs = {
     git = {
       enable = true;

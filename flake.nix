@@ -171,6 +171,8 @@
       inherit (self) outputs;
     in
     {
+      # lib/ 是纯函数库；注入给模块的是 modules/mylib.nix。
+      lib = import ./lib;
       overlays = import ./overlays { inherit inputs; };
       homeManagerModules = import ./modules/home-manager;
       nixosModules = import ./modules/nixos;
