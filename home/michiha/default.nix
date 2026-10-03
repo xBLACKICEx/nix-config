@@ -1,4 +1,4 @@
-{ pkgs, inputs, outputs, config, lib, ... }:
+{ pkgs, inputs, outputs, config, lib, mylib, ... }:
 let
   codexCli = inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default;
 in
@@ -237,6 +237,26 @@ in
     After = [ "headroom.service" ];
     Wants = [ "headroom.service" ];
   };
+
+  # 上游 bug 兜底：模块用 `writers.writeYAML` 播种 profile 的
+  # `pnpm-workspace.yaml`，会在开头带上 `%YAML 1.1` + `---`。pnpm 在 YAML 1.1
+  # 语义下把 `packages: [- .]` 里单独的 `.` 解析成 null，于是任何
+  # `dsh plugin` 安装都在 `pnpm add` 的最后一步以
+  #   ERR_PNPM_INVALID_WORKSPACE_CONFIGURATION: Missing or empty package
+  # 失败并被回滚（能浏览/搜索插件，但装不上）。mutable profile 播种后不再被
+  # Nix 重写，dsh 自己回写时也会保留该指令头，所以只能在外面剥掉这两行；
+  # 其余本地设置（如 allowBuilds）原样保留。
+  # 上游修好后（profiles.nix 的 workspace.packages 去掉 "." 即可）可删除本项。
+  home.activation.dshFixPnpmWorkspace = lib.hm.dag.entryAfter [ "dsh" ] (mylib.nu.run ''
+    let ws = "${config.home.homeDirectory}/.dsh/profiles/${config.programs.dsh.profiles.web-ui.materializedName}/pnpm-workspace.yaml"
+    if ($ws | path type) == "file" {
+      let raw = (open --raw $ws)
+      let fixed = ($raw | str replace --regex '^%YAML 1\.1\n---\n?' "")
+      if $fixed != $raw {
+        $fixed | save --force $ws
+      }
+    }
+  '');
 
   xdg.userDirs = {
     enable = true;
