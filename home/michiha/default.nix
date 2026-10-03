@@ -99,7 +99,7 @@ in
 
       # 系统调用监控
       strace # 系统调用监控
-      ltrace # 库调用监控
+      # ltrace # 库调用监控
       lsof # 列出打开的文件
 
       warp-terminal

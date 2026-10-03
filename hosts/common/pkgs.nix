@@ -81,15 +81,7 @@
     # rio
     # kitty
 
-    (pkgs.freecad.override {
-      python3Packages = pkgs.python3Packages.overrideScope (
-        pyFinal: pyPrev: {
-          ifcopenshell = pyPrev.ifcopenshell.override {
-            boost = pkgs.boost190;
-          };
-        }
-      );
-    })
+    freecad
     # orca-slicer
     kicad
   ];

@@ -85,7 +85,7 @@ in
   system.stateVersion = lib.mkForce "26.11";
 
   # Desktop
-  desktop.hypr.enable = true;
+  desktop.hypr.enable = false;
   desktop.kde.enable = true;
   desktop.niri.enable = false;
   # desktop.cosmic.enable = true;

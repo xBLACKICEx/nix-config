@@ -1,6 +1,7 @@
 { config
 , lib
 , pkgs
+, inputs
 , ...
 }:
 let
@@ -97,8 +98,10 @@ in
 
     package = lib.mkOption {
       type = lib.types.package;
-      default = pkgs.callPackage ../../pkgs/headroom.nix { };
-      defaultText = lib.literalExpression "pkgs.callPackage ../../pkgs/headroom.nix { }";
+      default = pkgs.callPackage ../../pkgs/headroom.nix {
+        inherit (inputs) uv2nix pyproject-nix pyproject-build-systems;
+      };
+      defaultText = lib.literalExpression "pkgs.callPackage ../../pkgs/headroom.nix { inherit (inputs) uv2nix pyproject-nix pyproject-build-systems; }";
       description = "提供 `headroom` 命令的包。";
     };
 

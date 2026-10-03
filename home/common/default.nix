@@ -23,9 +23,6 @@
     };
 
     nushell.enable = true;
-    nushell.package = pkgs.nushell.override {
-      additionalFeatures = p: p ++ [ "mcp" ];
-    };
     nushell.extraConfig = ''
       $env.config.keybindings = [
         {
