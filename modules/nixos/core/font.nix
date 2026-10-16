@@ -3,6 +3,7 @@
   # system fonts
   fonts.packages = with pkgs; [
     my_fonts
+    maple-mono.NF-CN
     nerd-fonts.fira-code
     nerd-fonts.caskaydia-cove
     nerd-fonts.jetbrains-mono
@@ -13,9 +14,9 @@
     enable = true;
     useEmbeddedBitmaps = true;
     defaultFonts = {
-      sansSerif = [ "lxgw-wenkai" ];
-      serif = [ "lxgw-wenkai" ];
-      monospace = [ "lxgw-wenkai" ];
+      sansSerif = [ "LXGW WenKai" ];
+      serif = [ "LXGW WenKai" ];
+      monospace = [ "LXGW WenKai Mono" ];
     };
   };
 }
