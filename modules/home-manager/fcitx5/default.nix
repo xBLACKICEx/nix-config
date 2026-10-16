@@ -2,6 +2,11 @@
 let
   rimeSource = "${inputs.dotfiles}/general/fcitx5/configs/input_methode";
   rimeUserDir = "${config.xdg.dataHome}/fcitx5/rime";
+  themesSource = "${inputs.dotfiles}/general/fcitx5/themes";
+  # Import another theme into dotfiles; no new flake input is needed.
+  themes = lib.filterAttrs
+    (name: type: type == "directory" && builtins.pathExists "${themesSource}/${name}/theme.conf")
+    (if builtins.pathExists themesSource then builtins.readDir themesSource else { });
 in
 {
   home.file.".config/fcitx5/conf" = {
@@ -54,6 +59,13 @@ in
     source = "${inputs.fcitx5-themes-candlelight}";
     recursive = true;
   };
+
+  xdg.dataFile = lib.mapAttrs'
+    (name: _: lib.nameValuePair "fcitx5/themes/${name}" {
+      source = "${themesSource}/${name}";
+      recursive = true;
+    })
+    themes;
 
   xdg.configFile = {
     "fcitx5/config" = {
