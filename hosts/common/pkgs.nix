@@ -82,7 +82,7 @@
     # kitty
 
     freecad
-    # orca-slicer
+    orca-slicer
     kicad
   ];
 
