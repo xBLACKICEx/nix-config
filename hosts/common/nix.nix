@@ -52,7 +52,7 @@
         # ];
       };
       registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
-      nixPath = lib.mapAttrsToList (flakeName: _: "${flakeName}=flake:${flakeName}") flakeInputs;
+      settings.nix-path = lib.mapAttrsToList (flakeName: _: "${flakeName}=flake:${flakeName}") flakeInputs;
       package = pkgs.lixPackageSets.stable.lix;
     };
 
