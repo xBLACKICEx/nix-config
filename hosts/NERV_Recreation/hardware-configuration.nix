@@ -161,13 +161,18 @@
     enable = true;
     enable32Bit = true;
   };
+  # 可选：提前加载 AMDGPU
+  hardware.amdgpu.initrd.enable = true;
 
-  services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.nvidia = {
-    modesetting.enable = true;
-    open = false;
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
-  };
+  # 可选：OpenCL 计算
+  hardware.amdgpu.opencl.enable = true;
+
+  # services.xserver.videoDrivers = [ "nvidia" ];
+  # hardware.nvidia = {
+  #   modesetting.enable = true;
+  #   open = false;
+  #   nvidiaSettings = true;
+  #   package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
+  # };
   programs.coolercontrol.enable = true;
 }

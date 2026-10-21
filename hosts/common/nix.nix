@@ -25,12 +25,6 @@
           "nix-command"
           "flakes"
         ];
-        # Temporary compatibility for upstream code using syntax deprecated
-        # by newer Lix releases (nixpkgs currently uses both forms).
-        extra-deprecated-features = [
-          "url-literals"
-          "or-as-identifier"
-        ];
 
         auto-optimise-store = true; # 自动优化 Nix 存储
 
@@ -52,7 +46,7 @@
         # ];
       };
       registry = lib.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
-      settings.nix-path = lib.mapAttrsToList (flakeName: _: "${flakeName}=flake:${flakeName}") flakeInputs;
+      nixPath = lib.mapAttrsToList (flakeName: _: "${flakeName}=flake:${flakeName}") flakeInputs;
       package = pkgs.lixPackageSets.stable.lix;
     };
 
