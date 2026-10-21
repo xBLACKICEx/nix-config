@@ -1,8 +1,10 @@
 {
+  config,
   pkgs,
   inputs,
   outputs,
   lib,
+  mylib,
   ...
 }:
 let
@@ -47,9 +49,15 @@ in
     # inputs.waywallen-display.homeModules.default
     # inputs.open-wallpaper-engine.homeModules.default
 
-    inputs.dms.homeModules.dank-material-shell
-    inputs.dms-plugin-registry.nixosModules.default
-    inputs.danksearch.homeModules.default
+    # inputs.dms.homeModules.dank-material-shell
+    # inputs.dms-plugin-registry.nixosModules.default
+    # inputs.danksearch.homeModules.default
+
+    # DeepSeek Harness：声明 profile、种子文件与 `$DSH_HOME/cordis.patch.yml`。
+    # 需要全局 pkgs 里已有 `dsh`（见 hosts/common/pkgs.nix 的 overlay）。
+    # Web UI 由下方的 `services.dsh` 使用同一份 profile 启动。
+    inputs.deepseek-harness.homeModules.default
+    outputs.homeManagerModules.headroom
 
   ];
 
@@ -114,7 +122,7 @@ in
 
       # 系统调用监控
       strace # 系统调用监控
-      ltrace # 库调用监控
+      # ltrace # 库调用监控
       lsof # 列出打开的文件
 
       warp-terminal
@@ -190,40 +198,40 @@ in
     createDirectories = true;
   };
 
-  programs.dank-material-shell = {
-    enable = true;
+  # programs.dank-material-shell = {
+  #   enable = true;
 
-    systemd = {
-      enable = true;             # Systemd service for auto-start
-      restartIfChanged = true;   # Auto-restart dms.service when dankMaterialShell changes
-    };
-    plugins = {
-      dankBatteryAlerts.enable = true;
-      dockerManager.enable = true;
-      dankPomodoroTimer.enable = true;
-      linuxWallpaperEngine.enable = true;
-      # DockerManager = {
-      #   enable = true;
-      #   src = pkgs.fetchFromGitHub {
-      #     owner = "LuckShiba";
-      #     repo = "DmsDockerManager";
-      #     rev = "v1.2.0";
-      #     sha256 = "sha256-VoJCaygWnKpv0s0pqTOmzZnPM922qPDMHk4EPcgVnaU=";
-      #   };
-      # };
-      # DankPomodoroTimer.src = "${inputs.dms-plugins}/DankPomodoroTimer";
-      # DankBatteryAlerts.src = "${inputs.dms-plugins}/DankBattery Alerts";
-      # dms-wallpaperengine.src = "${inputs.dms-wallpaperengine}";
-    };
+  #   systemd = {
+  #     enable = true;             # Systemd service for auto-start
+  #     restartIfChanged = true;   # Auto-restart dms.service when dankMaterialShell changes
+  #   };
+  #   plugins = {
+  #     dankBatteryAlerts.enable = true;
+  #     dockerManager.enable = true;
+  #     dankPomodoroTimer.enable = true;
+  #     linuxWallpaperEngine.enable = true;
+  #     # DockerManager = {
+  #     #   enable = true;
+  #     #   src = pkgs.fetchFromGitHub {
+  #     #     owner = "LuckShiba";
+  #     #     repo = "DmsDockerManager";
+  #     #     rev = "v1.2.0";
+  #     #     sha256 = "sha256-VoJCaygWnKpv0s0pqTOmzZnPM922qPDMHk4EPcgVnaU=";
+  #     #   };
+  #     # };
+  #     # DankPomodoroTimer.src = "${inputs.dms-plugins}/DankPomodoroTimer";
+  #     # DankBatteryAlerts.src = "${inputs.dms-plugins}/DankBattery Alerts";
+  #     # dms-wallpaperengine.src = "${inputs.dms-wallpaperengine}";
+  #   };
 
-    enableSystemMonitoring = true;     # System monitoring widgets (dgop)
-    enableClipboardPaste = true;            # Clipboard history manager
-    enableVPN = true;                  # VPN management widget
-    enableDynamicTheming = true;       # Wallpaper-based theming (matugen)
-    enableAudioWavelength = true;      # Audio visualizer (cava)
-    enableCalendarEvents = true;       # Calendar integration (khal)
-  };
-  programs.dsearch.enable = true;
+  #   enableSystemMonitoring = true;     # System monitoring widgets (dgop)
+  #   enableClipboardPaste = true;            # Clipboard history manager
+  #   enableVPN = true;                  # VPN management widget
+  #   enableDynamicTheming = true;       # Wallpaper-based theming (matugen)
+  #   enableAudioWavelength = true;      # Audio visualizer (cava)
+  #   enableCalendarEvents = true;       # Calendar integration (khal)
+  # };
+  # programs.dsearch.enable = true;
 
   programs = {
     home-manager.enable = true;
@@ -287,7 +295,93 @@ in
     #     };
     #   };
     # };
+      dsh = {
+      enable = true;
+
+      profiles.web-ui = {
+        # 等价于上游 `presets.web-ui`：base 层由模块隐式加入，这里只列额外的
+        # bundle（与 presets/web-ui/package.nix 保持一致）。
+        bundles = [
+          pkgs.dsh.bundles.web-app
+          pkgs.dsh.bundles.web-ui
+        ];
+
+        # mutable：Nix 只在 `~/.dsh/profiles/nix-web-ui` 不存在时播种一次，
+        # 之后插件与设置完全由 `dsh plugin` 管理，Nix 不再覆盖本地改动。
+        mode = "mutable";
+      };
+
+      defaultProfile = config.programs.dsh.profiles.web-ui.materializedName;
+
+      # provider → Headroom 的接线。home 级 patch 会被同步到
+      # `$DSH_HOME/cordis.patch.yml`，在每个 profile 的 patch 之后应用，因此
+      # 不管怎么启动 dsh（CLI、Web、headless）都生效，也不依赖 session 变量：
+      #   llm-deepseek → 8787（DeepSeek 官方）
+      #   opencode-go  → 8788（OpenCode Go）
+      # 凭据仍由各自的 credentials 解析（DEEPSEEK_API_KEY / OPENCODE_API_KEY），
+      # Headroom 只做压缩与转发。
+      patch = [
+        {
+          id = "llm-deepseek";
+          config.baseURL = "http://127.0.0.1:8787/v1";
+        }
+        {
+          id = "opencode-go";
+          config.baseURL = "http://127.0.0.1:8788/v1";
+        }
+      ];
+    };
   };
+
+  services.headroom = {
+    enable = true;
+
+    # 主实例：DSH 的 `deepseek-official`（Messages 协议）走这里，
+    # 上游仍然是 DeepSeek 自己的 API；chat-completions 协议也一并指过去。
+    anthropicApiUrl = "https://api.deepseek.com/anthropic";
+    openaiApiUrl = "https://api.deepseek.com/v1";
+
+    # OpenCode Go 订阅的模型（deepseek / gpt / claude / 小米…）都在这个网关上，
+    # 三种协议形状都转发到同一处，所以一个实例就够。
+    instances.opencode-go = {
+      port = 8788;
+      providerName = "OpenCode Go";
+      anthropicApiUrl = "https://opencode.ai/zen/go";
+      openaiApiUrl = "https://opencode.ai/zen/go/v1";
+    };
+  };
+
+  # 唯一的 DSH Web 实例。服务模块会复用上面声明的 mutable profile 和
+  # `~/.dsh`，因此不会创建第二套配置；启动顺序上等待主 Headroom 代理就绪。
+  services.dsh = {
+    enable = true;
+    profile = config.programs.dsh.profiles.web-ui.materializedName;
+  };
+
+  systemd.user.services.dsh-web.Unit = {
+    After = [ "headroom.service" ];
+    Wants = [ "headroom.service" ];
+  };
+
+  # 上游 bug 兜底：模块用 `writers.writeYAML` 播种 profile 的
+  # `pnpm-workspace.yaml`，会在开头带上 `%YAML 1.1` + `---`。pnpm 在 YAML 1.1
+  # 语义下把 `packages: [- .]` 里单独的 `.` 解析成 null，于是任何
+  # `dsh plugin` 安装都在 `pnpm add` 的最后一步以
+  #   ERR_PNPM_INVALID_WORKSPACE_CONFIGURATION: Missing or empty package
+  # 失败并被回滚（能浏览/搜索插件，但装不上）。mutable profile 播种后不再被
+  # Nix 重写，dsh 自己回写时也会保留该指令头，所以只能在外面剥掉这两行；
+  # 其余本地设置（如 allowBuilds）原样保留。
+  # 上游修好后（profiles.nix 的 workspace.packages 去掉 "." 即可）可删除本项。
+  home.activation.dshFixPnpmWorkspace = lib.hm.dag.entryAfter [ "dsh" ] (mylib.nu.run ''
+    let ws = "${config.home.homeDirectory}/.dsh/profiles/${config.programs.dsh.profiles.web-ui.materializedName}/pnpm-workspace.yaml"
+    if ($ws | path type) == "file" {
+      let raw = (open --raw $ws)
+      let fixed = ($raw | str replace --regex '^%YAML 1\.1\n---\n?' "")
+      if $fixed != $raw {
+        $fixed | save --force $ws
+      }
+    }
+  '');
 
   dconf.settings = {
     "org/virt-manager/virt-manager/connections" = {
