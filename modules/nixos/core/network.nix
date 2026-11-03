@@ -1,10 +1,4 @@
-{ lib, pkgs, ... }:
-let
-  forwardFile = pkgs.writeText "dnscrypt-forwarding-rules.txt" ''
-    bytel.fr 192.168.1.254
-    bbox.lan 192.168.1.254
-  '';
-in
+{ inputs, lib, ... }:
 {
   # Network
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -39,6 +33,8 @@ in
   services.dnscrypt-proxy = {
     enable = true;
     settings = {
+      listen_addresses = [ "127.0.0.1:53" ];
+      forwarding_rules = inputs.nix-config-private + "/flake-input/dnscrypt-forwarding-rules.txt";
       ipv6_servers = true;
       require_dnssec = true;
       require_nolog = true;
@@ -49,7 +45,7 @@ in
           "https://raw.githubusercontent.com/DNSCrypt/dnscrypt-resolvers/master/v3/public-resolvers.md"
           "https://download.dnscrypt.info/resolvers-list/v3/public-resolvers.md"
         ];
-        cache_file = "/var/lib/dnscrypt-proxy2/public-resolvers.md";
+        cache_file = "/var/cache/dnscrypt-proxy/public-resolvers.md";
         minisign_key = "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3";
         refresh_delay = 72;
       };
@@ -58,9 +54,4 @@ in
       # server_names = [ ... ];
     };
   };
-
-  systemd.services.dnscrypt-proxy.serviceConfig = {
-    StateDirectory = "dnscrypt-proxy";
-  };
-  services.dnscrypt-proxy.settings.forwarding_rules = forwardFile;
 }

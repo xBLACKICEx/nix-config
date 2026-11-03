@@ -21,6 +21,11 @@
       inputs.uv2nix.follows = "uv2nix";
     };
 
+    nix-config-private = {
+      url = "git+ssh://git@codeberg.org/trousers249/nix-config-private.git?ref=main";
+      flake = false;
+    };
+
     agenix.url = "github:ryantm/agenix";
 
     codex-cli-nix = {

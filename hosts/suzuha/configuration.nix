@@ -31,7 +31,7 @@ in
 
   # age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
   # age.secrets.ionos-acme = {
-  #   file = ../../secrets/ionos-acme.env.age;
+  #   file = /configs/nix-config-private/secrets/ionos-acme.env.age;
   #   owner = "root";
   #   group = "root";
   #   mode = "0400";
@@ -93,16 +93,6 @@ in
     enable = false;
     compositor.name = "niri";
 
-    # compositor.customConfig = ''
-    #   env = DMS_RUN_GREETER,1
-
-    #   monitor = DP-1, 5120x2160@100.03, 0x0, 1.25, bitdepth, 12
-    #   monitor = eDP-1, 1920x1080@60, 1088x1728, 1
-
-    #   misc {
-    #     disable_hyprland_logo = true
-    #   }
-    # '';
   };
 
   # Remote desktop / streaming
@@ -208,11 +198,11 @@ in
   # Users
   users.users = {
     root = {
-      hashedPassword = "$6$BKXv3QWuBJAnRYNK$uP.PDS1qmkCDvr2IBLw9mLyNhUP0Js7hGfPYBnRTE3Jc8Om24/ae/O6hn7jH58eCYM9L7zIM7EXb9es.10iO00";
+      hashedPasswordFile = "/persistent/configs/nix-config-private/passwords/root";
     };
     michiha = {
       linger = true;
-      hashedPassword = "$6$iBSb93jkx9FGya9x$q7riq6BxEZhXyNAoVCvPc62Br98Y2x69U4lgME8H4cJbXpebRVZsT7NZhhw2h1zumLuVZtJF.ZyXVicNQr1/7.";
+      hashedPasswordFile = "/persistent/configs/nix-config-private/passwords/desktop";
       isNormalUser = true;
       description = "michiha";
       enable = true;

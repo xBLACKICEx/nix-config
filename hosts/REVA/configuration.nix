@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   inputs,
@@ -6,6 +7,7 @@
   ...
 }:
 let
+  private = import (inputs.nix-config-private + "/flake-input/reva.nix");
   commonUserGroups = [
     "audio"
     "dialout"
@@ -24,12 +26,26 @@ in
   imports = [
     ./hardware-configuration.nix
     ./impermanence.nix
+    ./network.nix
     outputs.nixosModules.core
     outputs.nixosModules.desktop
     inputs.dank-greeter.nixosModules.default
   ];
 
-  networking.hostName = "REVA";
+  # Apply the wireless regulatory domain at boot.
+  boot.kernelParams = [ "cfg80211.ieee80211_regdom=${private.wirelessCountry}" ];
+
+  # This desktop should always prefer performance over power savings.
+  services.power-profiles-daemon.enable = false;
+  powerManagement.cpuFreqGovernor = "performance";
+
+  # Telescope: match the device numbers expected by the desktop application.
+  boot.extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
+  boot.kernelModules = [ "v4l2loopback" ];
+  boot.extraModprobeConfig = ''
+    options v4l2loopback devices=2 video_nr=10,11 exclusive_caps=1 card_label="OBS Virtual Camera,Phone Camera"
+  '';
+
   system.stateVersion = lib.mkForce "26.11";
 
   # Desktop
@@ -37,14 +53,6 @@ in
   desktop.hypr.enable = false;
   desktop.niri.enable = false;
   programs.dms-greeter.enable = false;
-
-  # Remote desktop / streaming
-  services.sunshine = {
-    enable = true;
-    autoStart = true;
-    capSysAdmin = true;
-    openFirewall = true;
-  };
 
   # Keep the small SSD from filling up with stale generations and store paths.
   nix.gc = {
@@ -65,11 +73,7 @@ in
 
   # Programs
   programs.dconf.enable = true;
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = true;
-    dedicatedServer.openFirewall = true;
-  };
+  programs.steam.enable = true;
   programs.virt-manager.enable = true;
 
   # Virtualisation
@@ -88,14 +92,6 @@ in
       "${pkgs.bash}/bin/bash -c 'umask 0077 && ${pkgs.coreutils}/bin/mkdir -p /var/lib/libvirt/secrets && ${pkgs.coreutils}/bin/dd if=/dev/random of=/var/lib/libvirt/secrets/secrets-encryption-key status=none bs=32 count=1'"
     ];
   };
-  # Networking / discovery
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    openFirewall = true;
-  };
-  services.syncthing.enable = true;
-
   # Printing / scanning
   services.printing.enable = true;
   services.printing.drivers = with pkgs; [ cnijfilter2 ];
@@ -105,6 +101,8 @@ in
   };
 
   environment.systemPackages = with pkgs; [
+    iw
+    liquidctl
     firefox
     google-chrome
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
@@ -126,11 +124,11 @@ in
 
   users.users = {
     root = {
-      hashedPassword = "$6$BKXv3QWuBJAnRYNK$uP.PDS1qmkCDvr2IBLw9mLyNhUP0Js7hGfPYBnRTE3Jc8Om24/ae/O6hn7jH58eCYM9L7zIM7EXb9es.10iO00";
+      hashedPasswordFile = "/persistent/configs/nix-config-private/passwords/root";
     };
     beatrice = {
       linger = true;
-      hashedPassword = "$6$iBSb93jkx9FGya9x$q7riq6BxEZhXyNAoVCvPc62Br98Y2x69U4lgME8H4cJbXpebRVZsT7NZhhw2h1zumLuVZtJF.ZyXVicNQr1/7.";
+      hashedPasswordFile = "/persistent/configs/nix-config-private/passwords/desktop";
       isNormalUser = true;
       description = "ベアトリス";
       enable = true;

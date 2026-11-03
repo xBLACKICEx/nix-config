@@ -1229,6 +1229,23 @@
         "type": "github"
       }
     },
+    "nix-config-private": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1793718327,
+        "narHash": "sha256-Y6lLwY4LfTtmD25EN3XQRXVLH7bb9DY/JzNYTxEN3LQ=",
+        "ref": "main",
+        "rev": "1565d5ce014cb90a6bf1fd20bd835f56479a79f1",
+        "revCount": 1,
+        "type": "git",
+        "url": "ssh://git@codeberg.org/trousers249/nix-config-private.git"
+      },
+      "original": {
+        "ref": "main",
+        "type": "git",
+        "url": "ssh://git@codeberg.org/trousers249/nix-config-private.git"
+      }
+    },
     "nix-index-database": {
       "inputs": {
         "nixpkgs": [
@@ -1541,6 +1558,7 @@
         "kwin-effects-forceblur": "kwin-effects-forceblur",
         "lanzaboote": "lanzaboote",
         "niri": "niri",
+        "nix-config-private": "nix-config-private",
         "nixpkgs": "nixpkgs_5",
         "nixpkgs-stable": "nixpkgs-stable_2",
         "nur": "nur",
