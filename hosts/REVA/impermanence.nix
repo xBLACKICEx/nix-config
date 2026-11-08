@@ -18,6 +18,12 @@
         "/var/lib/AccountsService" # 登录管理器用户头像/会话偏好，桌面按需
 
         {
+          directory = "/var/lib/syauth";
+          user = "beatrice";
+          group = "users";
+          mode = "0700";
+        }
+        {
           directory = "/srv/sync/shared";
           user = "syncthing";
           group = "syncthing-shared";

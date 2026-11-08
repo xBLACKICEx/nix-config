@@ -30,6 +30,7 @@ in
     outputs.nixosModules.core
     outputs.nixosModules.desktop
     inputs.dank-greeter.nixosModules.default
+    inputs.syauth.nixosModules.default
   ];
 
   # Apply the wireless regulatory domain at boot.
@@ -140,6 +141,13 @@ in
         "syncthing-shared"
       ];
     };
+  };
+
+  services.syauth = {
+    enable = true;
+    desktopUser = "beatrice";
+    pam.services = [ "sudo" "sudo-i" "kde" "plasmalogin" ];
+    pam.moduleArgs = [ "socket=/run/user/1000/syauth/auth.sock" ];
   };
 
   nix.settings.trusted-users = [ "beatrice" ];

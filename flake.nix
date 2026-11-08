@@ -162,6 +162,11 @@
       url = "github:can1357/kde-blur";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    syauth = {
+      url = "github:Mewplane/syauth";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
