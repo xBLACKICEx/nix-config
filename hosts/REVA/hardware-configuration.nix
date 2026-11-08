@@ -20,8 +20,23 @@
     "nvme"
   ];
   boot.initrd.kernelModules = [ "amdgpu" ];
-  boot.kernelModules = [ "kvm-amd" ];
-  boot.extraModulePackages = [ ];
+  boot.kernelModules = [
+    "kvm-amd"
+    "it87"
+  ];
+  boot.extraModulePackages = [
+    (config.boot.kernelPackages.it87.overrideAttrs (old: {
+      name = "it87-bd7a566-${config.boot.kernelPackages.kernel.version}";
+      version = "bd7a566";
+      src = pkgs.fetchFromGitHub {
+        owner = "frankcrawford";
+        repo = "it87";
+        rev = "bd7a566c8a60fe0308d67e26761e16260368191a";
+        hash = "sha256-Xh882j0YK9RF+YqMoP7JydbSLmotxqMTUqF1pjZ6CVE=";
+      };
+      makeFlags = old.makeFlags ++ [ "DRIVER_VERSION=bd7a566" ];
+    }))
+  ];
   boot.kernelPackages = pkgs.linuxPackages_zen;
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   nix.settings.extra-platforms = [ "aarch64-linux" ];
