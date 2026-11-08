@@ -1,4 +1,4 @@
-{ inputs, pkgs, ... }:
+{ config, inputs, lib, pkgs, ... }:
 {
   imports = [
     # 注入模块参数 `mylib`，与 NixOS 侧共用 modules/mylib.nix。
@@ -84,7 +84,12 @@
 
     atuin = {
       enable = true;
-      settings = fromTOML (builtins.readFile "${inputs.dotfiles}/general/atuin/config.toml");
+      settings = lib.recursiveUpdate
+        (fromTOML (builtins.readFile "${inputs.dotfiles}/general/atuin/config.toml"))
+        {
+          data_dir = "${config.xdg.dataHome}/atuin/data";
+          logs.dir = "${config.xdg.stateHome}/atuin/logs";
+        };
       enableNushellIntegration = true;
       enableBashIntegration = true;
     };
