@@ -356,6 +356,15 @@ in
   services.dsh = {
     enable = true;
     profile = config.programs.dsh.profiles.web-ui.materializedName;
+
+    # dsh 0.2.2-rc.1 的 flake 把 @linxin666/* 以 `link:` 依赖投影到 profile 的
+    # node_modules（符号链接指向 /nix/store）。Node 默认把 importer realpath 成
+    # store 路径，而这些包里直接 import 的 @deepseek-ai/cordis、dsh-settings、
+    # dsh-llm 等并没有写进 peerDependencies，dsh 的 linked-root 解析器只改写
+    # 声明过的 peer，于是启动时 9 个 bundle ERR_MODULE_NOT_FOUND。
+    # 保留符号链接后 importer 留在 profile 内，走 profile 层解析，所有
+    # @deepseek-ai/* 都会被路由回 dsh 安装自带的副本。上游修好后可删除。
+    environment.NODE_OPTIONS = "--preserve-symlinks";
   };
 
   systemd.user.services.dsh-web.Unit = {
