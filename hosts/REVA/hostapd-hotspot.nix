@@ -2,21 +2,21 @@
 let
   private = import (inputs.nix-config-private + "/flake-input/reva.nix");
   interface = "wlp15s0";
-  bridge = "br-phone";
+  bridge = "br-reva-ap";
   routerUuid = "76da544a-4dfb-4df8-9b1c-7c0efaa8dfe1";
   uplinkUuid = "3a77fa4e-958a-4bd4-b8c6-9c0e99263da0";
-  passwordFile = "/var/lib/phone-ap/password";
+  passwordFile = "/var/lib/reva-ap/password";
 
-  # Keep the working test SSID/password so the phone can reconnect automatically.
+  # The hotspot password is supplied locally, outside the Nix store.
   makeHotspot = { sixGHz, bridgeUplink ? false }: {
-    # The only Wi-Fi device is owned by hostapd in these specialisations.
+    # The only Wi-Fi device is owned by hostapd.
     networking.wireless.enable = lib.mkForce false;
     networking.networkmanager = {
       unmanaged = [ "interface-name:${interface}" ];
       ensureProfiles.profiles = {
-        phone-ap-router = {
+        reva-ap-router = {
           connection = {
-            id = "phone-ap-router";
+            id = "REVA-AP";
             uuid = routerUuid;
             type = "bridge";
             interface-name = bridge;
@@ -37,9 +37,9 @@ let
           ethernet.cloned-mac-address = "stable";
         };
       } // lib.optionalAttrs bridgeUplink {
-        phone-ap-uplink = {
+        reva-ap-uplink = {
           connection = {
-            id = "phone-ap-uplink";
+            id = "REVA-AP-uplink";
             uuid = uplinkUuid;
             type = "ethernet";
             interface-name = "enp14s0";
@@ -79,36 +79,25 @@ let
       done
     '');
 
-    # Import the existing local password at runtime; it never enters the store.
-    systemd.services.phone-ap-password = {
-      description = "Prepare local phone hotspot password";
-      requires = [ "NetworkManager.service" ];
-      after = [ "NetworkManager.service" ];
+    # Require an explicitly supplied password; do not import old hotspot secrets.
+    systemd.services.reva-ap-password = {
+      description = "Prepare REVA-AP hotspot password";
       serviceConfig = {
         Type = "oneshot";
-        StateDirectory = "phone-ap";
+        StateDirectory = "reva-ap";
         StateDirectoryMode = "0700";
         UMask = "0077";
       };
       script = ''
         if [ ! -s ${passwordFile} ]; then
-          password="$(${pkgs.networkmanager}/bin/nmcli --show-secrets \
-            --get-values 802-11-wireless-security.psk \
-            connection show ${lib.escapeShellArg private.hotspot.previousProfile})"
-          if [ -z "$password" ]; then
-            echo "Set ${passwordFile} to the hotspot passphrase (root-only)." >&2
-            exit 1
-          fi
-          printf '%s\n' "$password" > ${passwordFile}.new
-          chmod 600 ${passwordFile}.new
-          mv ${passwordFile}.new ${passwordFile}
-          unset password
+          echo "Set ${passwordFile} to the hotspot passphrase (root-only)." >&2
+          exit 1
         fi
       '';
     };
 
-    systemd.services.phone-ap-router = {
-      description = "Phone hotspot ${if bridgeUplink then "wired LAN" else "IPv4/IPv6 sharing"} bridge";
+    systemd.services.reva-ap-router = {
+      description = "REVA-AP hotspot ${if bridgeUplink then "wired LAN" else "IPv4/IPv6 sharing"} bridge";
       requires = [ "NetworkManager.service" "NetworkManager-ensure-profiles.service" ];
       after = [ "NetworkManager.service" "NetworkManager-ensure-profiles.service" ];
       serviceConfig = {
@@ -147,7 +136,7 @@ let
           vht_oper_centr_freq_seg0_idx = 42;
         };
         networks.${interface} = {
-          ssid = private.hotspot.ssid;
+          ssid = "REVA-AP";
           settings = {
             bridge = bridge;
             sae_pwe = lib.mkForce (if sixGHz then 1 else 2);
@@ -162,17 +151,15 @@ let
       };
     };
     systemd.services.hostapd = {
-      requires = [ "phone-ap-password.service" "phone-ap-router.service" ];
-      after = [ "phone-ap-password.service" "phone-ap-router.service" ];
-      restartTriggers = [ (pkgs.writeText "phone-ap-mode" (if bridgeUplink then "lan" else "routed")) ];
+      requires = [ "reva-ap-password.service" "reva-ap-router.service" ];
+      after = [ "reva-ap-password.service" "reva-ap-router.service" ];
+      restartTriggers = [ (pkgs.writeText "reva-ap-mode" (if bridgeUplink then "lan" else "routed")) ];
     };
   };
 in
-{
-  core.impermanence.persistence.directories = [ "/var/lib/phone-ap" ];
-  specialisation = {
-    hostapd-5g.configuration = makeHotspot { sixGHz = false; };
-    hostapd-6e.configuration = makeHotspot { sixGHz = true; };
-    hostapd-6e-lan.configuration = makeHotspot { sixGHz = true; bridgeUplink = true; };
-  };
+makeHotspot { sixGHz = true; } // {
+  # REVA defaults to the routed 6 GHz hotspot, including after reboot.
+  # Alternative configurations, kept disabled for reference:
+  # makeHotspot { sixGHz = false; }
+  # makeHotspot { sixGHz = true; bridgeUplink = true; }
 }

@@ -1292,11 +1292,11 @@
     "nix-config-private": {
       "flake": false,
       "locked": {
-        "lastModified": 1793718327,
-        "narHash": "sha256-Y6lLwY4LfTtmD25EN3XQRXVLH7bb9DY/JzNYTxEN3LQ=",
+        "lastModified": 1793728787,
+        "narHash": "sha256-vWftZ7gzIn1d91ucM+jn9uTbFCFWi5kLreMve5dErMA=",
         "ref": "main",
-        "rev": "1565d5ce014cb90a6bf1fd20bd835f56479a79f1",
-        "revCount": 1,
+        "rev": "31a6da3b770cd18c40ae6396fa3853556ee49007",
+        "revCount": 2,
         "type": "git",
         "url": "ssh://git@codeberg.org/trousers249/nix-config-private.git"
       },

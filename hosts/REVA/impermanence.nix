@@ -7,6 +7,7 @@
         "/etc/NetworkManager/system-connections"
         "/etc/nixos/nix-config"
         "/etc/agenix"
+        "/var/lib/reva-ap" # Hotspot password survives reboot.
 
         "/var/log"
         "/var/lib/nixos" # 通用 NixOS 本机状态，建议

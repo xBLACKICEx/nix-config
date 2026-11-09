@@ -1,4 +1,7 @@
-{ inputs, lib, ... }:
+{ config, inputs, lib, pkgs, ... }:
+let
+  dnscryptEnabled = config.services.dnscrypt-proxy.enable;
+in
 {
   # Network
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -18,23 +21,21 @@
   networking.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlo1.useDHCP = lib.mkDefault true;
 
-  networking = {
-    networkmanager.enable = true;
+  networking.networkmanager.enable = true;
 
-    nameservers = [
-      "127.0.0.1"
-    ];
-    # If using dhcpcd:
-    dhcpcd.extraConfig = "nohook resolv.conf";
-    # If using NetworkManager:
-    networkmanager.dns = "none";
-  };
+  # Only redirect DNS to localhost when DNSCrypt owns the resolver.
+  networking.nameservers = lib.mkIf dnscryptEnabled [ "127.0.0.1" ];
+  networking.dhcpcd.extraConfig = lib.mkIf dnscryptEnabled "nohook resolv.conf";
+  networking.networkmanager.dns = lib.mkIf dnscryptEnabled "none";
 
   services.dnscrypt-proxy = {
-    enable = true;
+    enable = lib.mkDefault true;
     settings = {
       listen_addresses = [ "127.0.0.1:53" ];
-      forwarding_rules = inputs.nix-config-private + "/flake-input/dnscrypt-forwarding-rules.txt";
+      # Read at build/evaluation time so a missing private file cannot produce
+      # a system whose sole DNS resolver fails only after activation.
+      forwarding_rules = pkgs.writeText "dnscrypt-forwarding-rules.txt"
+        (builtins.readFile (inputs.nix-config-private + "/flake-input/dnscrypt-forwarding-rules.txt"));
       ipv6_servers = true;
       require_dnssec = true;
       require_nolog = true;
