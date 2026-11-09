@@ -7,6 +7,17 @@
   # https://nixos.wiki/wiki/Overlays
   modifications = final: prev: {
     warp-terminal = prev.warp-terminal.override { waylandSupport = true; };
+    codex = prev.codex.overrideAttrs (old: {
+      buildInputs = (old.buildInputs or []) ++ [ final.zstd final.aws-lc final.oniguruma final.sqlite ];
+    });
+    tantivy-go = prev.tantivy-go.overrideAttrs (old: {
+      nativeBuildInputs = (old.nativeBuildInputs or []) ++ [ final.pkg-config ];
+      buildInputs = (old.buildInputs or []) ++ [ final.zstd ];
+    });
+    anytype-heart = prev.anytype-heart.overrideAttrs (old: {
+      buildInputs = (old.buildInputs or []) ++ [ final.zstd ];
+      env = (old.env or {}) // { CGO_LDFLAGS = "-lzstd"; };
+    });
     # app2unit = prev.app2unit.overrideAttrs (old: {
     #   # Upstream script changed; keep shebang rewrite strict but allow terminal-handler
     #   # replacement to be skipped when the pattern no longer exists.
