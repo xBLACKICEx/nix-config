@@ -1,4 +1,4 @@
-{ inputs, lib, pkgs, ... }:
+{ config, inputs, lib, pkgs, ... }:
 let
   private = import (inputs.nix-config-private + "/flake-input/reva.nix");
   interface = "wlp15s0";
@@ -10,7 +10,7 @@ let
   # The hotspot password is supplied locally, outside the Nix store.
   makeHotspot = { sixGHz, bridgeUplink ? false }: {
     # The only Wi-Fi device is owned by hostapd.
-    networking.wireless.enable = lib.mkForce false;
+    networking.wireless.enable = lib.mkOverride 60 false;
     networking.networkmanager = {
       unmanaged = [ "interface-name:${interface}" ];
       ensureProfiles.profiles = {
@@ -150,7 +150,7 @@ let
         };
       };
     };
-    systemd.services.hostapd = {
+    systemd.services.hostapd = lib.mkIf config.services.hostapd.enable {
       requires = [ "reva-ap-password.service" "reva-ap-router.service" ];
       after = [ "reva-ap-password.service" "reva-ap-router.service" ];
       restartTriggers = [ (pkgs.writeText "reva-ap-mode" (if bridgeUplink then "lan" else "routed")) ];
@@ -158,7 +158,18 @@ let
   };
 in
 makeHotspot { sixGHz = true; } // {
-  # REVA defaults to the routed 6 GHz hotspot, including after reboot.
+  # The normal boot entry runs the routed 6 GHz hotspot. The specialisation
+  # gives NetworkManager control of the radio for ordinary Wi-Fi connections.
+  specialisation.wifi-client.configuration = {
+    system.nixos.tags = [ "wifi-client" ];
+    services.hostapd.enable = lib.mkForce false;
+    networking.networkmanager.unmanaged = lib.mkForce [ ];
+    networking.wireless.enable = lib.mkForce true;
+  };
+
+  # Keep the GRUB menu visible long enough to select the client entry.
+  boot.loader.timeout = 5;
+
   # Alternative configurations, kept disabled for reference:
   # makeHotspot { sixGHz = false; }
   # makeHotspot { sixGHz = true; bridgeUplink = true; }

@@ -9,6 +9,76 @@
 }:
 let
   codexCli = inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default;
+
+  # Steam 无关的 Proton 启动器，脚本本体是 Nushell。
+  # 默认 DXVK_HDR=1；--wayland 让 Wine 走原生 Wayland（KWin 才能把 HDR
+  # 交给窗口）；--gamescope 走 Gamescope 的 HDR 路径。
+  stellarBlade = pkgs.writeScriptBin "stellar-blade" ''
+    #!${pkgs.nushell}/bin/nu
+
+    const game_dir = "/games-lib/manual/Stellar.Blade-voices38/prefix/drive_c/voices38/Stellar Blade"
+    const game_exe = $"($game_dir)/SB/Binaries/Win64/SB-Win64-Shipping.exe"
+    const setup_exe = "/games-lib/manual/Stellar.Blade-voices38/games/Setup.exe"
+    const default_prefix = "/games-lib/manual/Stellar.Blade-voices38/prefix"
+    const default_proton = "${pkgs.proton-ge-bin.steamcompattool}"
+    const umu = "${pkgs.umu-launcher}/bin/umu-run"
+    const gamescope = "${pkgs.gamescope}/bin/gamescope"
+
+    def main [
+      ...args: string
+      --install
+      --wayland
+      --gamescope(-g)
+      --prefix(-p): string = $default_prefix
+      --proton: string = $default_proton
+      --width(-W): int = 5120
+      --height(-H): int = 2160
+      --refresh(-r): int = 165
+    ] {
+      let target = if $install {
+        $setup_exe
+      } else if ($args | is-empty) {
+        $game_exe
+      } else {
+        $args.0
+      }
+
+      let cmd_args = if (($args | is-empty) or $install) {
+        [$target]
+      } else {
+        $args
+      }
+
+      let run_env = {
+        GAMEID: "0"
+        PROTONPATH: $proton
+        WINEPREFIX: $prefix
+        DXVK_HDR: "1"
+      } | merge (if ($wayland and (not $gamescope)) {
+        { PROTON_ENABLE_WAYLAND: "1" }
+      } else {
+        {}
+      })
+
+      if $gamescope {
+        let mode_file = $"($env.HOME)/.config/gamescope/modes.cfg"
+        let mode_dir = ($mode_file | path dirname)
+        if not ($mode_dir | path exists) { mkdir $mode_dir }
+        touch $mode_file
+
+        let gs_env = $run_env | merge {
+          ENABLE_GAMESCOPE_WSI: "1"
+          GAMESCOPE_MODE_SAVE_FILE: $mode_file
+        }
+
+        with-env $gs_env {
+          run-external $gamescope "--hdr-enabled" "-f" "-W" ($width | into string) "-H" ($height | into string) "-r" ($refresh | into string) "--" $umu ...$cmd_args
+        }
+      } else {
+        with-env $run_env { run-external $umu ...$cmd_args }
+      }
+    }
+  '';
   # caelestiaPackage = inputs.caelestia-shell.packages.${pkgs.stdenv.hostPlatform.system}.with-cli.override {
   #   app2unit = pkgs.app2unit;
   # };
@@ -59,7 +129,14 @@ in
     inputs.deepseek-harness.homeModules.default
     outputs.homeManagerModules.headroom
 
+    # Wine/Windows 兼容层、游戏工具和 Steam 默认库。
+    outputs.homeManagerModules.gaming
   ];
+
+  gaming = {
+    enable = true;
+    steamLibrary = "/games-lib/steam/steamapps";
+  };
 
   home = {
     # 注意修改这里的用户名与用户目录
@@ -139,6 +216,15 @@ in
       telegram-desktop
       element-desktop
       discord
+
+      # 不依赖 Steam 的 Proton 方案（Nushell 脚本）：
+      #   stellar-blade                运行游戏
+      #   stellar-blade --install      运行 Setup.exe
+      #   stellar-blade winetricks ... 给 prefix 装组件
+      #   stellar-blade --wayland      Wine 原生 Wayland（试 HDR）
+      #   stellar-blade --gamescope    Gamescope HDR（试 HDR）
+      # umu-launcher 由 gaming 模块提供。
+      stellarBlade
     ];
 
     # 直接将当前文件夹的配置文件，链接到 Home 目录下的指定位置

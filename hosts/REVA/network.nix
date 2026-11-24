@@ -20,6 +20,12 @@ in
     iptables -w -D nixos-fw -i enp14s0 -s ${private.telescope.wiredSubnet} -p tcp --dport ${toString private.telescope.port} -j nixos-fw-accept 2>/dev/null || true
   '';
 
+#   networking.networkmanager.settings.connectivity = {
+#   enabled = true;
+#   uri = "http://detectportal.firefox.com/success.txt";
+#   response = "success";
+# };
+
   # Remote desktop / streaming
   services.sunshine = {
     enable = true;

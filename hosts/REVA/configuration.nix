@@ -26,12 +26,16 @@ in
   imports = [
     ./hardware-configuration.nix
     ./impermanence.nix
+    ./gaming.nix
     ./network.nix
     outputs.nixosModules.core
     outputs.nixosModules.desktop
     inputs.dank-greeter.nixosModules.default
     inputs.syauth.nixosModules.default
   ];
+
+  # 北通 KP70B 手柄的 xpad 锁模补丁（模块说明见 xpad-beitong.nix）。
+  hardware.beitong.enable = true;
 
   # Apply the wireless regulatory domain at boot.
   boot.kernelParams = [ "cfg80211.ieee80211_regdom=${private.wirelessCountry}" ];
@@ -74,7 +78,6 @@ in
 
   # Programs
   programs.dconf.enable = true;
-  programs.steam.enable = true;
   programs.virt-manager.enable = true;
 
   # Virtualisation

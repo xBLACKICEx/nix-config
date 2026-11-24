@@ -18,6 +18,21 @@
         "/var/lib/syncthing" # Syncthing 设备身份和数据库
         "/var/lib/AccountsService" # 登录管理器用户头像/会话偏好，桌面按需
 
+        # Keep these in this list: core.impermanence.persistence uses a shallow
+        # attrs merge, so splitting directories across modules drops entries.
+        {
+          directory = "/home/gaming";
+          user = "gaming";
+          group = "users";
+          mode = "0700";
+        }
+        {
+          directory = "/var/lib/plasmalogin";
+          user = "plasmalogin";
+          group = "plasmalogin";
+          mode = "0700";
+        }
+
         {
           directory = "/var/lib/syauth";
           user = "beatrice";
