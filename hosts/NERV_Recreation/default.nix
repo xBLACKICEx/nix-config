@@ -22,7 +22,7 @@ nixpkgs.lib.nixosSystem {
       home-manager.useUserPackages = true;
       home-manager.backupFileExtension = "bkp";
 
-      home-manager.users.beatrice = ../../home/beatrice;
+      home-manager.users.nerv = ../../home/nerv;
       home-manager.extraSpecialArgs = { inherit inputs outputs; };
     }
   ];

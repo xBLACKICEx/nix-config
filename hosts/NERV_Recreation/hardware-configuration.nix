@@ -1,6 +1,6 @@
 # Do not modify this file after running nixos-generate-config on the target
 # machine. Until then, this is a install-oriented profile for:
-# i5-6600K, GTX 1060 6GB, 16GB RAM, 300GB carved from a 500GB NVMe SSD.
+# i5-6600K, GTX 1060 6GB, 16GB RAM, and a dedicated 256GB SSD.
 {
   config,
   lib,
@@ -56,8 +56,8 @@
     };
   };
 
-  # Target disk for the 500GB NVMe SSD. NixOS uses 512MB ESP + 300GB root,
-  # leaving the rest of the drive unallocated.
+  # Dedicated 256GB SSD: 512 MiB ESP and the remaining space for NixOS.
+  # Verify or override disk.main.device for the actual installation target.
   fileSystems."/persistent".neededForBoot = true;
 
   disko.devices = {
@@ -91,7 +91,7 @@
           };
 
           root = {
-            size = "300G";
+            size = "100%";
             type = "8304";
             label = "ROOT";
             content = {
@@ -161,18 +161,12 @@
     enable = true;
     enable32Bit = true;
   };
-  # 可选：提前加载 AMDGPU
-  hardware.amdgpu.initrd.enable = true;
-
-  # 可选：OpenCL 计算
-  hardware.amdgpu.opencl.enable = true;
-
-  # services.xserver.videoDrivers = [ "nvidia" ];
-  # hardware.nvidia = {
-  #   modesetting.enable = true;
-  #   open = false;
-  #   nvidiaSettings = true;
-  #   package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
-  # };
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.nvidia = {
+    modesetting.enable = true;
+    open = false; # GTX 1060 (Pascal) requires the proprietary kernel module.
+    nvidiaSettings = true;
+    package = config.boot.kernelPackages.nvidiaPackages.legacy_580;
+  };
   programs.coolercontrol.enable = true;
 }

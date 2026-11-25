@@ -18,14 +18,6 @@
       buildInputs = (old.buildInputs or []) ++ [ final.zstd ];
       env = (old.env or {}) // { CGO_LDFLAGS = "-lzstd"; };
     });
-    # gnome-desktop >= 50 删除了已废弃的 gnome-rr 绑定（GnomeDesktop.RRScreen），
-    # 但 lutris 的 FHS 环境仍会带上 51.x 的 typelib。lutris 0.5.22 在导入时构造
-    # DISPLAY_MANAGER 会直接抛 AttributeError；回移上游修复（lutris@fd91646f），
-    # 缺少该 API 时退回 xrandr 后端。
-    # lutris 是 callPackage 出来的 FHS 环境，会自动取最终的 lutris-unwrapped。
-    lutris-unwrapped = prev.lutris-unwrapped.overrideAttrs (old: {
-      patches = (old.patches or []) ++ [ ./patches/lutris-gnome-desktop-rr.patch ];
-    });
     # app2unit = prev.app2unit.overrideAttrs (old: {
     #   # Upstream script changed; keep shebang rewrite strict but allow terminal-handler
     #   # replacement to be skipped when the pattern no longer exists.

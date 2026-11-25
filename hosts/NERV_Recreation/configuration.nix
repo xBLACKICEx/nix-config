@@ -32,11 +32,13 @@ in
   networking.hostName = "NERV_Recreation";
   system.stateVersion = lib.mkForce "26.11";
 
+  services.openssh = {
+    enable = true;
+    settings.PermitRootLogin = "no";
+  };
+
   # Desktop
   desktop.kde.enable = true;
-  desktop.hypr.enable = false;
-  desktop.niri.enable = false;
-  programs.dms-greeter.enable = false;
 
   # Remote desktop / streaming
   services.sunshine = {
@@ -65,11 +67,6 @@ in
 
   # Programs
   programs.dconf.enable = true;
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = true;
-    dedicatedServer.openFirewall = true;
-  };
   programs.virt-manager.enable = true;
 
   # Virtualisation
@@ -88,14 +85,6 @@ in
       "${pkgs.bash}/bin/bash -c 'umask 0077 && ${pkgs.coreutils}/bin/mkdir -p /var/lib/libvirt/secrets && ${pkgs.coreutils}/bin/dd if=/dev/random of=/var/lib/libvirt/secrets/secrets-encryption-key status=none bs=32 count=1'"
     ];
   };
-  # Networking / discovery
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-    openFirewall = true;
-  };
-  services.syncthing.enable = true;
-
   # Printing / scanning
   services.printing.enable = true;
   services.printing.drivers = with pkgs; [ cnijfilter2 ];
@@ -106,18 +95,36 @@ in
 
   environment.systemPackages = with pkgs; [
     firefox
-    google-chrome
-    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
+    chromium
     kdePackages.qtdeclarative
     kdePackages.qt5compat
-    moonlight-qt
     simple-scan
     zed-editor
+
+      glow # 终端中的 Markdown 预览器
+
+      btop # htop/nmon 的替代品
+      iotop # IO 监控
+      iftop # 网络监控
+
+      # 系统调用监控
+      strace # 系统调用监控
+      ltrace # 库调用监控
+      lsof # 列出打开的文件
+
+      # 系统工具
+      sysstat
+      lm_sensors # 用于 `sensors` 命令
+      ethtool
+      pciutils # lspci
+      usbutils # lsusb
+      brightnessctl # 控制屏幕亮度，用于 Hyprland
+      helix
   ];
 
   users.groups = {
-    docker.members = [ "beatrice" ];
-    libvirtd.members = [ "beatrice" ];
+    docker.members = [ "nerv" ];
+    libvirtd.members = [ "nerv" ];
     plugdev = { };
     shared = { };
     syncthing-shared = { };
@@ -128,11 +135,11 @@ in
     root = {
       hashedPasswordFile = "/persistent/configs/nix-config-private/passwords/root";
     };
-    beatrice = {
+    nerv = {
       linger = true;
       hashedPasswordFile = "/persistent/configs/nix-config-private/passwords/desktop";
       isNormalUser = true;
-      description = "ベアトリス";
+      description = "NERV";
       enable = true;
       extraGroups = commonUserGroups ++ [
         "docker"
@@ -144,7 +151,7 @@ in
     };
   };
 
-  nix.settings.trusted-users = [ "beatrice" ];
+  nix.settings.trusted-users = [ "nerv" ];
   nixpkgs.config.permittedInsecurePackages = [
     "olm-3.2.16"
   ];

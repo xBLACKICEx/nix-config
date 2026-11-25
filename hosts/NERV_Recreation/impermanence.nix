@@ -15,13 +15,6 @@
         "/var/lib/libvirt" # 虚拟机状态
         "/var/lib/syncthing" # Syncthing 设备身份和数据库
         "/var/lib/AccountsService" # 登录管理器用户头像/会话偏好，桌面按需
-
-        {
-          directory = "/srv/sync/shared";
-          user = "syncthing";
-          group = "syncthing-shared";
-          mode = "2770";
-        }
         {
           directory = "/srv/Shared";
           group = "shared";
@@ -39,7 +32,7 @@
       ];
     };
     users = {
-      beatrice = {
+      nerv = {
         directories = [
           "Desktop"
           "Documents"
@@ -49,6 +42,7 @@
           "Projects"
           "Videos"
 
+          ".dsh"
           ".codex"
           ".cache/codex-desktop"
           ".cache/codex-runtimes"
